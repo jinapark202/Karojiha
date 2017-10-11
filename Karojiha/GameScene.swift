@@ -22,31 +22,39 @@ class GameScene: SKScene {
     var obstacles: [SKNode] = []
     let obstacleSpacing: CGFloat = 800
     let cameraNode = SKCameraNode()
+    let ledge = SKNode()
+    let playerBody = SKPhysicsBody(circleOfRadius: 30)
+
+
     
     override func didMove(to view: SKView) {
         createScene()
-        
-        let ledge = SKNode()
-        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
-        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
-        ledgeBody.isDynamic = false
-        ledgeBody.categoryBitMask = PhysicsCategory.Edge
-        ledge.physicsBody = ledgeBody
-        addChild(ledge)
-        
-        let playerBody = SKPhysicsBody(circleOfRadius: 30)
-        playerBody.mass = 1.5
-        playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 4
-        bird.physicsBody = playerBody
-        bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
-        
+        createLedge()
+        createPlayerAndPosition()
+
         physicsWorld.gravity.dy = -15
         
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
+    }
+    
+    func createLedge() {
+        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
+        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
+        ledgeBody.isDynamic = false
+        ledgeBody.categoryBitMask = PhysicsCategory.Edge
+        ledge.physicsBody = ledgeBody
+        addChild(ledge)
+    }
+    
+    func createPlayerAndPosition() {
+        playerBody.mass = 1.5
+        playerBody.categoryBitMask = PhysicsCategory.Player
+        playerBody.collisionBitMask = 4
+        bird.physicsBody = playerBody
+        bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
     }
     
     
