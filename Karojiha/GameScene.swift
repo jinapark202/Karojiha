@@ -16,6 +16,9 @@ class GameScene: SKScene {
         static let Edge: UInt32 = 4
     }
     
+    var counter = 0
+    let clickLabel = SKLabelNode()
+    
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
@@ -28,7 +31,6 @@ class GameScene: SKScene {
     let playerBody = SKPhysicsBody(circleOfRadius: 30)
 
 
-    
     override func didMove(to view: SKView) {
         createScene()
         createLedge()
@@ -40,7 +42,16 @@ class GameScene: SKScene {
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
+        clickLabel.horizontalAlignmentMode = .right
+        clickLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.35)
+        clickLabel.fontColor = .white
+        clickLabel.fontSize = 15
+        clickLabel.fontName = "Avenir"
+        clickLabel.text = String("Clicks: ") + String(counter)
+        cameraNode.addChild(clickLabel)
+
     }
+    
     
     func createLedge() {
         ledge.position = CGPoint(x: size.width/2, y: size.height/40)
@@ -84,10 +95,11 @@ class GameScene: SKScene {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        counter = counter + 1
+
         bird.physicsBody?.velocity.dy = 600.0
         
         self.bird.run(repeatActionbird)
-
     }
     
     
@@ -108,7 +120,6 @@ class GameScene: SKScene {
     
     func dieAndRestart() {
         bird.physicsBody?.velocity.dy = 0
-        //bird.removeFromParent()
         
         for node in obstacles {
             node.removeFromParent()
@@ -121,11 +132,15 @@ class GameScene: SKScene {
         
         let scene = GameScene(size: size)
         view?.presentScene(scene)
+        
+        counter = 0
+        clickLabel.text = String(counter)
     }
     
     
     override func update(_ currentTime: TimeInterval) {
-        
+        clickLabel.text = String("Clicks: ") + String(counter)
+
         if bird.position.y > obstacleSpacing * CGFloat(obstacles.count - 2) {
             addObstacle()
         }
@@ -135,7 +150,7 @@ class GameScene: SKScene {
             cameraNode.position.y = bird.position.y
         }
         
-        if playerPositionInCamera.y < -size.height/2 {
+        if playerPositionInCamera.y < -size.height/2.0 {
             dieAndRestart()
         }
     }
