@@ -16,8 +16,10 @@ class GameScene: SKScene {
         static let Edge: UInt32 = 4
     }
     
-    //CREATE THE BIRD ATLAS FOR ANIMATION
+    let birdAtlas = SKTextureAtlas(named:"player")
+    var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
+    var repeatActionbird = SKAction()
     
     var obstacles: [SKNode] = []
     let obstacleSpacing: CGFloat = 800
@@ -83,6 +85,9 @@ class GameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         bird.physicsBody?.velocity.dy = 600.0
+        
+        self.bird.run(repeatActionbird)
+
     }
     
     
@@ -91,10 +96,17 @@ class GameScene: SKScene {
         self.bird = createBird()
         self.addChild(bird)
         
+        birdSprites.append(birdAtlas.textureNamed("bird1"))
+        birdSprites.append(birdAtlas.textureNamed("bird2"))
+        birdSprites.append(birdAtlas.textureNamed("bird3"))
+        birdSprites.append(birdAtlas.textureNamed("bird4"))
+        
+        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
+        self.repeatActionbird = SKAction.repeatForever(animatebird)
+        
     }
     
     func dieAndRestart() {
-        print("boom")
         bird.physicsBody?.velocity.dy = 0
         //bird.removeFromParent()
         
