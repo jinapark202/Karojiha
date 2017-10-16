@@ -10,27 +10,35 @@ import SpriteKit
 
 
 extension GameScene{
+    
+    //Create the bird
     func createBird() -> SKSpriteNode {
-        //create a sprite node called “bird” and assign it a texture named “bird1”.
-        //set position
+        //Set the size and position of the bird
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird1"))
         bird.size = CGSize(width: 70, height: 70)
         bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
         
-        //In order to behave like a real world physics body, the bird has to be a SKPhysicsBody object.
-        //Define the bird to behave like a ball of radius of half of its width.
+        //Define the bird to be a SKPhysicsBody object.
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.width / 2)
         bird.physicsBody?.linearDamping = 1.1
         bird.physicsBody?.restitution = 0
         
-        
-        /* Here you set the bird to be affected by gravity. The bird will be pushed upward when you touch the screen and then will come down itself.*/
-        
+        //Set the bird to be affected by gravity.
         bird.physicsBody?.affectedByGravity = false
         bird.physicsBody?.isDynamic = true
         
         return bird
     }
     
+    //Set up click counter in upper right corner
+    func createClickLabel(){
+        clickLabel.horizontalAlignmentMode = .right
+        clickLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.35)
+        clickLabel.fontColor = .white
+        clickLabel.fontSize = 15
+        clickLabel.fontName = "Avenir"
+        clickLabel.text = String("Clicks: ") + String(counter)
+        cameraNode.addChild(clickLabel)
+    }
 }
 

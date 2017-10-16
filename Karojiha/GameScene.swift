@@ -16,6 +16,7 @@ class GameScene: SKScene {
         static let Edge: UInt32 = 4
     }
     
+    //Variables for click counter.
     var counter = 0
     let clickLabel = SKLabelNode()
     
@@ -23,12 +24,12 @@ class GameScene: SKScene {
     var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
     var repeatActionbird = SKAction()
+    let playerBody = SKPhysicsBody(circleOfRadius: 30)
     
     var obstacles: [SKNode] = []
     let obstacleSpacing: CGFloat = 800
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
-    let playerBody = SKPhysicsBody(circleOfRadius: 30)
 
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["bg0","bg3","bg2"]
@@ -37,26 +38,24 @@ class GameScene: SKScene {
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
     
-    override func didMove(to view: SKView) {
-        createScene()
-        createLedge()
-        createPlayerAndPosition()
-        createClickLabel()
-        
-        initBackgroundArray(names: backgroundNames)
-        
-        physicsWorld.gravity.dy = -15
-        
-        addChild(cameraNode)
-        camera = cameraNode
-        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
-        
-        addChild(backgroundImages[0])
-
-
-        
+    //Creates a ledge that prevents the bird from falling to the bottom of the screen.
+    func createLedge() {
+        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
+        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
+        ledgeBody.isDynamic = false
+        ledgeBody.categoryBitMask = PhysicsCategory.Edge
+        ledge.physicsBody = ledgeBody
+        addChild(ledge)
     }
     
+    //Initiates the position of the bird and sets up the playerBody.
+    func createPlayerAndPosition() {
+        playerBody.mass = 1.5
+        playerBody.categoryBitMask = PhysicsCategory.Player
+        playerBody.collisionBitMask = 4
+        bird.physicsBody = playerBody
+        bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
+    }
     
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
     func initBackgroundArray(names: [String]){
@@ -69,43 +68,75 @@ class GameScene: SKScene {
             backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*x)
             backgroundImage.zPosition = -1
             backgroundImages.append(backgroundImage)
-            x+=1
+            x += 1
             print(backgroundImage.position)
         }
+    }
+    
+    //Adds the first background to the screen and sets up the scene.
+    override func didMove(to view: SKView) {
+        createScene()
+        createLedge()
+        createPlayerAndPosition()
+        createClickLabel()
+        
+        initBackgroundArray(names: backgroundNames)
+        addChild(backgroundImages[0])
+        
+        physicsWorld.gravity.dy = -15
+        
+        addChild(cameraNode)
+        camera = cameraNode
+        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
     }
     
-    
-    //Set up click counter in upper right corner
-    func createClickLabel(){
-    
-    clickLabel.horizontalAlignmentMode = .right
-    clickLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.35)
-    clickLabel.fontColor = .white
-    clickLabel.fontSize = 15
-    clickLabel.fontName = "Avenir"
-    clickLabel.text = String("Clicks: ") + String(counter)
-    cameraNode.addChild(clickLabel)
-    
+    //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        counter += 1
+        
+        bird.physicsBody?.velocity.dy = 600.0
+        
+        self.bird.run(repeatActionbird)
     }
     
-    func createLedge() {
-        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
-        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
-        ledgeBody.isDynamic = false
-        ledgeBody.categoryBitMask = PhysicsCategory.Edge
-        ledge.physicsBody = ledgeBody
-        addChild(ledge)
+    //Creates the bird and makes it flap its wings.
+    func createScene(){
+        
+        self.bird = createBird()
+        self.addChild(bird)
+        
+        birdSprites.append(birdAtlas.textureNamed("bird1"))
+        birdSprites.append(birdAtlas.textureNamed("bird2"))
+        birdSprites.append(birdAtlas.textureNamed("bird3"))
+        birdSprites.append(birdAtlas.textureNamed("bird4"))
+        
+        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
+        self.repeatActionbird = SKAction.repeatForever(animatebird)
+        
     }
     
-    func createPlayerAndPosition() {
-        playerBody.mass = 1.5
-        playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 4
-        bird.physicsBody = playerBody
-        bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
+    //Restarts the game once the bird hits the bottom of the screen
+    func dieAndRestart() {
+        bird.physicsBody?.velocity.dy = 0
+        
+        // TESTING OBSTACLE CODE
+        //        for node in obstacles {
+        //            node.removeFromParent()
+        //        }
+        //
+        //        obstacles.removeAll()
+        //
+        //        addObstacle()
+        //        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+        
+        let scene = GameScene(size: size)
+        view?.presentScene(scene)
+        
+        counter = 0
+        clickLabel.text = String(counter)
     }
-    
+
     
     //TESTING OBSTACLE CODE
     
@@ -132,53 +163,8 @@ class GameScene: SKScene {
 //    }
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        counter = counter + 1
-
-        bird.physicsBody?.velocity.dy = 600.0
-        
-        self.bird.run(repeatActionbird)
-    }
-    
-    
-    func createScene(){
-        
-        self.bird = createBird()
-        self.addChild(bird)
-        
-        birdSprites.append(birdAtlas.textureNamed("bird1"))
-        birdSprites.append(birdAtlas.textureNamed("bird2"))
-        birdSprites.append(birdAtlas.textureNamed("bird3"))
-        birdSprites.append(birdAtlas.textureNamed("bird4"))
-        
-        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
-        self.repeatActionbird = SKAction.repeatForever(animatebird)
-        
-    }
-    
-    func dieAndRestart() {
-        bird.physicsBody?.velocity.dy = 0
- 
-        // TESTING OBSTACLE CODE
-//        for node in obstacles {
-//            node.removeFromParent()
-//        }
-//
-//        obstacles.removeAll()
-//
-//        addObstacle()
-//        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
-        
-        let scene = GameScene(size: size)
-        view?.presentScene(scene)
-        
-        counter = 0
-        clickLabel.text = String(counter)
-    }
-    
-    
+    //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
-        
         
         clickLabel.text = String("Clicks: ") + String(counter)
 
@@ -192,7 +178,6 @@ class GameScene: SKScene {
         if (bird.position.y > backgroundHeight*size.height*(previousBackground+1) + size.height){
             (backgroundImages[Int(previousBackground)]).removeFromParent()
             previousBackground+=1
-            
         }
         
         // TESTING OBSTACLE CODE
@@ -204,7 +189,6 @@ class GameScene: SKScene {
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y
         }
-        
         if playerPositionInCamera.y < -size.height/2.0 {
             dieAndRestart()
         }
