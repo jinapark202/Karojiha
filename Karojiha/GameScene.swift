@@ -19,6 +19,9 @@ class GameScene: SKScene {
     //Variables for click counter.
     var counter = 0
     let clickLabel = SKLabelNode()
+    var restartBtn = SKSpriteNode()
+    var pauseBtn = SKSpriteNode()
+
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
@@ -79,6 +82,8 @@ class GameScene: SKScene {
         createLedge()
         createPlayerAndPosition()
         createClickLabel()
+        createRestartBtn()
+        createPauseBtn()
         
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
@@ -88,7 +93,6 @@ class GameScene: SKScene {
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
-        
     }
     
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
@@ -98,11 +102,28 @@ class GameScene: SKScene {
         bird.physicsBody?.velocity.dy = 600.0
         
         self.bird.run(repeatActionbird)
+        
+        //Implements the pause and restart button functionality
+        for touch in touches{
+            let location = touch.location(in: self)
+            if restartBtn.contains(location){
+                dieAndRestart()
+            } else {
+                if pauseBtn.contains(location){
+                    if self.isPaused == false{
+                        self.isPaused = true
+                        pauseBtn.texture = SKTexture(imageNamed: "play")
+                    } else {
+                        self.isPaused = false
+                        pauseBtn.texture = SKTexture(imageNamed: "pause")
+                    }
+                }
+            }
+        }
     }
     
     //Creates the bird and makes it flap its wings.
     func createScene(){
-        
         self.bird = createBird()
         self.addChild(bird)
         
@@ -113,7 +134,6 @@ class GameScene: SKScene {
         
         let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
         self.repeatActionbird = SKAction.repeatForever(animatebird)
-        
     }
     
     //Restarts the game once the bird hits the bottom of the screen
@@ -136,7 +156,7 @@ class GameScene: SKScene {
         counter = 0
         clickLabel.text = String(counter)
     }
-
+    
     
     //TESTING OBSTACLE CODE
     
@@ -161,7 +181,7 @@ class GameScene: SKScene {
 //        container.addChild(section)
 //        return container
 //    }
-    
+
     
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
@@ -171,13 +191,13 @@ class GameScene: SKScene {
         //Adds the next background when the bird is close enough
         if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
             addChild(backgroundImages[Int(currentBackground)])
-            currentBackground+=1
+            currentBackground += 1
         }
         
         //Removes the previous background when the bird is far enough above it
-        if (bird.position.y > backgroundHeight*size.height*(previousBackground+1) + size.height){
+        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
             (backgroundImages[Int(previousBackground)]).removeFromParent()
-            previousBackground+=1
+            previousBackground += 1
         }
         
         // TESTING OBSTACLE CODE
@@ -189,7 +209,7 @@ class GameScene: SKScene {
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y
         }
-        if playerPositionInCamera.y < -size.height/2.0 {
+        if playerPositionInCamera.y < -size.height / 2.0 {
             dieAndRestart()
         }
     }
