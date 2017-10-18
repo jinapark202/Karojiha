@@ -34,10 +34,11 @@ class GameScene: SKScene {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
 
+    
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
-    let backgroundNames: [String] = ["bg0","bg3","bg2"]
+    let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
     var backgroundImages: [SKNode] = []
-    let backgroundHeight = CGFloat(3.0) //This is height of background in terms of # of screens
+    let backgroundHeight = CGFloat(3.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
     
@@ -63,8 +64,8 @@ class GameScene: SKScene {
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
     func initBackgroundArray(names: [String]){
         var x: CGFloat = 0.0
-        for i in names{
-            let backgroundImage = SKSpriteNode(imageNamed: i)
+        for bgName in names{
+            let backgroundImage = SKSpriteNode(imageNamed: bgName)
             backgroundImage.xScale=size.width/backgroundImage.size.width
             backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
             backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
@@ -186,13 +187,20 @@ class GameScene: SKScene {
 //    }
 
     
-    //Updates the position of the bird and background, updates the click counter
-    override func update(_ currentTime: TimeInterval) {
-        
-        clickLabel.text = String("Clicks: ") + String(counter)
-
+    //Perform Necessary Background checks, called in continously in update()
+    func checkBackground(){
         //Adds the next background when the bird is close enough
         if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
+            //Check if at end of BackgroundImages array, if so, re-add last Image
+            if currentBackground >= CGFloat(backgroundImages.count) {
+                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
+                backgroundImage.xScale=size.width/backgroundImage.size.width
+                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
+                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
+                backgroundImage.zPosition = -1
+                backgroundImages.append(backgroundImage)
+            }
             addChild(backgroundImages[Int(currentBackground)])
             currentBackground += 1
         }
@@ -202,6 +210,14 @@ class GameScene: SKScene {
             (backgroundImages[Int(previousBackground)]).removeFromParent()
             previousBackground += 1
         }
+    }
+    
+    
+    //Updates the position of the bird and background, updates the click counter
+    override func update(_ currentTime: TimeInterval) {
+        
+        clickLabel.text = String("Clicks: ") + String(counter)
+        checkBackground()
         
         // TESTING OBSTACLE CODE
 //        if bird.position.y > obstacleSpacing * CGFloat(obstacles.count - 2) {
