@@ -72,7 +72,7 @@ class GameScene: SKScene {
             backgroundImage.zPosition = -1
             backgroundImages.append(backgroundImage)
             x += 1
-            print(backgroundImage.position)
+            //print(backgroundImage.position)
         }
     }
     
@@ -84,7 +84,7 @@ class GameScene: SKScene {
         createClickLabel()
         createRestartBtn()
         createPauseBtn()
-        
+    
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
         
@@ -105,7 +105,10 @@ class GameScene: SKScene {
         
         //Implements the pause and restart button functionality
         for touch in touches{
-            let location = touch.location(in: self)
+            var location = touch.location(in: self)
+            //Adjust for cameraNode position
+            location.x-=cameraNode.position.x
+            location.y-=cameraNode.position.y
             if restartBtn.contains(location){
                 dieAndRestart()
             } else {
