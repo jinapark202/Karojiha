@@ -43,7 +43,7 @@ extension GameScene{
     
     //Creates the restart button
     func createRestartBtn() {
-        restartBtn = SKSpriteNode(imageNamed: "restart")
+        restartBtn = SKSpriteNode(imageNamed: "restart1")
         restartBtn.size = CGSize(width: 50, height: 50)
             //THIS MAY BE WRONG POSITION
         restartBtn.position = CGPoint(x: -size.width/2.4, y: size.height/2.25)
@@ -55,10 +55,10 @@ extension GameScene{
     
     //Creates the pause button
     func createPauseBtn() {
-        pauseBtn = SKSpriteNode(imageNamed: "pause")
-        pauseBtn.size = CGSize(width:70, height:70)
+        pauseBtn = SKSpriteNode(imageNamed: "pause1")
+        pauseBtn.size = CGSize(width:50, height:50)
             //THIS MAY BE WRONG POSITION
-        pauseBtn.position = CGPoint(x: -size.width/3.5, y: size.height/2.25)
+        pauseBtn.position = CGPoint(x: -size.width/3.7, y: size.height/2.25)
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)

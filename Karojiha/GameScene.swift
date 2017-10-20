@@ -116,10 +116,10 @@ class GameScene: SKScene {
                 if pauseBtn.contains(location){
                     if self.isPaused == false{
                         self.isPaused = true
-                        pauseBtn.texture = SKTexture(imageNamed: "play")
+                        pauseBtn.texture = SKTexture(imageNamed: "play1")
                     } else {
                         self.isPaused = false
-                        pauseBtn.texture = SKTexture(imageNamed: "pause")
+                        pauseBtn.texture = SKTexture(imageNamed: "pause1")
                     }
                 }
             }
