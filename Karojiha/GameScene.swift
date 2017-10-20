@@ -17,11 +17,16 @@ class GameScene: SKScene {
     }
     
     //Variables for click counter.
-    var counter = 0
+    var counter = 0.0
     let clickLabel = SKLabelNode()
+    
     var restartBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
 
+    //All necessary to determine clicksRequired
+    var timer = Timer()
+    var time = 0.0
+    var clicksRequired = 0.0
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
@@ -34,6 +39,7 @@ class GameScene: SKScene {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
 
+    var gravity = CGFloat(-15.0)
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
@@ -77,6 +83,36 @@ class GameScene: SKScene {
         }
     }
     
+    
+    
+    //Starts timer in motion, calls updateCounting every second
+    func scheduledTimerWithTimeInterval(){
+        // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+    }
+    
+    
+    //Waits a while at beginning of game, then begins to calculate clicks required
+    @objc func updateCounting(){
+        time+=1
+        print(time)
+    }
+    
+    //Sets the birds speed to the desired velocity
+//    func calculateBirdSpeed(){
+//        let speedRatio = counter/clicksRequired
+//        if clicksRequired > 0{
+//            bird.physicsBody?.velocity.dy = CGFloat(300 * speedRatio)
+//            print("clicks required :", clicksRequired)
+//            print("ratio: ", speedRatio)
+//        }
+//        if (speedRatio < 1) {
+//            bird.physicsBody?.velocity.dy = CGFloat(-100 / speedRatio)
+//        }
+//
+//    }
+    
+    
     //Adds the first background to the screen and sets up the scene.
     override func didMove(to view: SKView) {
         createScene()
@@ -85,24 +121,29 @@ class GameScene: SKScene {
         createClickLabel()
         createRestartBtn()
         createPauseBtn()
-    
+        
+        //Start the timer counting
+        scheduledTimerWithTimeInterval()
+        
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
         
-        physicsWorld.gravity.dy = -15
+        physicsWorld.gravity.dy = gravity
+        
         
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
     }
     
+ 
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         counter += 1
         
-        bird.physicsBody?.velocity.dy = 600.0
-        
         self.bird.run(repeatActionbird)
+        
+        bird.physicsBody?.velocity.dy = 600
         
         //Implements the pause and restart button functionality
         for touch in touches{
@@ -143,6 +184,8 @@ class GameScene: SKScene {
     //Restarts the game once the bird hits the bottom of the screen
     func dieAndRestart() {
         bird.physicsBody?.velocity.dy = 0
+        gravity = CGFloat(-15.0)
+        physicsWorld.gravity.dy = gravity
         
         // TESTING OBSTACLE CODE
         //        for node in obstacles {
@@ -159,6 +202,7 @@ class GameScene: SKScene {
         
         counter = 0
         clickLabel.text = String(counter)
+        timer.invalidate()
     }
     
     
@@ -216,7 +260,20 @@ class GameScene: SKScene {
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
         
-        clickLabel.text = String("Clicks: ") + String(counter)
+        //This is the function that determines the clicks required
+        clicksRequired = pow(time, 1.65)
+        
+        gravity = CGFloat(-1*(pow(time, 1.3))-15)
+        if (gravity < -80){
+            physicsWorld.gravity.dy = -70
+        }
+        else{
+            physicsWorld.gravity.dy = gravity
+        }
+        
+        print(gravity)
+        
+        clickLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
         checkBackground()
         
         // TESTING OBSTACLE CODE
