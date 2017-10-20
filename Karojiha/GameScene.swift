@@ -26,7 +26,6 @@ class GameScene: SKScene {
     //All necessary to determine clicksRequired
     var timer = Timer()
     var time = 0.0
-    var clicksRequired = 0.0
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
@@ -92,25 +91,11 @@ class GameScene: SKScene {
     }
     
     
-    //Waits a while at beginning of game, then begins to calculate clicks required
+    //Waits a while at beginning of game, then begins to calculate
     @objc func updateCounting(){
         time+=1
         print(time)
     }
-    
-    //Sets the birds speed to the desired velocity
-//    func calculateBirdSpeed(){
-//        let speedRatio = counter/clicksRequired
-//        if clicksRequired > 0{
-//            bird.physicsBody?.velocity.dy = CGFloat(300 * speedRatio)
-//            print("clicks required :", clicksRequired)
-//            print("ratio: ", speedRatio)
-//        }
-//        if (speedRatio < 1) {
-//            bird.physicsBody?.velocity.dy = CGFloat(-100 / speedRatio)
-//        }
-//
-//    }
     
     
     //Adds the first background to the screen and sets up the scene.
@@ -260,9 +245,7 @@ class GameScene: SKScene {
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
         
-        //This is the function that determines the clicks required
-        clicksRequired = pow(time, 1.65)
-        
+        //Beginning Stages of gravity manipulation
         gravity = CGFloat(-1*(pow(time, 1.3))-15)
         if (gravity < -80){
             physicsWorld.gravity.dy = -70
