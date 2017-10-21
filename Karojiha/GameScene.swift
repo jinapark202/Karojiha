@@ -16,9 +16,13 @@ class GameScene: SKScene {
         static let Edge: UInt32 = 4
     }
     
+    var maxAltitude = CGFloat(0.0)
+    var altitude = CGFloat(0.0)
+    
     //Variables for click counter.
     var counter = 0.0
     let clickLabel = SKLabelNode()
+    let maxElevationLabel = SKLabelNode()
     
     var restartBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
@@ -82,8 +86,6 @@ class GameScene: SKScene {
         }
     }
     
-    
-    
     //Starts timer in motion, calls updateCounting every second
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
@@ -104,6 +106,7 @@ class GameScene: SKScene {
         createLedge()
         createPlayerAndPosition()
         createClickLabel()
+        createMaxElevationLabel()
         createRestartBtn()
         createPauseBtn()
         
@@ -115,10 +118,10 @@ class GameScene: SKScene {
         
         physicsWorld.gravity.dy = gravity
         
-        
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+
     }
     
  
@@ -129,6 +132,11 @@ class GameScene: SKScene {
         self.bird.run(repeatActionbird)
         
         bird.physicsBody?.velocity.dy = 600
+        
+        //Determine the maximum altitude of the bird
+        if (altitude >= maxAltitude) {
+            maxAltitude = altitude
+        }
         
         //Implements the pause and restart button functionality
         for touch in touches{
@@ -168,6 +176,9 @@ class GameScene: SKScene {
     
     //Restarts the game once the bird hits the bottom of the screen
     func dieAndRestart() {
+//        createMaxElevationLabel()
+        maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
+        
         bird.physicsBody?.velocity.dy = 0
         gravity = CGFloat(-15.0)
         physicsWorld.gravity.dy = gravity
@@ -187,6 +198,8 @@ class GameScene: SKScene {
         
         counter = 0
         clickLabel.text = String(counter)
+        altitude = 0.0
+
         timer.invalidate()
     }
     
@@ -246,7 +259,7 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         
         //Beginning Stages of gravity manipulation
-        gravity = CGFloat(-1*(pow(time, 1.3))-15)
+        gravity = CGFloat(-1 * (pow(time, 1.3)) - 15)
         if (gravity < -80){
             physicsWorld.gravity.dy = -70
         }
@@ -256,7 +269,11 @@ class GameScene: SKScene {
         
         print(gravity)
         
-        clickLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
+        altitude = floor(bird.position.y - (ledge.position.y + 10) - 26.5)
+        
+        maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
+        clickLabel.text = String("Elevation: ") + String(describing: altitude)
+
         checkBackground()
         
         // TESTING OBSTACLE CODE
