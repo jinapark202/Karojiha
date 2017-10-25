@@ -34,11 +34,22 @@ extension GameScene{
     func createClickLabel(){
         clickLabel.horizontalAlignmentMode = .right
         clickLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.35)
-        clickLabel.fontColor = .white
+        clickLabel.fontColor = .orange
         clickLabel.fontSize = 15
         clickLabel.fontName = "Avenir"
         clickLabel.text = String("All the Elevations: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
         cameraNode.addChild(clickLabel)
+    }
+    
+    //Set up maximum elevation counter in upper right corner
+    func createMaxElevationLabel(){
+        maxElevationLabel.horizontalAlignmentMode = .right
+        maxElevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height/2.55)
+        maxElevationLabel.fontColor = .red
+        maxElevationLabel.fontSize = 15
+        maxElevationLabel.fontName = "Avenir"
+        maxElevationLabel.text = String("Max Elevation: ") + String(describing: floor(maxAltitude))
+        cameraNode.addChild(maxElevationLabel)
     }
     
     //Creates the restart button
@@ -50,7 +61,7 @@ extension GameScene{
         restartBtn.zPosition = 6
         restartBtn.setScale(0)
         cameraNode.addChild(restartBtn)
-        restartBtn.run(SKAction.scale(to: 1.0, duration: 0.3))
+        restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
     
     //Creates the pause button
@@ -62,7 +73,7 @@ extension GameScene{
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
-        pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.3))
+        pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
 }
 
