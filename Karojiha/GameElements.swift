@@ -37,7 +37,7 @@ extension GameScene{
         clickLabel.fontColor = .white
         clickLabel.fontSize = 15
         clickLabel.fontName = "Avenir"
-        clickLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
+        clickLabel.text = String("All the Elevations: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
         cameraNode.addChild(clickLabel)
     }
     

@@ -14,6 +14,7 @@ class GameScene: SKScene {
         static let Player: UInt32 = 1
         static let Obstacle: UInt32 = 2
         static let Edge: UInt32 = 4
+        static let Worm: UInt32 = 0b1
     }
     
     //Variables for click counter.
@@ -46,6 +47,15 @@ class GameScene: SKScene {
     let backgroundHeight = CGFloat(3.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
+    
+    //creates a random function for us to use
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }
     
     //Creates a ledge that prevents the bird from falling to the bottom of the screen.
     func createLedge() {
@@ -94,7 +104,8 @@ class GameScene: SKScene {
     //Waits a while at beginning of game, then begins to calculate
     @objc func updateCounting(){
         time+=1
-        print(time)
+        //print(time)
+        addWorm()
     }
     
     
@@ -190,6 +201,28 @@ class GameScene: SKScene {
         timer.invalidate()
     }
     
+    func addWorm() {
+        
+        // Create sprite
+        let worm = SKSpriteNode(imageNamed: "dragonfly.png")
+        
+        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size) // 1
+        worm.physicsBody?.isDynamic = true// 2
+        worm.physicsBody?.affectedByGravity = false
+        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm // 3
+        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm // 5
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        
+        // Position the worm
+        worm.position = CGPoint(x: random(min:10, max: size.width-10 ), y: actualY)
+        
+        // Add the worm to the scene
+        self.addChild(worm)
+        
+        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+    }
     
     //TESTING OBSTACLE CODE
     
@@ -256,7 +289,7 @@ class GameScene: SKScene {
         
         print(gravity)
         
-        clickLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
+        clickLabel.text = String("All the Elevations: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
         checkBackground()
         
         // TESTING OBSTACLE CODE
