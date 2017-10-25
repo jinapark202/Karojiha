@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 class GameScene: SKScene {
     
@@ -16,6 +17,9 @@ class GameScene: SKScene {
         static let Edge: UInt32 = 4
         static let Worm: UInt32 = 0b1
     }
+    
+    let motionManager = CMMotionManager()
+    let birdName = "bird"
     
     var maxAltitude = CGFloat(0.0)
     var altitude = CGFloat(0.0)
@@ -73,11 +77,16 @@ class GameScene: SKScene {
     
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
-        playerBody.mass = 1.5
+        playerBody.mass = 0.3
         playerBody.categoryBitMask = PhysicsCategory.Player
         playerBody.collisionBitMask = 4
         bird.physicsBody = playerBody
+        bird.physicsBody!.isDynamic = true
         bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
+        bird.name = birdName
+        
+        //Prevents bird from rotating upon collision
+        bird.physicsBody?.allowsRotation = false
     }
     
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
@@ -101,11 +110,11 @@ class GameScene: SKScene {
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
-    
+
     
     //Waits a while at beginning of game, then begins to calculate
     @objc func updateCounting(){
-        time+=1
+        time += 1
         //print(time)
         addWorm()
     }
@@ -113,6 +122,10 @@ class GameScene: SKScene {
     
     //Adds the first background to the screen and sets up the scene.
     override func didMove(to view: SKView) {
+        //Prevents bird from leaving the frame
+        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        
+        //Creates scene, bird, and buttons
         createScene()
         createLedge()
         createPlayerAndPosition()
@@ -132,6 +145,9 @@ class GameScene: SKScene {
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+        
+        //Starts generating accelerometer data
+        motionManager.startAccelerometerUpdates()
 
     }
     
@@ -214,8 +230,9 @@ class GameScene: SKScene {
         timer.invalidate()
     }
     
+    //Function that adds worms to screen
     func addWorm() {
-        
+    
         // Create sprite
         let worm = SKSpriteNode(imageNamed: "dragonfly.png")
         
@@ -287,9 +304,23 @@ class GameScene: SKScene {
         }
     }
     
+    //Allows the bird to move left and right when phone tilts
+    func processUserMotion(forUpdate currentTime: CFTimeInterval) {
+        if let bird = childNode(withName: birdName) as? SKSpriteNode {
+            if let data = motionManager.accelerometerData {
+                if fabs(data.acceleration.x) > 0.2 {
+                    print("Acceleration: \(data.acceleration.x)")
+                    bird.physicsBody!.applyForce(CGVector(dx: 100 * CGFloat(data.acceleration.x), dy: 0))
+                }
+            }
+        }
+    }
+    
     
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
+        processUserMotion(forUpdate: currentTime)
+
         
         //Beginning Stages of gravity manipulation
         gravity = CGFloat(-1 * (pow(time, 1.3)) - 15)
@@ -302,7 +333,7 @@ class GameScene: SKScene {
         
         print(gravity)
         
-        altitude = floor(bird.position.y - (ledge.position.y + 10) - 26.5)
+        altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
         
         maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
