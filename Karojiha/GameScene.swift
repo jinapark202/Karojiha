@@ -38,6 +38,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var restartBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
 
+    var gameStarted = false
+    
     //All necessary to determine clicksRequired
     var timer = Timer()
     var time = 0.0
@@ -146,12 +148,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createPauseBtn()
         createWormsEatenLabel()
         
-        //Start the timer counting
-        scheduledTimerWithTimeInterval()
-        
-        //        COMMENTED OUT FOR TESTING
-//        initBackgroundArray(names: backgroundNames)
-//        addChild(backgroundImages[0])
+        initBackgroundArray(names: backgroundNames)
+        addChild(backgroundImages[0])
         
         physicsWorld.gravity.dy = gravity
         self.physicsWorld.contactDelegate = self
@@ -195,7 +193,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (altitude >= maxAltitude) {
             maxAltitude = altitude
         }
+
+        //Start the timer counting
+        if gameStarted == false{
+            scheduledTimerWithTimeInterval()
+            gameStarted = true
+        }
         
+    
         //Implements the pause and restart button functionality
         for touch in touches{
             var location = touch.location(in: self)
@@ -208,9 +213,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if pauseBtn.contains(location){
                     if self.isPaused == false{
                         self.isPaused = true
+                        timer.invalidate()
                         pauseBtn.texture = SKTexture(imageNamed: "play1")
                     } else {
                         self.isPaused = false
+                        timer.fire()
                         pauseBtn.texture = SKTexture(imageNamed: "pause1")
                     }
                 }
@@ -240,16 +247,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.velocity.dy = 0
         gravity = CGFloat(-15.0)
         physicsWorld.gravity.dy = gravity
-        
-        // TESTING OBSTACLE CODE
-        //        for node in obstacles {
-        //            node.removeFromParent()
-        //        }
-        //
-        //        obstacles.removeAll()
-        //
-        //        addObstacle()
-        //        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
         let scene = GameScene(size: size)
         view?.presentScene(scene)
@@ -385,8 +382,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    
-    
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
         processUserMotion(forUpdate: currentTime)
@@ -407,8 +402,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
 
-//        COMMENTED OUT FOR TESTING
-        //checkBackground()
+        checkBackground()
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
