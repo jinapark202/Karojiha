@@ -52,6 +52,17 @@ extension GameScene{
         cameraNode.addChild(maxElevationLabel)
     }
     
+    //Set up maximum elevation counter in upper right corner
+    func createWormsEatenLabel(){
+        wormsEatenLabel.horizontalAlignmentMode = .left
+        wormsEatenLabel.position = CGPoint(x: -1*size.width / 2.35, y: size.height/2.55)
+        wormsEatenLabel.fontColor = .red
+        wormsEatenLabel.fontSize = 15
+        wormsEatenLabel.fontName = "Avenir"
+        wormsEatenLabel.text = String("Worms Eaten: ") + String(describing: floor(wormsEaten))
+        cameraNode.addChild(wormsEatenLabel)
+    }
+    
     //Creates the restart button
     func createRestartBtn() {
         restartBtn = SKSpriteNode(imageNamed: "restart1")

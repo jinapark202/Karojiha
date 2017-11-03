@@ -23,11 +23,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var maxAltitude = CGFloat(0.0)
     var altitude = CGFloat(0.0)
+    var wormsEaten = CGFloat(0.0)
     
     //Variables for click counter.
     var counter = 0.0
     let clickLabel = SKLabelNode()
     let maxElevationLabel = SKLabelNode()
+    let wormsEatenLabel = SKLabelNode()
     
     var restartBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
@@ -138,6 +140,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createMaxElevationLabel()
         createRestartBtn()
         createPauseBtn()
+        createWormsEatenLabel()
         
         //Start the timer counting
         scheduledTimerWithTimeInterval()
@@ -290,7 +293,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
-        bird.removeFromParent()
+        worm.removeFromParent()
+        wormsEaten += 1
+        wormsEatenLabel.text = String("Worms Eaten: ") + String(describing: floor(wormsEaten))
         newSparkNode(scene: self, Worm: worm)
     }
     
@@ -299,6 +304,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // 1
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
+        
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
@@ -310,37 +316,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // 2
         if ((firstBody.categoryBitMask & PhysicsCategory.Worm != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Player != 0)) {
-            if let worm = firstBody.node as? SKSpriteNode, let
-                bird = secondBody.node as? SKSpriteNode {
+            if let worm = secondBody.node as? SKSpriteNode, let
+                bird = firstBody.node as? SKSpriteNode {
                 collisionBetween(worm: worm, bird: bird)
             }
         }
     }
     
-    //TESTING OBSTACLE CODE
-    
-//    func addObstacle() {
-//        addSquareObstacle()
-//    }
-//
-//    func addSquareObstacle() {
-//        let path = UIBezierPath(roundedRect: CGRect.init(x: -200, y: -200,
-//                                                         width: 400, height: 40),
-//                                cornerRadius: 20)
-//
-//        let obstacle = obstacleByDuplicatingPath(path, clockwise: false)
-//        obstacles.append(obstacle)
-//        obstacle.position = CGPoint(x: size.width/2, y: obstacleSpacing * CGFloat(obstacles.count))
-//        addChild(obstacle)
-//    }
-//
-//    func obstacleByDuplicatingPath(_ path: UIBezierPath, clockwise: Bool) -> SKNode {
-//        let container = SKNode()
-//        let section = SKShapeNode(path: path.cgPath)
-//        container.addChild(section)
-//        return container
-//    }
-
     
     //Perform Necessary Background checks, called in continously in update()
     func checkBackground(){
@@ -401,12 +383,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
 
         checkBackground()
-        
-        // TESTING OBSTACLE CODE
-//        if bird.position.y > obstacleSpacing * CGFloat(obstacles.count - 2) {
-//            addObstacle()
-//        }
-    
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
