@@ -127,7 +127,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Adds the first background to the screen and sets up the scene.
     override func didMove(to view: SKView) {
         //Prevents bird from leaving the frame
-        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000)) //Sloppy solution but it works
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
         
         //Creates scene, bird, and buttons
         createScene()
@@ -383,7 +384,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         processUserMotion(forUpdate: currentTime)
 
-        
         //Beginning Stages of gravity manipulation
         gravity = CGFloat(-1 * (pow(time, 1.3)) - 15)
         if (gravity < -80){
