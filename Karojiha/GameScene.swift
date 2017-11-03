@@ -9,7 +9,7 @@
 import SpriteKit
 import CoreMotion
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     struct PhysicsCategory {
         static let Player: UInt32 = 1
@@ -80,10 +80,14 @@ class GameScene: SKScene {
         playerBody.mass = 0.3
         playerBody.categoryBitMask = PhysicsCategory.Player
         playerBody.collisionBitMask = 4
+        
         bird.physicsBody = playerBody
         bird.physicsBody!.isDynamic = true
         bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
         bird.name = birdName
+        
+        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Worm
+        bird.physicsBody?.usesPreciseCollisionDetection = true
         
         //Prevents bird from rotating upon collision
         bird.physicsBody?.allowsRotation = false
@@ -141,6 +145,7 @@ class GameScene: SKScene {
         addChild(backgroundImages[0])
         
         physicsWorld.gravity.dy = gravity
+        self.physicsWorld.contactDelegate = self
         
         addChild(cameraNode)
         camera = cameraNode
@@ -148,6 +153,14 @@ class GameScene: SKScene {
         
         //Starts generating accelerometer data
         motionManager.startAccelerometerUpdates()
+
+        //Maybe use this to spawn worms instead of calling add worm under updateCounting() func   ?????
+//        run(SKAction.repeatForever(
+//            SKAction.sequence([
+//                SKAction.run(addWorm),
+//                SKAction.wait(forDuration: 1)
+//                ])
+//        ))
 
     }
     
@@ -241,6 +254,7 @@ class GameScene: SKScene {
         worm.physicsBody?.affectedByGravity = false
         worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm // 3
         worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm // 5
+        worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         
         // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/2
@@ -252,6 +266,54 @@ class GameScene: SKScene {
         self.addChild(worm)
         
         worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+    }
+    
+    
+    //Function to emit spark particles at worm position when worm collides with bird
+    func newSparkNode(scene: SKScene, Worm: SKNode) {
+        guard let emitter = SKEmitterNode(fileNamed: "spark.sks") else {
+            return
+        }
+        emitter.particleBirthRate = 100
+        emitter.numParticlesToEmit = 15
+        emitter.particleLifetime = 0.2
+        
+        // Place the emitter at worm postition.
+        emitter.position = Worm.position
+        emitter.name = "exhaust"
+        
+        // Send the particles to the scene.
+        emitter.targetNode = scene;
+        scene.addChild(emitter)
+    }
+    
+    //function to remove worm when it collides with bird
+    func collisionBetween(worm: SKNode, bird: SKNode) {
+        bird.removeFromParent()
+        newSparkNode(scene: self, Worm: worm)
+    }
+    
+    //function to check for collision between worm and bird
+    func didBegin(_ contact: SKPhysicsContact) {
+        // 1
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        // 2
+        if ((firstBody.categoryBitMask & PhysicsCategory.Worm != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.Player != 0)) {
+            if let worm = firstBody.node as? SKSpriteNode, let
+                bird = secondBody.node as? SKSpriteNode {
+                collisionBetween(worm: worm, bird: bird)
+            }
+        }
     }
     
     //TESTING OBSTACLE CODE
@@ -344,6 +406,7 @@ class GameScene: SKScene {
 //        if bird.position.y > obstacleSpacing * CGFloat(obstacles.count - 2) {
 //            addObstacle()
 //        }
+    
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
