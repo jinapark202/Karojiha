@@ -15,10 +15,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Player: UInt32 = 1
         static let Obstacle: UInt32 = 2
         static let Edge: UInt32 = 4
-        static let Worm: UInt32 = 0b1
+        static let Worm: UInt32 = 3
     }
     
     let motionManager = CMMotionManager()
+    //for swiping
+    let swipeRightRec = UISwipeGestureRecognizer()
+    let swipeLeftRec = UISwipeGestureRecognizer()
+    
     let birdName = "bird"
     
     var maxAltitude = CGFloat(0.0)
@@ -145,8 +149,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Start the timer counting
         scheduledTimerWithTimeInterval()
         
-        initBackgroundArray(names: backgroundNames)
-        addChild(backgroundImages[0])
+        //        COMMENTED OUT FOR TESTING
+//        initBackgroundArray(names: backgroundNames)
+//        addChild(backgroundImages[0])
         
         physicsWorld.gravity.dy = gravity
         self.physicsWorld.contactDelegate = self
@@ -157,7 +162,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Starts generating accelerometer data
         motionManager.startAccelerometerUpdates()
-
+        
+        //adds swipe gestureRecognition
+        swipeRightRec.addTarget(self, action: #selector(GameScene.swipedRight) )
+        swipeRightRec.direction = .right
+        self.view!.addGestureRecognizer(swipeRightRec)
+        
+        swipeLeftRec.addTarget(self, action: #selector(GameScene.swipedLeft) )
+        swipeLeftRec.direction = .left
+        self.view!.addGestureRecognizer(swipeLeftRec)
+        
         //Maybe use this to spawn worms instead of calling add worm under updateCounting() func   ?????
 //        run(SKAction.repeatForever(
 //            SKAction.sequence([
@@ -305,6 +319,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
         
+        //checks which categoryBitMask is larger, larger one is assigned to secondBody, smaller one is assigned to firstBody
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
@@ -314,12 +329,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // 2
-        if ((firstBody.categoryBitMask & PhysicsCategory.Worm != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Player != 0)) {
-            if let worm = secondBody.node as? SKSpriteNode, let
-                bird = firstBody.node as? SKSpriteNode {
-                collisionBetween(worm: worm, bird: bird)
-            }
+        if (firstBody.categoryBitMask != secondBody.categoryBitMask) {
+                if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
+                    collisionBetween(worm: worm, bird: bird)
+                }
         }
     }
     
@@ -361,6 +374,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    @objc func swipedRight() {
+        print("Right")
+        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
+    }
+    
+    @objc func swipedLeft() {
+        print("Left")
+        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
+    }
+    
+    
+    
     
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
@@ -382,7 +407,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
 
-        checkBackground()
+//        COMMENTED OUT FOR TESTING
+        //checkBackground()
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
