@@ -400,7 +400,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
 //    }
     
-    
+    //Scrolling background - parallax
     func createBackground() {
         let backgroundTexture = SKTexture(imageNamed: "iconBackground")
         
@@ -409,7 +409,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.zPosition = 0
             background.anchorPoint = CGPoint.zero
             background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
-//            background.position = CGPoint(x: (backgroundTexture.size().width * CGFloat(i)) - CGFloat(1 * i), y: 100)
             addChild(background)
             
             let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
