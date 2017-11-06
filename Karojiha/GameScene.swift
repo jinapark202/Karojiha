@@ -57,6 +57,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var gravity = CGFloat(-15.0)
     
+    var birdVelocity = CGFloat(600.0)
+    
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
     var backgroundImages: [SKNode] = []
@@ -161,14 +163,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Starts generating accelerometer data
         motionManager.startAccelerometerUpdates()
         
-        //adds swipe gestureRecognition
-        swipeRightRec.addTarget(self, action: #selector(GameScene.swipedRight) )
-        swipeRightRec.direction = .right
-        self.view!.addGestureRecognizer(swipeRightRec)
-        
-        swipeLeftRec.addTarget(self, action: #selector(GameScene.swipedLeft) )
-        swipeLeftRec.direction = .left
-        self.view!.addGestureRecognizer(swipeLeftRec)
+//        //adds swipe gestureRecognition
+//        swipeRightRec.addTarget(self, action: #selector(GameScene.swipedRight) )
+//        swipeRightRec.direction = .right
+//        self.view!.addGestureRecognizer(swipeRightRec)
+//
+//        swipeLeftRec.addTarget(self, action: #selector(GameScene.swipedLeft) )
+//        swipeLeftRec.direction = .left
+//        self.view!.addGestureRecognizer(swipeLeftRec)
         
         //Maybe use this to spawn worms instead of calling add worm under updateCounting() func   ?????
 //        run(SKAction.repeatForever(
@@ -187,7 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.bird.run(repeatActionbird)
         
-        bird.physicsBody?.velocity.dy = 600
+        bird.physicsBody?.velocity.dy = birdVelocity
         
         //Determine the maximum altitude of the bird
         if (altitude >= maxAltitude) {
@@ -257,6 +259,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         timer.invalidate()
     }
+    
+//    Collecting enough worms will cause the bird's velocity to increase for a few seconds
+    func powerUp(){
+        let x = time
+        if wormsEaten.truncatingRemainder(dividingBy: 4)==0 && wormsEaten>1{
+            birdVelocity = birdVelocity + 5
+            while time > x+1{
+                birdVelocity = birdVelocity - 5
+            }
+        }
+    }
+    
     
     //Function that adds worms to screen
     func addWorm() {
@@ -371,15 +385,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    @objc func swipedRight() {
-        print("Right")
-        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
-    }
-    
-    @objc func swipedLeft() {
-        print("Left")
-        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
-    }
+//    @objc func swipedRight() {
+//        print("Right")
+//        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
+//    }
+//
+//    @objc func swipedLeft() {
+//        print("Left")
+//        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
+//    }
     
     
     //Updates the position of the bird and background, updates the click counter
@@ -403,6 +417,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
 
         checkBackground()
+        powerUp()
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
