@@ -94,6 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody = playerBody
         bird.physicsBody!.isDynamic = true
         bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
+        bird.zPosition = 10
         bird.name = birdName
         
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Worm
@@ -200,6 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameStarted == false{
             scheduledTimerWithTimeInterval()
             gameStarted = true
+            createBackground()
         }
         
     
@@ -207,8 +209,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             var location = touch.location(in: self)
             //Adjust for cameraNode position
-            location.x-=cameraNode.position.x
-            location.y-=cameraNode.position.y
+            location.x -= cameraNode.position.x
+            location.y -= cameraNode.position.y
             if restartBtn.contains(location){
                 dieAndRestart()
             } else {
@@ -350,6 +352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Perform Necessary Background checks, called in continously in update()
     func checkBackground(){
+        
         //Adds the next background when the bird is close enough
         if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
             //Check if at end of BackgroundImages array, if so, re-add last Image
@@ -364,6 +367,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             addChild(backgroundImages[Int(currentBackground)])
             currentBackground += 1
+
+            
         }
         
         //Removes the previous background when the bird is far enough above it
@@ -394,6 +399,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        print("Left")
 //        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
 //    }
+    
+    
+    func createBackground() {
+        let backgroundTexture = SKTexture(imageNamed: "iconBackground")
+        
+        for i in 0 ... 6 {
+            let background = SKSpriteNode(texture: backgroundTexture)
+            background.zPosition = 0
+            background.anchorPoint = CGPoint.zero
+            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
+//            background.position = CGPoint(x: (backgroundTexture.size().width * CGFloat(i)) - CGFloat(1 * i), y: 100)
+            addChild(background)
+            
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
+            let moveLoop = SKAction.sequence([moveUp, moveReset])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            
+            background.run(moveForever)
+        }
+    }
     
     
     //Updates the position of the bird and background, updates the click counter
