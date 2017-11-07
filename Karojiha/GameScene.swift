@@ -75,6 +75,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return random() * (max - min) + min
     }
     
+    //delay functions
+    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+        let dispatchTime = DispatchTime.now() + seconds
+        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
+    }
+    
+    public enum DispatchLevel {
+        case main, userInteractive, userInitiated, utility, background
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .main:                 return DispatchQueue.main
+            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
+            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
+            case .utility:              return DispatchQueue.global(qos: .utility)
+            case .background:           return DispatchQueue.global(qos: .background)
+            }
+        }
+    }
+    
     //Creates a ledge that prevents the bird from falling to the bottom of the screen.
     func createLedge() {
         ledge.position = CGPoint(x: size.width/2, y: size.height/40)
@@ -262,14 +281,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer.invalidate()
     }
     
-//    Collecting enough worms will cause the bird's velocity to increase for a few seconds
+    
+//    function to shake screen. used in power up func
+    func shakeCamera(layer:SKSpriteNode, duration:Float) {
+        
+        let amplitudeX:Float = 10;
+        let amplitudeY:Float = 6;
+        let numberOfShakes = duration / 0.04;
+        var actionsArray:[SKAction] = [];
+        for i in 1...Int(numberOfShakes) {
+            let moveX = Float(arc4random_uniform(UInt32(amplitudeX))) - amplitudeX / 2;
+            let moveY = Float(arc4random_uniform(UInt32(amplitudeY))) - amplitudeY / 2;
+            let shakeAction = SKAction.moveBy(x: CGFloat(moveX), y: CGFloat(moveY), duration: 0.02);
+            shakeAction.timingMode = SKActionTimingMode.easeOut;
+            actionsArray.append(shakeAction);
+            actionsArray.append(shakeAction.reversed());
+        }
+        
+        let actionSeq = SKAction.sequence(actionsArray);
+        layer.run(actionSeq);
+    }
+    
+    //Function to emit spark particles at worm position when worm collides with bird
+    func newFlyNode(scene: SKScene, Bird: SKNode) {
+        guard let emitter = SKEmitterNode(fileNamed: "fire.sks") else {
+            return
+        }
+        emitter.particleBirthRate = 100
+        emitter.numParticlesToEmit = 15
+        emitter.particleLifetime = 0.2
+        
+        // Place the emitter at worm postition.
+        emitter.position = bird.position
+        emitter.name = "exhaust"
+        
+        // Send the particles to the scene.
+        emitter.targetNode = scene;
+        scene.addChild(emitter)
+    }
+    
+//    Collecting enough worms will apply an upward force to the bird
     func powerUp(){
-        let x = time
-        if wormsEaten.truncatingRemainder(dividingBy: 4)==0 && wormsEaten>1{
-            birdVelocity = birdVelocity + 5
-            while time > x+1{
-                birdVelocity = birdVelocity - 5
-            }
+        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
+            //shakeCamera(layer: bird, duration: 1.0)
+            newFlyNode(scene: self, Bird: bird)
+            
+            
         }
     }
     
