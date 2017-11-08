@@ -30,7 +30,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wormsEaten = CGFloat(0.0)
     
     //Variables for click counter.
-    var counter = 0.0
+    var totalClickCounter = 0.0
     let clickLabel = SKLabelNode()
     let maxElevationLabel = SKLabelNode()
     let wormsEatenLabel = SKLabelNode()
@@ -206,12 +206,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
  
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        counter += 1
+        totalClickCounter += 1
         
         self.bird.run(repeatActionbird)
         
         bird.physicsBody?.velocity.dy = birdVelocity
-        
         
         //Determine the maximum altitude of the bird
         if (altitude >= maxAltitude) {
@@ -289,8 +288,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let scene = GameScene(size: size)
         view?.presentScene(scene)
         
-        counter = 0
-        clickLabel.text = String(counter)
+        totalClickCounter = 0
+        clickLabel.text = String(totalClickCounter)
         altitude = 0.0
 
         timer.invalidate()
@@ -497,9 +496,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Updates the position of the bird and background, updates the click counter
     override func update(_ currentTime: TimeInterval) {
         processUserMotion(forUpdate: currentTime)
-
-        //Beginning Stages of gravity manipulation
-        gravity = CGFloat(-1 * (pow(time, 1.3)) - 15)
+        
+        //Logistic Function for gravity increase, can graph this at
+        //www.desmos.com/calculator/agxuc5gip8
+        
+        gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.018 * totalClickCounter)))))-15)
+        
         if (gravity < -80){
             physicsWorld.gravity.dy = -70
         }
@@ -515,7 +517,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         clickLabel.text = String("Elevation: ") + String(describing: altitude)
 
         checkBackground()
-        powerUp()
+        //powerUp()
         
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
