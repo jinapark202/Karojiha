@@ -31,7 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Variables for click counter.
     var totalClickCounter = 0.0
-    let clickLabel = SKLabelNode()
+    let elevationLabel = SKLabelNode()
     let maxElevationLabel = SKLabelNode()
     let wormsEatenLabel = SKLabelNode()
     
@@ -55,7 +55,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
 
-    var gravity = CGFloat(-15.0)
     
     var birdVelocity = CGFloat(600.0)
     var sidewaysTapForce = CGFloat(600.0)
@@ -165,7 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createScene()
         createLedge()
         createPlayerAndPosition()
-        createClickLabel()
+        createElevationLabel()
         createMaxElevationLabel()
         createRestartBtn()
         createPauseBtn()
@@ -174,7 +173,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
         
-        physicsWorld.gravity.dy = gravity
         self.physicsWorld.contactDelegate = self
         
         addChild(cameraNode)
@@ -212,10 +210,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bird.physicsBody?.velocity.dy = birdVelocity
         
-        //Determine the maximum altitude of the bird
-        if (altitude >= maxAltitude) {
-            maxAltitude = altitude
-        }
 
         //Start the timer counting
         if gameStarted == false{
@@ -262,6 +256,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     //Creates the bird and makes it flap its wings.
     func createScene(){
         self.bird = createBird()
@@ -276,20 +271,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
     
+    
     //Restarts the game once the bird hits the bottom of the screen
     func dieAndRestart() {
 //        createMaxElevationLabel()
         maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
         
         bird.physicsBody?.velocity.dy = 0
-        gravity = CGFloat(-15.0)
-        physicsWorld.gravity.dy = gravity
         
         let scene = GameScene(size: size)
         view?.presentScene(scene)
         
         totalClickCounter = 0
-        clickLabel.text = String(totalClickCounter)
+        elevationLabel.text = String(totalClickCounter)
         altitude = 0.0
 
         timer.invalidate()
@@ -316,6 +310,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         layer.run(actionSeq);
     }
     
+    
     //Function to emit spark particles at worm position when worm collides with bird
     func newFlyNode(scene: SKScene, Bird: SKNode) {
         guard let emitter = SKEmitterNode(fileNamed: "fire.sks") else {
@@ -334,6 +329,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+    
+    
 //    Collecting enough worms will apply an upward force to the bird
     func powerUp(){
         if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
@@ -344,6 +341,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         }
     }
+    
     
     
     //Function that adds worms to screen
@@ -390,6 +388,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+    
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
         worm.removeFromParent()
@@ -398,11 +397,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         newSparkNode(scene: self, Worm: worm)
     }
     
+    
     //function to check for collision between worm and bird
     func didBegin(_ contact: SKPhysicsContact) {
         // 1
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
+        
         
         //checks which categoryBitMask is larger, larger one is assigned to secondBody, smaller one is assigned to firstBody
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
@@ -421,56 +422,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    //Perform Necessary Background checks, called in continously in update()
-    func checkBackground(){
-        
-        //Adds the next background when the bird is close enough
-        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
-            //Check if at end of BackgroundImages array, if so, re-add last Image
-            if currentBackground >= CGFloat(backgroundImages.count) {
-                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
-                backgroundImage.xScale=size.width/backgroundImage.size.width
-                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
-                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
-                backgroundImage.zPosition = -1
-                backgroundImages.append(backgroundImage)
-            }
-            addChild(backgroundImages[Int(currentBackground)])
-            currentBackground += 1
-
-            
-        }
-        
-        //Removes the previous background when the bird is far enough above it
-        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
-            (backgroundImages[Int(previousBackground)]).removeFromParent()
-            previousBackground += 1
-        }
-    }
-    
-    //Allows the bird to move left and right when phone tilts
-    func processUserMotion(forUpdate currentTime: CFTimeInterval) {
-        if let bird = childNode(withName: birdName) as? SKSpriteNode {
-            if let data = motionManager.accelerometerData {
-                if fabs(data.acceleration.x) > 0.2 {
-                    print("Acceleration: \(data.acceleration.x)")
-                    bird.physicsBody!.applyForce(CGVector(dx: 100 * CGFloat(data.acceleration.x), dy: 0))
-                }
-            }
-        }
-    }
-    
-//    @objc func swipedRight() {
-//        print("Right")
-//        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
-//    }
-//
-//    @objc func swipedLeft() {
-//        print("Left")
-//        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
-//    }
     
     //Scrolling background - parallax
     func createBackground() {
@@ -493,32 +444,91 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //Updates the position of the bird and background, updates the click counter
-    override func update(_ currentTime: TimeInterval) {
-        processUserMotion(forUpdate: currentTime)
+    //Perform Necessary Background checks, making changes as necesary called in continously in update()
+    func adjustBackground(){
+    
+        //Adds the next background when the bird is close enough
+        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
+            //Check if at end of BackgroundImages array, if so, re-add last Image
+            if currentBackground >= CGFloat(backgroundImages.count) {
+                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
+                backgroundImage.xScale=size.width/backgroundImage.size.width
+                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
+                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
+                backgroundImage.zPosition = -1
+                backgroundImages.append(backgroundImage)
+            }
+            addChild(backgroundImages[Int(currentBackground)])
+            currentBackground += 1
+        }
         
+        //Removes the previous background when the bird is far enough above it
+        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
+            (backgroundImages[Int(previousBackground)]).removeFromParent()
+            previousBackground += 1
+        }
+    }
+    
+    
+    //Allows the bird to move left and right when phone tilts
+    func processUserMotion(forUpdate currentTime: CFTimeInterval) {
+        if let bird = childNode(withName: birdName) as? SKSpriteNode {
+            if let data = motionManager.accelerometerData {
+                if fabs(data.acceleration.x) > 0.2 {
+                    //print("Acceleration: \(data.acceleration.x)")
+                    bird.physicsBody!.applyForce(CGVector(dx: 100 * CGFloat(data.acceleration.x), dy: 0))
+                }
+            }
+        }
+    }
+    
+    
+    
+//    @objc func swipedRight() {
+//        print("Right")
+//        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
+//    }
+//
+//    @objc func swipedLeft() {
+//        print("Left")
+//        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
+//    }
+    
+  
+    
+    
+    //Changes gravity of the physics World
+    func calculateGravity(){
         //Logistic Function for gravity increase, can graph this at
         //www.desmos.com/calculator/agxuc5gip8
         
-        gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.018 * totalClickCounter)))))-15)
-        
-        if (gravity < -80){
-            physicsWorld.gravity.dy = -70
-        }
-        else{
-            physicsWorld.gravity.dy = gravity
-        }
-        
-        print(gravity)
-        
-        altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
-        
-        maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
-        clickLabel.text = String("Elevation: ") + String(describing: altitude)
+        let gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
+        physicsWorld.gravity.dy = gravity
 
-        checkBackground()
+    }
+    
+    
+    //Updates the text of the labels on the game screen
+    func adjustLabels(){
+        altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
+        if (altitude >= maxAltitude) {
+            maxAltitude = altitude
+        }
+        maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
+        elevationLabel.text = String("Elevation: ") + String(describing: altitude)
+    }
+    
+    
+    //Updates several parts of the game, including background/bird/labels/gravity
+    override func update(_ currentTime: TimeInterval) {
+        processUserMotion(forUpdate: currentTime)
+        calculateGravity()
+        adjustLabels()
+        adjustBackground()
         //powerUp()
         
+        //DON'T KNOW WHAT THIS CODE DOES, CAN THE PERSON THAT WROTE IT PUT IT IN A FUNCTION/ COMMENT?
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y

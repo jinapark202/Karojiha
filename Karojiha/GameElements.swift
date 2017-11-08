@@ -31,14 +31,14 @@ extension GameScene{
     }
     
     //Set up click counter in upper right corner
-    func createClickLabel(){
-        clickLabel.horizontalAlignmentMode = .right
-        clickLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.35)
-        clickLabel.fontColor = .orange
-        clickLabel.fontSize = 15
-        clickLabel.fontName = "Avenir"
-        clickLabel.text = String("All the Elevations: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
-        cameraNode.addChild(clickLabel)
+    func createElevationLabel(){
+        elevationLabel.horizontalAlignmentMode = .right
+        elevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.35)
+        elevationLabel.fontColor = .orange
+        elevationLabel.fontSize = 15
+        elevationLabel.fontName = "Avenir"
+        elevationLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
+        cameraNode.addChild(elevationLabel)
     }
     
     //Set up maximum elevation counter in upper right corner
