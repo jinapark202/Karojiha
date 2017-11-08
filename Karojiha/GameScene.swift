@@ -58,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gravity = CGFloat(-15.0)
     
     var birdVelocity = CGFloat(600.0)
+    var sidewaysTapForce = CGFloat(600.0)
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
@@ -211,6 +212,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bird.physicsBody?.velocity.dy = birdVelocity
         
+        
         //Determine the maximum altitude of the bird
         if (altitude >= maxAltitude) {
             maxAltitude = altitude
@@ -227,6 +229,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Implements the pause and restart button functionality
         for touch in touches{
             var location = touch.location(in: self)
+
+            //UNCOMMENT TO HAVE BIRD MOVE SIDEWAYS WITH TAPS, SPEED CAN BE ADJUSTED WITH THE
+            //GLOBAL VARIABLE SIDEWAYSTAPFORCE
+            
+//            if location.x < size.width/3{
+//                bird.physicsBody?.applyForce(CGVector(dx: sidewaysTapForce, dy: 0))
+//            }
+//
+//            if location.x > (2/3) * size.width {
+//                bird.physicsBody?.applyForce(CGVector(dx: -1*sidewaysTapForce, dy: 0))
+//                }
+
+            
             //Adjust for cameraNode position
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
@@ -289,7 +304,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let amplitudeY:Float = 6;
         let numberOfShakes = duration / 0.04;
         var actionsArray:[SKAction] = [];
-        for i in 1...Int(numberOfShakes) {
+        for _ in 1...Int(numberOfShakes) {
             let moveX = Float(arc4random_uniform(UInt32(amplitudeX))) - amplitudeX / 2;
             let moveY = Float(arc4random_uniform(UInt32(amplitudeY))) - amplitudeY / 2;
             let shakeAction = SKAction.moveBy(x: CGFloat(moveX), y: CGFloat(moveY), duration: 0.02);
