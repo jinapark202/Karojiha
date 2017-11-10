@@ -106,13 +106,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
-        playerBody.mass = 0.3
+        playerBody.mass = 0.4
         playerBody.categoryBitMask = PhysicsCategory.Player
         playerBody.collisionBitMask = 4
         
         bird.physicsBody = playerBody
         bird.physicsBody!.isDynamic = true
-        bird.position = CGPoint(x: ledge.position.x, y: ledge.position.y + 10)
+        bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
         bird.zPosition = 10
         bird.name = birdName
         
@@ -149,8 +149,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Waits a while at beginning of game, then begins to calculate
     @objc func updateCounting(){
         time += 1
-        //print(time)
-        addWorm()
+        if (time.truncatingRemainder(dividingBy: 2) == 0) {
+            addWorm()
+        }
     }
     
     
@@ -162,7 +163,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Creates scene, bird, and buttons
         createScene()
-        createLedge()
+//        createLedge()
         createPlayerAndPosition()
         createElevationLabel()
         createMaxElevationLabel()
@@ -289,28 +290,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer.invalidate()
     }
     
-    
-//    function to shake screen. used in power up func
-    func shakeCamera(layer:SKSpriteNode, duration:Float) {
-        
-        let amplitudeX:Float = 10;
-        let amplitudeY:Float = 6;
-        let numberOfShakes = duration / 0.04;
-        var actionsArray:[SKAction] = [];
-        for _ in 1...Int(numberOfShakes) {
-            let moveX = Float(arc4random_uniform(UInt32(amplitudeX))) - amplitudeX / 2;
-            let moveY = Float(arc4random_uniform(UInt32(amplitudeY))) - amplitudeY / 2;
-            let shakeAction = SKAction.moveBy(x: CGFloat(moveX), y: CGFloat(moveY), duration: 0.02);
-            shakeAction.timingMode = SKActionTimingMode.easeOut;
-            actionsArray.append(shakeAction);
-            actionsArray.append(shakeAction.reversed());
-        }
-        
-        let actionSeq = SKAction.sequence(actionsArray);
-        layer.run(actionSeq);
-    }
-    
-    
     //Function to emit spark particles at worm position when worm collides with bird
     func newFlyNode(scene: SKScene, Bird: SKNode) {
         guard let emitter = SKEmitterNode(fileNamed: "fire.sks") else {
@@ -335,14 +314,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func powerUp(){
         if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
-            //shakeCamera(layer: bird, duration: 1.0)
             newFlyNode(scene: self, Bird: bird)
-            
-            
         }
     }
-    
-    
     
     //Function that adds worms to screen
     func addWorm() {
@@ -416,12 +390,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // 2
         if (firstBody.categoryBitMask != secondBody.categoryBitMask) {
-                if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                    collisionBetween(worm: worm, bird: bird)
-                }
+            if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
+                collisionBetween(worm: worm, bird: bird)
+            }
         }
     }
-    
     
     //Scrolling background - parallax
     func createBackground() {
@@ -473,16 +446,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
-        if let bird = childNode(withName: birdName) as? SKSpriteNode {
-            if let data = motionManager.accelerometerData {
-                if fabs(data.acceleration.x) > 0.2 {
-                    //print("Acceleration: \(data.acceleration.x)")
-                    bird.physicsBody!.applyForce(CGVector(dx: 100 * CGFloat(data.acceleration.x), dy: 0))
+        if gameStarted == true {
+            if let bird = childNode(withName: birdName) as? SKSpriteNode {
+                if let data = motionManager.accelerometerData {
+                    if fabs(data.acceleration.x) > 0.001 {
+                        bird.physicsBody!.applyForce(CGVector(dx: CGFloat(70 * pow(abs(data.acceleration.x) * 7, 1.5) * sign(data.acceleration.x)), dy: 0))
                 }
             }
         }
     }
-    
+}
     
     
 //    @objc func swipedRight() {
@@ -508,7 +481,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
-    
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
@@ -519,6 +491,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         elevationLabel.text = String("Elevation: ") + String(describing: altitude)
     }
     
+    //Adjusts the camera as the bird moves up the screen.
+    func setupCameraNode() {
+        let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
+        //Moves the camera up with the bird when the bird goes halfway up the screen
+        if playerPositionInCamera.y > 0 {
+            cameraNode.position.y = bird.position.y
+        }
+        //Restarts the game when the bird hits the bottom of the screen
+        if playerPositionInCamera.y < -size.height / 2.0 {
+            dieAndRestart()
+        }
+    }
     
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
@@ -527,14 +511,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         adjustLabels()
         adjustBackground()
         //powerUp()
-        
-        //DON'T KNOW WHAT THIS CODE DOES, CAN THE PERSON THAT WROTE IT PUT IT IN A FUNCTION/ COMMENT?
-        let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
-        if playerPositionInCamera.y > 0 {
-            cameraNode.position.y = bird.position.y
-        }
-        if playerPositionInCamera.y < -size.height / 2.0 {
-            dieAndRestart()
-        }
+        setupCameraNode()
+    
     }
 }
