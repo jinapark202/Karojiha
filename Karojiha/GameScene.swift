@@ -94,15 +94,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    //Creates a ledge that prevents the bird from falling to the bottom of the screen.
-    func createLedge() {
-        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
-        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
-        ledgeBody.isDynamic = false
-        ledgeBody.categoryBitMask = PhysicsCategory.Edge
-        ledge.physicsBody = ledgeBody
-        addChild(ledge)
-    }
+//    //Creates a ledge that prevents the bird from falling to the bottom of the screen.
+//    func createLedge() {
+//        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
+//        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
+//        ledgeBody.isDynamic = false
+//        ledgeBody.categoryBitMask = PhysicsCategory.Edge
+//        ledge.physicsBody = ledgeBody
+//        addChild(ledge)
+//    }
     
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
@@ -147,10 +147,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     //Waits a while at beginning of game, then begins to calculate
+    //Prevent worms from accumulating until after the bird gets halfway up the screen
     @objc func updateCounting(){
         time += 1
-        if (time.truncatingRemainder(dividingBy: 2) == 0) {
-            addWorm()
+        if (bird.position.y > size.height/2) {
+            if (time.truncatingRemainder(dividingBy: 2) == 0) {
+                addWorm()
+            }
         }
     }
     
@@ -210,7 +213,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.bird.run(repeatActionbird)
         
         bird.physicsBody?.velocity.dy = birdVelocity
-        
 
         //Start the timer counting
         if gameStarted == false{
@@ -457,7 +459,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 }
     
-    
 //    @objc func swipedRight() {
 //        print("Right")
 //        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
@@ -467,8 +468,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        print("Left")
 //        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
 //    }
-    
-  
     
     
     //Changes gravity of the physics World
