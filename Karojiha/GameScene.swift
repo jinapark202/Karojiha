@@ -75,35 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return random() * (max - min) + min
     }
     
-    //delay functions
-    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
-        let dispatchTime = DispatchTime.now() + seconds
-        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
-    }
-    
-    public enum DispatchLevel {
-        case main, userInteractive, userInitiated, utility, background
-        var dispatchQueue: DispatchQueue {
-            switch self {
-            case .main:                 return DispatchQueue.main
-            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
-            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
-            case .utility:              return DispatchQueue.global(qos: .utility)
-            case .background:           return DispatchQueue.global(qos: .background)
-            }
-        }
-    }
-    
-//    //Creates a ledge that prevents the bird from falling to the bottom of the screen.
-//    func createLedge() {
-//        ledge.position = CGPoint(x: size.width/2, y: size.height/40)
-//        let ledgeBody = SKPhysicsBody(rectangleOf: CGSize(width: size.width/2, height: size.height/40))
-//        ledgeBody.isDynamic = false
-//        ledgeBody.categoryBitMask = PhysicsCategory.Edge
-//        ledge.physicsBody = ledgeBody
-//        addChild(ledge)
-//    }
-    
+
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
         playerBody.mass = 0.4
@@ -123,6 +95,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.allowsRotation = false
     }
     
+    //Function that adds worms to screen
+    func addWorm() {
+        
+        // Create sprite
+        let worm = SKSpriteNode(imageNamed: "dragonfly.png")
+        
+        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size) // 1
+        worm.physicsBody?.isDynamic = true// 2
+        worm.physicsBody?.affectedByGravity = false
+        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm // 3
+        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm // 5
+        worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        
+        // Position the worm
+        worm.position = CGPoint(x: random(min:10, max: size.width-10 ), y: actualY)
+        
+        // Add the worm to the scene
+        self.addChild(worm)
+        
+        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+    }
+    
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
     func initBackgroundArray(names: [String]){
         var x: CGFloat = 0.0
@@ -137,6 +134,66 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             x += 1
             //print(backgroundImage.position)
         }
+    }
+    
+    //Scrolling background - parallax
+    func createBackground() {
+        let backgroundTexture = SKTexture(imageNamed: "iconBackground")
+        
+        for i in 0 ... 6 {
+            let background = SKSpriteNode(texture: backgroundTexture)
+            background.zPosition = 0
+            background.anchorPoint = CGPoint.zero
+            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
+            addChild(background)
+            
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
+            let moveLoop = SKAction.sequence([moveUp, moveReset])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            
+            background.run(moveForever)
+        }
+    }
+    
+    //Perform Necessary Background checks, making changes as necesary called in continously in update()
+    func adjustBackground(){
+        
+        //Adds the next background when the bird is close enough
+        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
+            //Check if at end of BackgroundImages array, if so, re-add last Image
+            if currentBackground >= CGFloat(backgroundImages.count) {
+                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
+                backgroundImage.xScale=size.width/backgroundImage.size.width
+                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
+                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
+                backgroundImage.zPosition = -1
+                backgroundImages.append(backgroundImage)
+            }
+            addChild(backgroundImages[Int(currentBackground)])
+            currentBackground += 1
+        }
+        
+        //Removes the previous background when the bird is far enough above it
+        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
+            (backgroundImages[Int(previousBackground)]).removeFromParent()
+            previousBackground += 1
+        }
+    }
+    
+    //Creates the bird and makes it flap its wings.
+    func createScene(){
+        self.bird = createBird()
+        self.addChild(bird)
+        
+        birdSprites.append(birdAtlas.textureNamed("bird1"))
+        birdSprites.append(birdAtlas.textureNamed("bird2"))
+        birdSprites.append(birdAtlas.textureNamed("bird3"))
+        birdSprites.append(birdAtlas.textureNamed("bird4"))
+        
+        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
+        self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
     
     //Starts timer in motion, calls updateCounting every second
@@ -166,7 +223,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Creates scene, bird, and buttons
         createScene()
-//        createLedge()
         createPlayerAndPosition()
         createElevationLabel()
         createMaxElevationLabel()
@@ -236,7 +292,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            if location.x > (2/3) * size.width {
 //                bird.physicsBody?.applyForce(CGVector(dx: -1*sidewaysTapForce, dy: 0))
 //                }
-
             
             //Adjust for cameraNode position
             location.x -= cameraNode.position.x
@@ -258,22 +313,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
-    
-    //Creates the bird and makes it flap its wings.
-    func createScene(){
-        self.bird = createBird()
-        self.addChild(bird)
-        
-        birdSprites.append(birdAtlas.textureNamed("bird1"))
-        birdSprites.append(birdAtlas.textureNamed("bird2"))
-        birdSprites.append(birdAtlas.textureNamed("bird3"))
-        birdSprites.append(birdAtlas.textureNamed("bird4"))
-        
-        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
-        self.repeatActionbird = SKAction.repeatForever(animatebird)
-    }
-    
     
     //Restarts the game once the bird hits the bottom of the screen
     func dieAndRestart() {
@@ -310,42 +349,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
-    
-    
-//    Collecting enough worms will apply an upward force to the bird
-    func powerUp(){
-        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
-            newFlyNode(scene: self, Bird: bird)
-        }
-    }
-    
-    //Function that adds worms to screen
-    func addWorm() {
-    
-        // Create sprite
-        let worm = SKSpriteNode(imageNamed: "dragonfly.png")
-        
-        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size) // 1
-        worm.physicsBody?.isDynamic = true// 2
-        worm.physicsBody?.affectedByGravity = false
-        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm // 3
-        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm // 5
-        worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        
-        // Determine where to spawn the worm along the Y axis
-        let actualY = bird.position.y + size.height/2
-        
-        // Position the worm
-        worm.position = CGPoint(x: random(min:10, max: size.width-10 ), y: actualY)
-        
-        // Add the worm to the scene
-        self.addChild(worm)
-        
-        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
-    }
-    
-    
     //Function to emit spark particles at worm position when worm collides with bird
     func newSparkNode(scene: SKScene, Worm: SKNode) {
         guard let emitter = SKEmitterNode(fileNamed: "spark.sks") else {
@@ -364,6 +367,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+
+    //Collecting enough worms will apply an upward force to the bird
+    func powerUp(){
+        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
+            newFlyNode(scene: self, Bird: bird)
+        }
+    }
+    
     
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
@@ -372,7 +384,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wormsEatenLabel.text = String("Worms Eaten: ") + String(describing: floor(wormsEaten))
         newSparkNode(scene: self, Worm: worm)
     }
-    
     
     //function to check for collision between worm and bird
     func didBegin(_ contact: SKPhysicsContact) {
@@ -398,54 +409,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    //Scrolling background - parallax
-    func createBackground() {
-        let backgroundTexture = SKTexture(imageNamed: "iconBackground")
-        
-        for i in 0 ... 6 {
-            let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = 0
-            background.anchorPoint = CGPoint.zero
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
-            addChild(background)
-            
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
-            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
-            let moveLoop = SKAction.sequence([moveUp, moveReset])
-            let moveForever = SKAction.repeatForever(moveLoop)
-            
-            background.run(moveForever)
-        }
-    }
-    
-    
-    //Perform Necessary Background checks, making changes as necesary called in continously in update()
-    func adjustBackground(){
-    
-        //Adds the next background when the bird is close enough
-        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
-            //Check if at end of BackgroundImages array, if so, re-add last Image
-            if currentBackground >= CGFloat(backgroundImages.count) {
-                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
-                backgroundImage.xScale=size.width/backgroundImage.size.width
-                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
-                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
-                backgroundImage.zPosition = -1
-                backgroundImages.append(backgroundImage)
-            }
-            addChild(backgroundImages[Int(currentBackground)])
-            currentBackground += 1
-        }
-        
-        //Removes the previous background when the bird is far enough above it
-        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
-            (backgroundImages[Int(previousBackground)]).removeFromParent()
-            previousBackground += 1
-        }
-    }
-    
-    
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
         if gameStarted == true {
@@ -459,17 +422,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 }
     
-//    @objc func swipedRight() {
-//        print("Right")
-//        bird.physicsBody!.applyForce(CGVector(dx: -1000, dy: 0))
-//    }
-//
-//    @objc func swipedLeft() {
-//        print("Left")
-//        bird.physicsBody!.applyForce(CGVector(dx: 1000, dy: 0))
-//    }
-    
-    
     //Changes gravity of the physics World
     func calculateGravity(){
         //Logistic Function for gravity increase, can graph this at
@@ -477,7 +429,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
         physicsWorld.gravity.dy = gravity
-
     }
     
     //Updates the text of the labels on the game screen
@@ -489,6 +440,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         maxElevationLabel.text = String("Max Elevation: ") + String(describing: maxAltitude)
         elevationLabel.text = String("Elevation: ") + String(describing: altitude)
     }
+    
+    //delay functions
+    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+        let dispatchTime = DispatchTime.now() + seconds
+        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
+    }
+    
+    public enum DispatchLevel {
+        case main, userInteractive, userInitiated, utility, background
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .main:                 return DispatchQueue.main
+            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
+            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
+            case .utility:              return DispatchQueue.global(qos: .utility)
+            case .background:           return DispatchQueue.global(qos: .background)
+            }
+        }
+    }
+    
     
     //Adjusts the camera as the bird moves up the screen.
     func setupCameraNode() {
