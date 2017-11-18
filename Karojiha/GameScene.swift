@@ -6,6 +6,7 @@
 //  Copyright © 2017 Macalester College. All rights reserved.
 //
 
+
 import SpriteKit
 import CoreMotion
 
@@ -18,7 +19,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Worm: UInt32 = 3
     }
     
-    
     let motionManager = CMMotionManager()
     //for swiping
     let swipeRightRec = UISwipeGestureRecognizer()
@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let birdName = "bird"
     
-    var maxAltitude = CGFloat(0.0)
+    static var maxAltitude = CGFloat(0.0)
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
     var altitude = CGFloat(0.0)
@@ -405,7 +405,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
         if gameStarted == true {
@@ -426,15 +425,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
         physicsWorld.gravity.dy = gravity
-        
     }
     
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         
         altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
-        if (altitude >= maxAltitude) {
-            maxAltitude = altitude
+        if (altitude >= GameScene.maxAltitude) {
+            GameScene.maxAltitude = altitude
         }
         elevationLabel.text = String(describing: Int(altitude/10)) + String(" ft")
         let scaleUpAction = SKAction.scale(to: 1.5, duration: 0.3)
@@ -446,7 +444,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             previousCheckpoint = currentCheckpoint
             elevationLabel.run(scaleActionSequence)
         }
-        
     }
     
     //Adjusts the camera as the bird moves up the screen.
@@ -458,9 +455,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
-            dieAndRestart()
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            let gameOverScene = GameOverScene(size: self.size)
+            self.view?.presentScene(gameOverScene, transition: reveal)
         }
-
     }
     
     //Updates several parts of the game, including background/bird/labels/gravity
@@ -470,7 +468,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         adjustLabels()
         adjustBackground()
         powerUp()
-        
         setupCameraNode()
     }
 }
