@@ -14,11 +14,25 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     override init(size: CGSize) {
         
         super.init(size: size)
-        var highscore = CGFloat(0.0)
         
-        if (highscore <= GameScene.maxAltitude / 10) {
-            highscore = GameScene.maxAltitude / 10
+        var score = Int(GameScene.maxAltitude / 10)
+        var highScore = 0
+        
+        var highScoreDefault = UserDefaults.standard
+        
+        if (highScoreDefault.value(forKey: "highScore") != nil) {
+            highScore = highScoreDefault.value(forKey: "highScore") as! NSInteger!
         }
+        
+        if (score > highScore) {
+            highScore = score
+            
+            var HighScoreDefault = UserDefaults.standard
+            highScoreDefault.setValue(highScore, forKey: "highScore")
+            highScoreDefault.synchronize()
+            
+        }
+        
         
         //Creates the restart button
         var restartBtn = SKSpriteNode()
@@ -41,7 +55,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         //Creates score label from the past game.
         let scoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
-        scoreLabel.text = "Current Elevation: \(GameScene.maxAltitude / 10) ft"
+        scoreLabel.text = "Current Elevation: \(score) ft"
         scoreLabel.fontSize = 25
         scoreLabel.fontColor = SKColor.yellow
         scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
@@ -51,7 +65,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         //Creates label for highest score.
         let highScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
         highScoreLabel.fontSize = 25
-        highScoreLabel.text = "Record: \(highscore) ft"
+        highScoreLabel.text = "Record: \(highScore) ft"
         highScoreLabel.fontColor = SKColor.orange
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/6.5)
         addChild(highScoreLabel)
@@ -67,7 +81,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-
         run(SKAction.sequence([
             SKAction.wait(forDuration: 3.0),
             SKAction.run() {
@@ -75,7 +88,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
                 self.view?.presentScene(scene)
             }
             ]))
-        
     }
     
     required init(coder aDecoder: NSCoder) {
