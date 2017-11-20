@@ -444,27 +444,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gravity = newGravity
     }
 
+    
     var altitude: CGFloat {
         return floor(bird.position.y - (ledge.position.y + 10) - 28)
     }
 
     var score = CGFloat(0.0)
+    
+    
 
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         
-        // compute Int(altitude / 10)
-        // increase score if it’s bigger
-        // check out the max(a,b) function
-        
+        //Keeps track of the score - the highest point the bird ever went
         if (altitude >= score) {
             score = altitude
         }
         
-        elevationLabel.text = String(describing: "\(score) ft")
+        elevationLabel.text = String(describing: "\(Int(score)) ft")
         let scaleUpAction = SKAction.scale(to: 1.5, duration: 0.3)
         let scaleDownAction = SKAction.scale(to: 1.0, duration: 0.3)
         let scaleActionSequence = SKAction.sequence([scaleUpAction, scaleDownAction])
+        
         //Used to decide when to animate ElevationLabel
         let currentCheckpoint = floor(altitude/1000)
         if (currentCheckpoint > previousCheckpoint) {
@@ -473,25 +474,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
+    
     //Adjusts the camera as the bird moves up the screen.
     func setupCameraNode() {
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
+        
         //Moves the camera up with the bird when the bird goes halfway up the screen
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y
         }
+        
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
-            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score))
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
+    
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
-
         processUserMotion(forUpdate: currentTime)
         calculateGravity()
         adjustLabels()

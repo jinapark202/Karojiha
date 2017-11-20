@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
 		8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AF8565B1FB2327D002BA0EB /* fire.sks */; };
+		D8014BFC1FC386AB00E6510F /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8014BFB1FC386AB00E6510F /* MenuScene.swift */; };
 		D82C77DF1FC25A1600B3ED74 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82C77DE1FC25A1600B3ED74 /* GameOverScene.swift */; };
 		D8984AEC1F8EBF5300B6D113 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */; };
 		D8984AF21F8EBF5300B6D113 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AF11F8EBF5300B6D113 /* GameScene.swift */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		8AF8565B1FB2327D002BA0EB /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
+		D8014BFB1FC386AB00E6510F /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		D82C77DE1FC25A1600B3ED74 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		D8984AE81F8EBF5300B6D113 /* Karojiha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karojiha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				D82C77DE1FC25A1600B3ED74 /* GameOverScene.swift */,
+				D8014BFB1FC386AB00E6510F /* MenuScene.swift */,
 				D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */,
 				D8984AF11F8EBF5300B6D113 /* GameScene.swift */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
@@ -283,6 +286,7 @@
 				D82C77DF1FC25A1600B3ED74 /* GameOverScene.swift in Sources */,
 				D8984B201F8EC05400B6D113 /* GameElements.swift in Sources */,
 				D8984AF21F8EBF5300B6D113 /* GameScene.swift in Sources */,
+				D8014BFC1FC386AB00E6510F /* MenuScene.swift in Sources */,
 				D8984AF41F8EBF5300B6D113 /* GameViewController.swift in Sources */,
 				D8984AEC1F8EBF5300B6D113 /* AppDelegate.swift in Sources */,
 			);
@@ -452,11 +456,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y4M5563D49;
+				DEVELOPMENT_TEAM = 5HELNZVN42;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha1014123;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -469,11 +473,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y4M5563D49;
+				DEVELOPMENT_TEAM = 5HELNZVN42;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha1014123;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
