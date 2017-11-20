@@ -11,32 +11,22 @@ import SpriteKit
 
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
-    override init(size: CGSize) {
+    let restartBtn = SKSpriteNode(imageNamed: "restart2")
+
+    init(size: CGSize, score: Int) {
         
         super.init(size: size)
         
-        var score = Int(GameScene.maxAltitude / 10)
-        var highScore = 0
-        
         var highScoreDefault = UserDefaults.standard
-        
-        if (highScoreDefault.value(forKey: "highScore") != nil) {
-            highScore = highScoreDefault.value(forKey: "highScore") as! NSInteger!
-        }
+        var highScore = highScoreDefault.integer(forKey: "highScore")
         
         if (score > highScore) {
             highScore = score
-            
-            var HighScoreDefault = UserDefaults.standard
             highScoreDefault.setValue(highScore, forKey: "highScore")
             highScoreDefault.synchronize()
-            
         }
         
-        
         //Creates the restart button
-        var restartBtn = SKSpriteNode()
-        restartBtn = SKSpriteNode(imageNamed: "restart2")
         restartBtn.size = CGSize(width: 200, height: 200)
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.5)
         addChild(restartBtn)
@@ -70,25 +60,27 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/6.5)
         addChild(highScoreLabel)
         
-        func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            for touch in touches{
-                let location = touch.location(in: self)
-                if restartBtn.contains(location){
-                    let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-                    let gameScene = GameScene()
-                    self.view?.presentScene(gameScene, transition: reveal)
-                }
-            }
-        }
-        
         run(SKAction.sequence([
             SKAction.wait(forDuration: 3.0),
             SKAction.run() {
-                let scene = GameScene(size: size)
-                self.view?.presentScene(scene)
             }
             ]))
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches{
+            let location = touch.location(in: self)
+            if restartBtn.contains(location){
+//                let scene = GameScene(size: size)
+//                self.view?.presentScene(scene)
+
+                let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+                let gameScene = GameScene(size: size)
+                self.view?.presentScene(gameScene, transition: reveal)
+            }
+        }
+    }
+    
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -27,11 +27,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let birdName = "bird"
     
-    static var maxAltitude = CGFloat(0.0)
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
-    var altitude = CGFloat(0.0)
-    var wormsEaten = CGFloat(0.0)
+    var wormsEaten = 0
     
     //Variables for click counter.
     var totalClickCounter = 0.0
@@ -46,6 +44,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //All necessary to determine clicksRequired
     var timer = Timer()
     var time = 0.0
+    
+    var latestTime = 0.0
+    var powerUpEndTime = 0.0
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
@@ -247,7 +248,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view?.presentScene(scene)
         
         totalClickCounter = 0
-        altitude = 0.0
         
         timer.invalidate()
     }
@@ -313,12 +313,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+    func startPowerUp() {
+        powerUpEndTime = latestTime + 4
+    }
+    
     //Collecting enough worms will apply an upward force to the bird
-    func powerUp(){
+    func applyPowerUp(){
         //expontential decay funtion to allow for more worms to be needed at the beginning of the game than at the end of the game
         //let wormsNeeded = (pow((1/1.3),((abs(gravity))-21))).rounded(.up)
-        let wormsNeeded = 3
-        if wormsEaten.truncatingRemainder(dividingBy: CGFloat(wormsNeeded))==0 && wormsEaten>1{
+        
+        if latestTime < powerUpEndTime {
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
             newFlyNode(scene: self, Bird: bird)
         }
@@ -328,6 +332,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func collisionBetween(worm: SKNode, bird: SKNode) {
         worm.removeFromParent()
         wormsEaten += 1
+        
+        let wormsNeeded = 3
+        if wormsEaten % wormsNeeded == 0 && wormsEaten > 1 {
+            startPowerUp()
+        }
+
         animateWormLabel()
         wormsEatenLabel.text = String("Worms: ") + String(describing: (Int(wormsEaten)))
         newSparkNode(scene: self, Worm: worm)
@@ -428,15 +438,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity.dy = newGravity
         gravity = newGravity
     }
-    
+
+    var altitude: CGFloat {
+        return floor(bird.position.y - (ledge.position.y + 10) - 28)
+    }
+
+    var score = CGFloat(0.0)
+
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         
-        altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
-        if (altitude >= GameScene.maxAltitude) {
-            GameScene.maxAltitude = altitude
+        // compute Int(altitude / 10)
+        // increase score if it’s bigger
+        // check out the max(a,b) function
+        
+        if (altitude >= score) {
+            score = altitude
         }
-        elevationLabel.text = String(describing: Int(altitude/10)) + String(" ft")
+        
+        elevationLabel.text = String(describing: "\(score) ft")
         let scaleUpAction = SKAction.scale(to: 1.5, duration: 0.3)
         let scaleDownAction = SKAction.scale(to: 1.0, duration: 0.3)
         let scaleActionSequence = SKAction.sequence([scaleUpAction, scaleDownAction])
@@ -458,18 +478,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
             let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size)
+            let gameOverScene = GameOverScene(size: self.size, score: Int(score))
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
+        latestTime = currentTime
+
         processUserMotion(forUpdate: currentTime)
         calculateGravity()
         adjustLabels()
         adjustBackground()
-        powerUp()
+        applyPowerUp()
         setupCameraNode()
     }
     
