@@ -472,5 +472,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         powerUp()
         setupCameraNode()
     }
+    
 }
 
