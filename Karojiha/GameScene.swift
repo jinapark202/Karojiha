@@ -270,16 +270,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
-    
-    
-    //    Collecting enough worms will apply an upward force to the bird
-    func powerUp(){
-        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
-            newFlyNode(scene: self, Bird: bird)
-        }
-    }
-    
     //Function that adds worms to screen
     func addWorm() {
         
