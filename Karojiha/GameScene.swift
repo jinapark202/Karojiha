@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Edge: UInt32 = 4
         static let Worm: UInt32 = 3
     }
+    var gravity = CGFloat(0.0)
     
     let motionManager = CMMotionManager()
     //for swiping
@@ -367,20 +368,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
-
     //Collecting enough worms will apply an upward force to the bird
     func powerUp(){
-        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
+        print("gravity: ", gravity)
+        //expontential decay funtion to allow for more worms to be needed at the beginning of the game than at the end of the game
+        //let wormsNeeded = (pow((1/1.3),((abs(gravity))-21))).rounded(.up)
+        let wormsNeeded = 3
+        print("wormsNeeded: ", wormsNeeded)
+        if wormsEaten.truncatingRemainder(dividingBy: CGFloat(wormsNeeded))==0 && wormsEaten>1{
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
             newFlyNode(scene: self, Bird: bird)
         }
     }
-    
     
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
         worm.removeFromParent()
         wormsEaten += 1
+        print("wormsEaten: ", wormsEaten)
         wormsEatenLabel.text = String("Worms Eaten: ") + String(describing: floor(wormsEaten))
         newSparkNode(scene: self, Worm: worm)
     }
@@ -427,8 +432,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Logistic Function for gravity increase, can graph this at
         //www.desmos.com/calculator/agxuc5gip8
         
-        let gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
-        physicsWorld.gravity.dy = gravity
+        let newGravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
+        physicsWorld.gravity.dy = newGravity
+        gravity = newGravity
     }
     
     //Updates the text of the labels on the game screen
@@ -480,7 +486,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         calculateGravity()
         adjustLabels()
         adjustBackground()
-        //powerUp()
+        powerUp()
         setupCameraNode()
     
     }
