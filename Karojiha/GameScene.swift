@@ -18,16 +18,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Edge: UInt32 = 4
         static let Worm: UInt32 = 3
     }
+    var gravity = CGFloat(0.0)
     
     let motionManager = CMMotionManager()
 
     let birdName = "bird"
     
-    static var maxAltitude = CGFloat(0.0)
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
-    var altitude = CGFloat(0.0)
-    var wormsEaten = CGFloat(0.0)
+    var wormsEaten = 0
     
     //Variables for click counter.
     var totalClickCounter = 0.0
@@ -42,6 +41,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //All necessary to determine clicksRequired
     var timer = Timer()
     var time = 0.0
+    
+    var latestTime = 0.0
+    var powerUpEndTime = 0.0
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
@@ -161,8 +163,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createPauseBtn()
         createWormsEatenLabel()
         
-//        initBackgroundArray(names: backgroundNames)
-//        addChild(backgroundImages[0])
+        initBackgroundArray(names: backgroundNames)
+        addChild(backgroundImages[0])
         
         self.physicsWorld.contactDelegate = self
         
@@ -243,7 +245,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view?.presentScene(scene)
         
         totalClickCounter = 0
-        altitude = 0.0
         
         timer.invalidate()
     }
@@ -264,16 +265,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Send the particles to the scene.
         emitter.targetNode = scene;
         scene.addChild(emitter)
-    }
-    
-    
-    
-    //    Collecting enough worms will apply an upward force to the bird
-    func powerUp(){
-        if wormsEaten.truncatingRemainder(dividingBy: 3)==0 && wormsEaten>1{
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 3000))
-            newFlyNode(scene: self, Bird: bird)
-        }
     }
     
     //Function that adds worms to screen
@@ -319,11 +310,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+    func startPowerUp() {
+        powerUpEndTime = latestTime + 4
+    }
+    
+    //Collecting enough worms will apply an upward force to the bird
+    func applyPowerUp(){
+        //expontential decay funtion to allow for more worms to be needed at the beginning of the game than at the end of the game
+        //let wormsNeeded = (pow((1/1.3),((abs(gravity))-21))).rounded(.up)
+        
+        if latestTime < powerUpEndTime {
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
+            newFlyNode(scene: self, Bird: bird)
+        }
+    }
     
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
         worm.removeFromParent()
         wormsEaten += 1
+        
+        let wormsNeeded = 3
+        if wormsEaten % wormsNeeded == 0 && wormsEaten > 1 {
+            startPowerUp()
+        }
+
         animateWormLabel()
         wormsEatenLabel.text = String("Worms: ") + String(describing: (Int(wormsEaten)))
         newSparkNode(scene: self, Worm: worm)
@@ -391,7 +402,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 backgroundImage.zPosition = -1
                 backgroundImages.append(backgroundImage)
             }
-//            addChild(backgroundImages[Int(currentBackground)])
+            addChild(backgroundImages[Int(currentBackground)])
             currentBackground += 1
         }
         
@@ -420,18 +431,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Logistic Function for gravity increase, can graph this at
         //www.desmos.com/calculator/agxuc5gip8
         
-        let gravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
-        physicsWorld.gravity.dy = gravity
+        let newGravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
+        physicsWorld.gravity.dy = newGravity
+        gravity = newGravity
     }
-    
+
+    var altitude: CGFloat {
+        return floor(bird.position.y - (ledge.position.y + 10) - 28)
+    }
+
+    var score = CGFloat(0.0)
+
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         
-        altitude = floor(bird.position.y - (ledge.position.y + 10) - 28)
-        if (altitude >= GameScene.maxAltitude) {
-            GameScene.maxAltitude = altitude
+        // compute Int(altitude / 10)
+        // increase score if it’s bigger
+        // check out the max(a,b) function
+        
+        if (altitude >= score) {
+            score = altitude
         }
-        elevationLabel.text = String(describing: Int(altitude/10)) + String(" ft")
+        
+        elevationLabel.text = String(describing: "\(score) ft")
         let scaleUpAction = SKAction.scale(to: 1.5, duration: 0.3)
         let scaleDownAction = SKAction.scale(to: 1.0, duration: 0.3)
         let scaleActionSequence = SKAction.sequence([scaleUpAction, scaleDownAction])
@@ -453,19 +475,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
             let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size)
+            let gameOverScene = GameOverScene(size: self.size, score: Int(score))
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
+        latestTime = currentTime
+
         processUserMotion(forUpdate: currentTime)
         calculateGravity()
         adjustLabels()
         adjustBackground()
-        powerUp()
+        applyPowerUp()
         setupCameraNode()
     }
+    
 }
 

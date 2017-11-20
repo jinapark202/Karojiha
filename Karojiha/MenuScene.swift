@@ -20,20 +20,18 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         playLabel.text = message
         playLabel.fontSize = 60
         playLabel.fontColor = SKColor.white
-        playLabel.position = CGPoint(x: size.width/2, y: size.height/1.25)
+        playLabel.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(playLabel)
-        
-        
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let gameScene = GameScene(size: self.size)
-        self.view?.presentScene(gameScene, transition: reveal)
+        playLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
             if playLabel.contains(location){
-                let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+                let reveal = SKTransition.moveIn(with: .down,
+                                                 duration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
