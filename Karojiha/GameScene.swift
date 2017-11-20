@@ -164,8 +164,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createPauseBtn()
         createWormsEatenLabel()
         
-        initBackgroundArray(names: backgroundNames)
-        addChild(backgroundImages[0])
+//        initBackgroundArray(names: backgroundNames)
+//        addChild(backgroundImages[0])
         
         self.physicsWorld.contactDelegate = self
         
@@ -394,7 +394,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 backgroundImage.zPosition = -1
                 backgroundImages.append(backgroundImage)
             }
-            addChild(backgroundImages[Int(currentBackground)])
+//            addChild(backgroundImages[Int(currentBackground)])
             currentBackground += 1
         }
         
