@@ -35,31 +35,23 @@ extension GameScene{
         elevationLabel.horizontalAlignmentMode = .right
         elevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.35)
         elevationLabel.fontColor = .orange
-        elevationLabel.fontSize = 15
-        elevationLabel.fontName = "Avenir"
-        elevationLabel.text = String("Elevation: ") + String(describing: floor(bird.position.y - (ledge.position.y + 10)))
+        elevationLabel.fontSize = 18
+        elevationLabel.fontName = "Avenir-BlackOblique"
+        elevationLabel.text = String(describing:
+            Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
+        
         cameraNode.addChild(elevationLabel)
     }
     
-    //Set up maximum elevation counter in upper right corner
-    func createMaxElevationLabel(){
-        maxElevationLabel.horizontalAlignmentMode = .right
-        maxElevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height/2.55)
-        maxElevationLabel.fontColor = .red
-        maxElevationLabel.fontSize = 15
-        maxElevationLabel.fontName = "Avenir"
-        maxElevationLabel.text = String("Max Elevation: ") + String(describing: floor(maxAltitude))
-        cameraNode.addChild(maxElevationLabel)
-    }
-    
+
     //Set up maximum elevation counter in upper right corner
     func createWormsEatenLabel(){
-        wormsEatenLabel.horizontalAlignmentMode = .left
-        wormsEatenLabel.position = CGPoint(x: -1*size.width / 2.35, y: size.height/2.55)
+        wormsEatenLabel.horizontalAlignmentMode = .right
+        wormsEatenLabel.position = CGPoint(x: size.width / 2.35, y: size.height/2.8)
         wormsEatenLabel.fontColor = .red
         wormsEatenLabel.fontSize = 15
-        wormsEatenLabel.fontName = "Avenir"
-        wormsEatenLabel.text = String("Worms Eaten: ") + String(describing: floor(wormsEaten))
+        wormsEatenLabel.fontName = "Avenir-BlackOblique"
+        wormsEatenLabel.text = String("Worms: ") + String(describing: (Int(wormsEaten)))
         cameraNode.addChild(wormsEatenLabel)
     }
     
@@ -67,7 +59,6 @@ extension GameScene{
     func createRestartBtn() {
         restartBtn = SKSpriteNode(imageNamed: "restart1")
         restartBtn.size = CGSize(width: 50, height: 50)
-            //THIS MAY BE WRONG POSITION
         restartBtn.position = CGPoint(x: -size.width/2.4, y: size.height/2.25)
         restartBtn.zPosition = 6
         restartBtn.setScale(0)
