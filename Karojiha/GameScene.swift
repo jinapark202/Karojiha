@@ -207,7 +207,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.y -= cameraNode.position.y
             if restartBtn.contains(location){
                 dieAndRestart()
-            } else {
+            }
+            else if homeBtn.contains(location){
+                let reveal = SKTransition.moveIn(with: .down, duration: 0.5)
+                let menuScene = MenuScene(size: size)
+                self.view?.presentScene(menuScene, transition: reveal)
+            }
+            else {
                 if pauseBtn.contains(location){
                     if self.isPaused == false{
                         self.isPaused = true
