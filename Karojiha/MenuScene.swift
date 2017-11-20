@@ -9,18 +9,38 @@
 import Foundation
 import SpriteKit
 
-class MenuScreen: SKScene, SKPhysicsContactDelegate {
+class MenuScene: SKScene, SKPhysicsContactDelegate {
+    
+    let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
+    
     override init(size: CGSize) {
-        
         super.init(size: size)
         
-//        let message = "Play"
-//        let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
-//        gameOverLabel.text = message
-//        gameOverLabel.fontSize = 60
-//        gameOverLabel.fontColor = SKColor.white
-//        gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.25)
-//        addChild(gameOverLabel)
+        let message = "Play"
+        playLabel.text = message
+        playLabel.fontSize = 60
+        playLabel.fontColor = SKColor.white
+        playLabel.position = CGPoint(x: size.width/2, y: size.height/1.25)
+        addChild(playLabel)
+        
+        
+        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+        let gameScene = GameScene(size: self.size)
+        self.view?.presentScene(gameScene, transition: reveal)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches{
+            let location = touch.location(in: self)
+            if playLabel.contains(location){
+                let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+                let gameScene = GameScene(size: size)
+                self.view?.presentScene(gameScene, transition: reveal)
+            }
+        }
+    }
+    
+    override func didMove(to view: SKView) {
         
     }
     

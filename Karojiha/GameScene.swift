@@ -20,10 +20,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     let motionManager = CMMotionManager()
-    //for swiping
-    let swipeRightRec = UISwipeGestureRecognizer()
-    let swipeLeftRec = UISwipeGestureRecognizer()
-    
+
     let birdName = "bird"
     
     static var maxAltitude = CGFloat(0.0)
