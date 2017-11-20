@@ -17,9 +17,10 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         super.init(size: size)
         
-        var highScoreDefault = UserDefaults.standard
+        let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
         
+        // If score is higher than highScore, change highScore to current score.
         if (score > highScore) {
             highScore = score
             highScoreDefault.setValue(highScore, forKey: "highScore")
@@ -28,7 +29,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         //Creates the restart button
         restartBtn.size = CGSize(width: 200, height: 200)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.5)
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
@@ -61,11 +62,12 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         addChild(highScoreLabel)
     }
     
+    //Takes you back to the GameScene when you touch the restart button
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
             if restartBtn.contains(location){
-                let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+                let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
