@@ -77,5 +77,16 @@ extension GameScene{
         cameraNode.addChild(pauseBtn)
         pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
+    
+    //Creates the restart button
+    func createHomeBtn() {
+        homeBtn = SKSpriteNode(imageNamed: "back1")
+        homeBtn.size = CGSize(width: 50, height: 50)
+        homeBtn.position = CGPoint(x: -size.width/8, y: size.height/2.25)
+        homeBtn.zPosition = 6
+        homeBtn.setScale(0)
+        cameraNode.addChild(homeBtn)
+        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+    }
 }
 

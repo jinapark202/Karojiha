@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var restartBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
+    var homeBtn = SKSpriteNode()
     
     var gameStarted = false
     
@@ -161,6 +162,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createElevationLabel()
         createRestartBtn()
         createPauseBtn()
+        createHomeBtn()
         createWormsEatenLabel()
         
         initBackgroundArray(names: backgroundNames)
