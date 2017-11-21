@@ -209,7 +209,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 dieAndRestart()
             }
             else if homeBtn.contains(location){
-                let reveal = SKTransition.moveIn(with: .down, duration: 0.5)
+                let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             }
@@ -488,7 +488,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
             let reveal = SKTransition.fade(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size, score: Int(score))
+            let gameOverScene = GameOverScene(size: self.size, score: Int(score), wormCount: wormsEaten)
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }

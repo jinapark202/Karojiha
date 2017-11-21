@@ -13,7 +13,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let restartBtn = SKSpriteNode(imageNamed: "restart2")
 
-    init(size: CGSize, score: Int) {
+    init(size: CGSize, score: Int, wormCount: Int) {
         
         super.init(size: size)
         
@@ -49,8 +49,16 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "Current Elevation: \(score) ft"
         scoreLabel.fontSize = 25
         scoreLabel.fontColor = SKColor.yellow
-        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.4)
         addChild(scoreLabel)
+        
+        //Creates worm label for the number of worms eaten in the last game.
+        let wormLabel = SKLabelNode(fontNamed: "Avenir-Light")
+        wormLabel.text = "Worms Eaten: \(wormCount)"
+        wormLabel.fontSize = 20
+        wormLabel.fontColor = SKColor.lightGray
+        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        addChild(wormLabel)
         
         
         //Creates label for highest score.

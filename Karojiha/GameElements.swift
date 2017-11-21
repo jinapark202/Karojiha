@@ -59,7 +59,7 @@ extension GameScene{
     func createRestartBtn() {
         restartBtn = SKSpriteNode(imageNamed: "restart1")
         restartBtn.size = CGSize(width: 50, height: 50)
-        restartBtn.position = CGPoint(x: -size.width/2.4, y: size.height/2.25)
+        restartBtn.position = CGPoint(x: -size.width/8, y: size.height/2.25)
         restartBtn.zPosition = 6
         restartBtn.setScale(0)
         cameraNode.addChild(restartBtn)
@@ -82,7 +82,8 @@ extension GameScene{
     func createHomeBtn() {
         homeBtn = SKSpriteNode(imageNamed: "back1")
         homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: -size.width/8, y: size.height/2.25)
+        homeBtn.position = CGPoint(x: -size.width/2.4, y: size.height/2.25)
+        
         homeBtn.zPosition = 6
         homeBtn.setScale(0)
         cameraNode.addChild(homeBtn)

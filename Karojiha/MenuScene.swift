@@ -30,8 +30,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: self)
             if playLabel.contains(location){
-                let reveal = SKTransition.moveIn(with: .down,
-                                                 duration: 0.5)
+                let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
