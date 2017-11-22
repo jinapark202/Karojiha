@@ -20,11 +20,20 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
         
+        //Label for new high score
+        let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
+        newHighScoreLabel.text = "(New High Score)"
+        newHighScoreLabel.fontSize = 10
+        newHighScoreLabel.fontColor = SKColor.green
+        newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
+        
+        
         // If score is higher than highScore, change highScore to current score.
         if (score > highScore) {
             highScore = score
             highScoreDefault.setValue(highScore, forKey: "highScore")
             highScoreDefault.synchronize()
+            addChild(newHighScoreLabel)
         }
         
         //Creates the restart button
@@ -57,7 +66,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         wormLabel.text = "Worms Eaten: \(wormCount)"
         wormLabel.fontSize = 20
         wormLabel.fontColor = SKColor.lightGray
-        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.55)
         addChild(wormLabel)
         
         
