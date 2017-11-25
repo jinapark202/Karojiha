@@ -13,6 +13,8 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     
+    let settingsLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
+    
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -20,9 +22,17 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         playLabel.text = message
         playLabel.fontSize = 60
         playLabel.fontColor = SKColor.white
-        playLabel.position = CGPoint(x: size.width/2, y: size.height/2)
+        playLabel.position = CGPoint(x: size.width/2, y: size.height/3)
         addChild(playLabel)
         playLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
+        
+        let message1 = "Settings"
+        settingsLabel.text = message1
+        settingsLabel.fontSize = 60
+        settingsLabel.fontColor = SKColor.white
+        settingsLabel.position = CGPoint(x: size.width/2, y: (size.height/3) * 2)
+        addChild(settingsLabel)
+        settingsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
 
     }
     
@@ -34,6 +44,11 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
+//            if settingsLabel.contains(location){
+//                let reveal = SKTransition.fade(withDuration: 0.5)
+//                let gameScene = GameScene(size: size)
+//                self.view?.presentScene(gameScene, transition: reveal)
+//            }
         }
     }
     
