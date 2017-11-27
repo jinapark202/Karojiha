@@ -13,7 +13,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     
     let instructionsLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
-    let startBtn = SKSpriteNode(imageNamed: "startButton_350")
+    let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
     
     override init(size: CGSize) {
         super.init(size: size)

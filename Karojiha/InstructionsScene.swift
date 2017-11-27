@@ -35,7 +35,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         
-        instructions.size = CGSize(width: 400, height: 200)
+        instructions.size = CGSize(width: size.width/1.05, height: 200)
         instructions.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(instructions)
         instructions.run(SKAction.scale(to: 1.0, duration: 0.0))
