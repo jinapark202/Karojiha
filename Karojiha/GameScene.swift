@@ -224,10 +224,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.view?.presentScene(menuScene, transition: reveal)
             }
             else if soundBtn.contains(location){
-                if soundBtn.texture == SKTexture(imageNamed: "soundButtonSmallSquare"){
-                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                }
-                soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+            //CHANGE THIS IF STATEMENT TO CHECK IF SOUND IS ON OR NOT--DOESN"T WORK RIGHT NOW
+//                if soundBtn.texture!.isEqual("soundButtonSmallSquare"){
+//                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+//                    print("sound is turned OFF")
+//                }
+//                else{
+//                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+//                    print("sound is turned ON")
+//                }
             }
             else {
                 if pauseBtn.contains(location){
