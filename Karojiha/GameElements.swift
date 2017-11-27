@@ -78,7 +78,7 @@ extension GameScene{
     
     //Creates the restart button
     func createHomeBtn() {
-        homeBtn = SKSpriteNode(imageNamed: "backButtonSmallSquare")
+        homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: -3 * homeBtn.size.width, y: size.height/2.25)
         
