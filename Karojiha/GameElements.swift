@@ -32,9 +32,9 @@ extension GameScene{
     //Set up click counter in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
-        elevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.35)
+        elevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.25)
         elevationLabel.fontColor = .orange
-        elevationLabel.fontSize = 18
+        elevationLabel.fontSize = 20
         elevationLabel.fontName = "Avenir-BlackOblique"
         elevationLabel.text = String(describing:
             Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
@@ -42,11 +42,10 @@ extension GameScene{
         cameraNode.addChild(elevationLabel)
     }
     
-
     //Set up maximum elevation counter in upper right corner
     func createWormsEatenLabel(){
         wormsEatenLabel.horizontalAlignmentMode = .right
-        wormsEatenLabel.position = CGPoint(x: size.width / 2.35, y: size.height/2.8)
+        wormsEatenLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.45)
         wormsEatenLabel.fontColor = .red
         wormsEatenLabel.fontSize = 15
         wormsEatenLabel.fontName = "Avenir-BlackOblique"
@@ -81,7 +80,6 @@ extension GameScene{
         homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: -3 * homeBtn.size.width, y: size.height/2.25)
-        
         homeBtn.zPosition = 6
         homeBtn.setScale(0)
         cameraNode.addChild(homeBtn)

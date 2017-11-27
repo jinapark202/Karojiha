@@ -61,7 +61,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var birdVelocity = CGFloat(600.0)
     
     
-    
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
     var backgroundImages: [SKNode] = []
@@ -76,9 +75,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            5: ["rainbow.png"]
         
     ]
-    
-    
-
     
     //creates a random function for us to use
     func random() -> CGFloat {

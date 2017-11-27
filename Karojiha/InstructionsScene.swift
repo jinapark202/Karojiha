@@ -16,7 +16,6 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
     let instructions = SKSpriteNode(imageNamed: "instructions")
 
-    
     override init(size: CGSize){
         super.init(size: size)
         
@@ -43,6 +42,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
+    // Return to the home page if the home button is pressed
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
