@@ -12,14 +12,14 @@ import SpriteKit
 class MenuScene: SKScene, SKPhysicsContactDelegate {
     
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
-    let startBtn = SKSpriteNode(imageNamed: "startButtonSmall")
+    let startBtn = SKSpriteNode(imageNamed: "startButton_350")
 
     
     override init(size: CGSize) {
         super.init(size: size)
     
-        startBtn.size = CGSize(width: 300, height: 150)
-        startBtn.position = CGPoint(x: size.width/1.75, y: size.height/1.5)
+        startBtn.size = CGSize(width: 250, height: 125)
+        startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         startBtn.zPosition = 6
         startBtn.setScale(0)
         addChild(startBtn)

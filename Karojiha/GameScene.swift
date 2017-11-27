@@ -218,11 +218,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     if self.isPaused == false{
                         self.isPaused = true
                         timer.invalidate()
-                        pauseBtn.texture = SKTexture(imageNamed: "playButtonSmall")
+                        pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                     } else {
                         self.isPaused = false
                         timer.fire()
-                        pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmall")
+                        pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                     }
                 }
             }
