@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		022E34891FCCA23D001AF1D0 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022E34881FCCA23D001AF1D0 /* Background.swift */; };
 		0239C34E1FCC7C9B004C44E8 /* InstructionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */; };
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
 		8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AF8565B1FB2327D002BA0EB /* fire.sks */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		022E34881FCCA23D001AF1D0 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsScene.swift; sourceTree = "<group>"; };
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		8AF8565B1FB2327D002BA0EB /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				D8014BFB1FC386AB00E6510F /* MenuScene.swift */,
 				D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */,
 				D8984AF11F8EBF5300B6D113 /* GameScene.swift */,
+				022E34881FCCA23D001AF1D0 /* Background.swift */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
 				8AAE84E01FA8DFE2003E0738 /* spark.sks */,
 				D8984AF31F8EBF5300B6D113 /* GameViewController.swift */,
@@ -289,6 +292,7 @@
 				D82C77DF1FC25A1600B3ED74 /* GameOverScene.swift in Sources */,
 				0239C34E1FCC7C9B004C44E8 /* InstructionsScene.swift in Sources */,
 				D8984B201F8EC05400B6D113 /* GameElements.swift in Sources */,
+				022E34891FCCA23D001AF1D0 /* Background.swift in Sources */,
 				D8984AF21F8EBF5300B6D113 /* GameScene.swift in Sources */,
 				D8014BFC1FC386AB00E6510F /* MenuScene.swift in Sources */,
 				D8984AF41F8EBF5300B6D113 /* GameViewController.swift in Sources */,
