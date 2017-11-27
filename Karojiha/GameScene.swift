@@ -33,9 +33,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let elevationLabel = SKLabelNode()
     let wormsEatenLabel = SKLabelNode()
     
-    var restartBtn = SKSpriteNode()
+    var soundBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
     var homeBtn = SKSpriteNode()
+    
     
     var gameStarted = false
     
@@ -164,7 +165,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createScene()
         createPlayerAndPosition()
         createElevationLabel()
-        createRestartBtn()
+        createSoundBtn()
         createPauseBtn()
         createHomeBtn()
         createWormsEatenLabel()
@@ -221,6 +222,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
+            }
+            else if soundBtn.contains(location){
+                if soundBtn.texture == SKTexture(imageNamed: "soundButtonSmallSquare"){
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                }
+                soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
             }
             else {
                 if pauseBtn.contains(location){

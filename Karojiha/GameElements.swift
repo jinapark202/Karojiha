@@ -55,14 +55,14 @@ extension GameScene{
     }
     
     //Creates the restart button
-    func createRestartBtn() {
-        restartBtn = SKSpriteNode(imageNamed: "restartButtonSmallSqaure")
-        restartBtn.size = CGSize(width: 50, height: 50)
-        restartBtn.position = CGPoint(x: -restartBtn.size.width, y: size.height/2.25)
-        restartBtn.zPosition = 6
-        restartBtn.setScale(0)
-        cameraNode.addChild(restartBtn)
-        restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+    func createSoundBtn() {
+        soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
+        soundBtn.size = CGSize(width: 50, height: 50)
+        soundBtn.position = CGPoint(x: -soundBtn.size.width, y: size.height/2.25)
+        soundBtn.zPosition = 6
+        soundBtn.setScale(0)
+        cameraNode.addChild(soundBtn)
+        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
     
     //Creates the pause button
