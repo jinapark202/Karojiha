@@ -44,11 +44,11 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
-//            if settingsLabel.contains(location){
-//                let reveal = SKTransition.fade(withDuration: 0.5)
-//                let gameScene = GameScene(size: size)
-//                self.view?.presentScene(gameScene, transition: reveal)
-//            }
+            if settingsLabel.contains(location){
+                let reveal = SKTransition.fade(withDuration: 0.5)
+                let gameScene = SettingsScene(size: size)
+                self.view?.presentScene(gameScene, transition: reveal)
+            }
         }
     }
     

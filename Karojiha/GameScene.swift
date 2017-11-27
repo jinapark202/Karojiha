@@ -205,10 +205,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //Adjust for cameraNode position
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
-            if restartBtn.contains(location){
-                dieAndRestart()
-            }
-            else if homeBtn.contains(location){
+            
+            
+            //THIS MAY BE UNNECESSARY NOW!!!
+            
+//            if restartBtn.contains(location){
+//                dieAndRestart()
+//            }
+            
+            if homeBtn.contains(location){
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
@@ -244,18 +249,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
     
-    
+    //NO LONGER NECESSARY I THINK!
     //Restarts the game once the bird hits the bottom of the screen
-    func dieAndRestart() {
-        bird.physicsBody?.velocity.dy = 0
-        
-        let scene = GameScene(size: size)
-        view?.presentScene(scene)
-        
-        totalClickCounter = 0
-        
-        timer.invalidate()
-    }
+//    func dieAndRestart() {
+//        bird.physicsBody?.velocity.dy = 0
+//
+//        let scene = GameScene(size: size)
+//        view?.presentScene(scene)
+//
+//        totalClickCounter = 0
+//
+//        timer.invalidate()
+//    }
     
     //Function to emit spark particles at worm position when worm collides with bird
     func newFlyNode(scene: SKScene, Bird: SKNode) {
@@ -351,10 +356,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //function to check for collision between worm and bird
     func didBegin(_ contact: SKPhysicsContact) {
-        // 1
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
-        
         
         //checks which categoryBitMask is larger, larger one is assigned to secondBody, smaller one is assigned to firstBody
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
@@ -365,7 +368,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        // 2
         if (firstBody.categoryBitMask != secondBody.categoryBitMask) {
             if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
                 collisionBetween(worm: worm, bird: bird)
