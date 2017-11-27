@@ -11,7 +11,7 @@ import SpriteKit
 
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
-    let restartBtn = SKSpriteNode(imageNamed: "restart2")
+    let restartBtn = SKSpriteNode(imageNamed: "restartButtonSmall")
 
     init(size: CGSize, score: Int, wormCount: Int) {
         
@@ -37,8 +37,8 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         }
         
         //Creates the restart button
-        restartBtn.size = CGSize(width: 200, height: 200)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
+        restartBtn.size = CGSize(width: 250, height: 220)
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.4)
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 

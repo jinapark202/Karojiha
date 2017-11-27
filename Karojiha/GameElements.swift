@@ -8,14 +8,13 @@
 
 import SpriteKit
 
-
 extension GameScene{
     
     //Create the bird
     func createBird() -> SKSpriteNode {
         //Set the size and position of the bird
-        let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird1"))
-        bird.size = CGSize(width: 70, height: 70)
+        let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
+        bird.size = CGSize(width: 150, height: 110)
         bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
         
         //Define the bird to be a SKPhysicsBody object.
@@ -57,9 +56,9 @@ extension GameScene{
     
     //Creates the restart button
     func createRestartBtn() {
-        restartBtn = SKSpriteNode(imageNamed: "restart1")
+        restartBtn = SKSpriteNode(imageNamed: "restartButtonSmall")
         restartBtn.size = CGSize(width: 50, height: 50)
-        restartBtn.position = CGPoint(x: -size.width/8, y: size.height/2.25)
+        restartBtn.position = CGPoint(x: -size.width/5.8, y: size.height/2.25)
         restartBtn.zPosition = 6
         restartBtn.setScale(0)
         cameraNode.addChild(restartBtn)
@@ -68,10 +67,10 @@ extension GameScene{
     
     //Creates the pause button
     func createPauseBtn() {
-        pauseBtn = SKSpriteNode(imageNamed: "pause1")
-        pauseBtn.size = CGSize(width:50, height:50)
+        pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmall")
+        pauseBtn.size = CGSize(width: 50, height: 50)
             //THIS MAY BE WRONG POSITION
-        pauseBtn.position = CGPoint(x: -size.width/3.7, y: size.height/2.25)
+        pauseBtn.position = CGPoint(x: -size.width/3.4, y: size.height/2.25)
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
@@ -80,7 +79,7 @@ extension GameScene{
     
     //Creates the restart button
     func createHomeBtn() {
-        homeBtn = SKSpriteNode(imageNamed: "back1")
+        homeBtn = SKSpriteNode(imageNamed: "backButtonSmall")
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: -size.width/2.4, y: size.height/2.25)
         
