@@ -60,12 +60,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var birdVelocity = CGFloat(600.0)
     
+    
+    
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
     var backgroundImages: [SKNode] = []
-    let backgroundHeight = CGFloat(3.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
+    let backgroundHeight = CGFloat(8.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
+    
+    var bgFlavorImages  = [1: ["rainbow.png" , "pauseButtonSmallSquare.png"],
+                           2: ["rainbow.png"],
+                           3: ["rainbow.png"],
+                           4: ["rainbow.png"],
+                           5: ["rainbow.png"]
+        
+    ]
+    
+    
+
     
     //creates a random function for us to use
     func random() -> CGFloat {
@@ -95,21 +108,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.allowsRotation = false
     }
     
-    //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
-    func initBackgroundArray(names: [String]){
-        var x: CGFloat = 0.0
-        for bgName in names{
-            let backgroundImage = SKSpriteNode(imageNamed: bgName)
-            backgroundImage.xScale=size.width/backgroundImage.size.width
-            backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
-            backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-            backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*x)
-            backgroundImage.zPosition = -1
-            backgroundImages.append(backgroundImage)
-            x += 1
-            //print(backgroundImage.position)
-        }
-    }
+    
+    
+    
+    
+    
     
     //Starts timer in motion, calls updateCounting every second
     func scheduledTimerWithTimeInterval(){
@@ -125,6 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (bird.position.y > size.height / 2) {
             if (time.truncatingRemainder(dividingBy: 2) == 0) {
                 addWorm()
+                //addBackgroundFlavor()
             }
         }
     }
@@ -378,53 +382,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    //Scrolling background - parallax
-    func createBackground() {
-        let backgroundTexture = SKTexture(imageNamed: "dotsBackground")
-        
-        for i in 0 ... 6 {
-            let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = 0
-            background.anchorPoint = CGPoint.zero
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
-            addChild(background)
-            
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
-            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
-            let moveLoop = SKAction.sequence([moveUp, moveReset])
-            let moveForever = SKAction.repeatForever(moveLoop)
-            
-            background.run(moveForever)
-        }
-    }
-    
-    
-    //Perform Necessary Background checks, making changes as necesary called in continously in update()
-    func adjustBackground(){
-        
-        //Adds the next background when the bird is close enough
-        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
-            //Check if at end of BackgroundImages array, if so, re-add last Image
-            if currentBackground >= CGFloat(backgroundImages.count) {
-                let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
-                backgroundImage.xScale=size.width/backgroundImage.size.width
-                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
-                backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
-                backgroundImage.zPosition = -1
-                backgroundImages.append(backgroundImage)
-            }
-            addChild(backgroundImages[Int(currentBackground)])
-            currentBackground += 1
-        }
-        
-        //Removes the previous background when the bird is far enough above it
-        if (bird.position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
-            (backgroundImages[Int(previousBackground)]).removeFromParent()
-            previousBackground += 1
-        }
-    }
     
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
