@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "backButtonSmall.png",
+      "filename" : "playButtonSmallSquare.png",
       "scale" : "1x"
     },
     {
