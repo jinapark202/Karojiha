@@ -319,7 +319,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startPowerUp() {
-        powerUpEndTime = latestTime + 4
+        powerUpEndTime = latestTime + 2
     }
     
     //Collecting enough worms will apply an upward force to the bird
@@ -328,6 +328,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //let wormsNeeded = (pow((1/1.3),((abs(gravity))-21))).rounded(.up)
         
         if latestTime < powerUpEndTime {
+            
+            let stopGravity = CGFloat(-10.0)
+            physicsWorld.gravity.dy = stopGravity
+            gravity = stopGravity
+            
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
             newFlyNode(scene: self, Bird: bird)
         }
