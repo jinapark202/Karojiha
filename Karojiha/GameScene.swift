@@ -218,11 +218,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     if self.isPaused == false{
                         self.isPaused = true
                         timer.invalidate()
-                        pauseBtn.texture = SKTexture(imageNamed: "play1")
+                        pauseBtn.texture = SKTexture(imageNamed: "playButtonSmall")
                     } else {
                         self.isPaused = false
                         timer.fire()
-                        pauseBtn.texture = SKTexture(imageNamed: "pause1")
+                        pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmall")
                     }
                 }
             }
@@ -235,10 +235,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.bird = createBird()
         self.addChild(bird)
         
-        birdSprites.append(birdAtlas.textureNamed("bird1"))
-        birdSprites.append(birdAtlas.textureNamed("bird2"))
-        birdSprites.append(birdAtlas.textureNamed("bird3"))
-        birdSprites.append(birdAtlas.textureNamed("bird4"))
+        birdSprites.append(birdAtlas.textureNamed("bird_1"))
+        birdSprites.append(birdAtlas.textureNamed("bird_2"))
+        birdSprites.append(birdAtlas.textureNamed("bird_3"))
+        birdSprites.append(birdAtlas.textureNamed("bird_4"))
         
         let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
         self.repeatActionbird = SKAction.repeatForever(animatebird)
@@ -376,7 +376,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Scrolling background - parallax
     func createBackground() {
-        let backgroundTexture = SKTexture(imageNamed: "iconBackground")
+        let backgroundTexture = SKTexture(imageNamed: "dotsBackground")
         
         for i in 0 ... 6 {
             let background = SKSpriteNode(texture: backgroundTexture)

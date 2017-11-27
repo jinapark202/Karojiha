@@ -12,33 +12,30 @@ import SpriteKit
 class MenuScene: SKScene, SKPhysicsContactDelegate {
     
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
+    let startBtn = SKSpriteNode(imageNamed: "startButtonSmall")
+
     
     override init(size: CGSize) {
         super.init(size: size)
-        
-        let message = "Play"
-        playLabel.text = message
-        playLabel.fontSize = 60
-        playLabel.fontColor = SKColor.white
-        playLabel.position = CGPoint(x: size.width/2, y: size.height/2)
-        addChild(playLabel)
-        playLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
-
+    
+        startBtn.size = CGSize(width: 300, height: 150)
+        startBtn.position = CGPoint(x: size.width/1.75, y: size.height/1.5)
+        startBtn.zPosition = 6
+        startBtn.setScale(0)
+        addChild(startBtn)
+        startBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+    
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
-            if playLabel.contains(location){
+            if startBtn.contains(location){
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             }
         }
-    }
-    
-    override func didMove(to view: SKView) {
-        
     }
     
     required init(coder aDecoder: NSCoder) {
