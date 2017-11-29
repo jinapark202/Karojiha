@@ -28,11 +28,10 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         let message = "Instructions"
         instructionsLabel.text = message
         instructionsLabel.fontSize = 30
-        instructionsLabel.fontColor = SKColor.white
+        instructionsLabel.fontColor = SKColor.yellow
         instructionsLabel.position = CGPoint(x: size.width/2, y: size.height/2.2)
         addChild(instructionsLabel)
         instructionsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
-
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
