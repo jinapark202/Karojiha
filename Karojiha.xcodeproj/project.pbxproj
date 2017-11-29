@@ -17,12 +17,14 @@
 		D8984AF21F8EBF5300B6D113 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AF11F8EBF5300B6D113 /* GameScene.swift */; };
 		D8984AF41F8EBF5300B6D113 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AF31F8EBF5300B6D113 /* GameViewController.swift */; };
 		D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8984AF51F8EBF5300B6D113 /* Main.storyboard */; };
-		D8984AF91F8EBF5300B6D113 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8984AF81F8EBF5300B6D113 /* Assets.xcassets */; };
 		D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8984AFA1F8EBF5300B6D113 /* LaunchScreen.storyboard */; };
 		D8984B071F8EBF5300B6D113 /* KarojihaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984B061F8EBF5300B6D113 /* KarojihaTests.swift */; };
 		D8984B121F8EBF5300B6D113 /* KarojihaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984B111F8EBF5300B6D113 /* KarojihaUITests.swift */; };
 		D8984B201F8EC05400B6D113 /* GameElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984B1F1F8EC05400B6D113 /* GameElements.swift */; };
 		D8984B221F8EC20D00B6D113 /* player.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D8984B211F8EC1D300B6D113 /* player.atlas */; };
+		D8DD14A71FCF35D4003D4BAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8984AF81F8EBF5300B6D113 /* Assets.xcassets */; };
+		D8DD14A91FCF405C003D4BAD /* open_lighter.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D8DD14A81FCF405C003D4BAD /* open_lighter.mp3 */; };
+		D8DD14AD1FCF42FA003D4BAD /* single_flap_from_small_flag.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D8DD14AC1FCF42F9003D4BAD /* single_flap_from_small_flag.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		D8984B131F8EBF5300B6D113 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8984B1F1F8EC05400B6D113 /* GameElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameElements.swift; sourceTree = "<group>"; };
 		D8984B211F8EC1D300B6D113 /* player.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = player.atlas; sourceTree = "<group>"; };
+		D8DD14A81FCF405C003D4BAD /* open_lighter.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = open_lighter.mp3; sourceTree = "<group>"; };
+		D8DD14AC1FCF42F9003D4BAD /* single_flap_from_small_flag.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = single_flap_from_small_flag.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +128,9 @@
 				022E34881FCCA23D001AF1D0 /* Background.swift */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
 				8AAE84E01FA8DFE2003E0738 /* spark.sks */,
+				D8DD14AC1FCF42F9003D4BAD /* single_flap_from_small_flag.mp3 */,
 				D8984AF31F8EBF5300B6D113 /* GameViewController.swift */,
+				D8DD14A81FCF405C003D4BAD /* open_lighter.mp3 */,
 				D8984AF51F8EBF5300B6D113 /* Main.storyboard */,
 				D8984AF81F8EBF5300B6D113 /* Assets.xcassets */,
 				D8984B211F8EC1D300B6D113 /* player.atlas */,
@@ -260,10 +266,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8984B221F8EC20D00B6D113 /* player.atlas in Resources */,
+				D8DD14AD1FCF42FA003D4BAD /* single_flap_from_small_flag.mp3 in Resources */,
 				D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */,
 				8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */,
-				D8984AF91F8EBF5300B6D113 /* Assets.xcassets in Resources */,
 				D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */,
+				D8DD14A91FCF405C003D4BAD /* open_lighter.mp3 in Resources */,
+				D8DD14A71FCF35D4003D4BAD /* Assets.xcassets in Resources */,
 				8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

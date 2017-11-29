@@ -9,6 +9,7 @@
 
 import SpriteKit
 import CoreMotion
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -61,6 +62,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var birdVelocity = CGFloat(600.0)
     
+    //Sound effects taken from freesfx.co.uk
+    let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
+    let sparkSound = SKAction.playSoundFileNamed("single_flap_from_small_flag.mp3", waitForCompletion: true)
+
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
@@ -105,12 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.allowsRotation = false
     }
     
-    
-    
-    
-    
-    
-    
+
     //Starts timer in motion, calls updateCounting every second
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
@@ -260,22 +260,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
         self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
-    
-    //NO LONGER NECESSARY I THINK!
-    //Restarts the game once the bird hits the bottom of the screen
-//    func dieAndRestart() {
-//        bird.physicsBody?.velocity.dy = 0
-//
-//        let scene = GameScene(size: size)
-//        view?.presentScene(scene)
-//
-//        totalClickCounter = 0
-//
-//        timer.invalidate()
-//    }
+
     
     //Function to emit spark particles at worm position when worm collides with bird
     func newFlyNode(scene: SKScene, Bird: SKNode) {
+        
+        run(sparkSound)
+        
         guard let emitter = SKEmitterNode(fileNamed: "fire.sks") else {
             return
         }
@@ -298,18 +289,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Create sprite
         let worm = SKSpriteNode(imageNamed: "dragonfly.png")
         
-        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size) // 1
-        worm.physicsBody?.isDynamic = true// 2
+        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size)
+        worm.physicsBody?.isDynamic = true
         worm.physicsBody?.affectedByGravity = false
-        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm // 3
-        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm // 5
+        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm
+        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm
         worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         
         // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/2
         
         // Position the worm
-        worm.position = CGPoint(x: random(min:10, max: size.width-10 ), y: actualY)
+        worm.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         // Add the worm to the scene
         self.addChild(worm)
@@ -317,8 +308,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
     }
     
+
+    
     //Function to emit spark particles at worm position when worm collides with bird
     func newSparkNode(scene: SKScene, Worm: SKNode) {
+        
         guard let emitter = SKEmitterNode(fileNamed: "spark.sks") else {
             return
         }
@@ -357,6 +351,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //function to remove worm when it collides with bird
     func collisionBetween(worm: SKNode, bird: SKNode) {
+        run(wormHitSound)
         worm.removeFromParent()
         wormsEaten += 1
         
@@ -411,7 +406,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Logistic Function for gravity increase, can graph this at
         //www.desmos.com/calculator/agxuc5gip8
         
-        let newGravity = CGFloat(-1*(65 / (1+(100 * (pow(M_E, -0.025 * totalClickCounter)))))-14)
+        let newGravity = CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
         physicsWorld.gravity.dy = newGravity
         gravity = newGravity
     }
