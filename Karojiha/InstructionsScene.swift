@@ -15,10 +15,22 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     let stepsLabel = SKLabelNode(fontNamed: "Avenir-Light")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
     let instructions = SKSpriteNode(imageNamed: "instructions")
+    
+    //Sound effects and music taken from freesfx.co.uk
+    let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
+    let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
 
     override init(size: CGSize){
         super.init(size: size)
         
+        //Changed background to be black
+        backgroundColor = SKColor.black
+
+        
+        //Adds and loops the background sound
+        self.addChild(backgroundSound)
+        backgroundSound.autoplayLooped = true
+
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.07)
         homeBtn.zPosition = 6
@@ -26,15 +38,14 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
-        let titleLabel = SKLabelNode(fontNamed: "Avenir-Light")
+        let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
-        titleLabel.fontColor = SKColor.gray
+        titleLabel.fontColor = SKColor.yellow
         titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
     
-        
         instructions.size = CGSize(width: size.width/1.05, height: 200)
         instructions.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(instructions)
@@ -47,6 +58,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         for touch in touches{
             let location = touch.location(in: self)
             if homeBtn.contains(location) {
+                run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)

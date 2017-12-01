@@ -12,6 +12,10 @@ import SpriteKit
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
+    let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
+    
+    //Sound effects and music taken from freesfx.co.uk
+    let restartBtnSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
 
     init(size: CGSize, score: Int, wormCount: Int) {
         
@@ -19,6 +23,10 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
+        
+        //Adds and loops the background sound
+        self.addChild(backgroundSound)
+        backgroundSound.autoplayLooped = true
         
         //Label for new high score
         let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
@@ -84,6 +92,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: self)
             if restartBtn.contains(location){
+                run(restartBtnSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
