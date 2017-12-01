@@ -40,6 +40,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     var gameStarted = false
+    var mute: Bool = true
+    
+    let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     
     //All necessary to determine clicksRequired
     var timer = Timer()
@@ -166,6 +169,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createHomeBtn()
         createWormsEatenLabel()
         
+        self.addChild(backgroundSound)
+        
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
         
@@ -219,19 +224,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             }
-            else if soundBtn.contains(location){
-            //CHANGE THIS IF STATEMENT TO CHECK IF SOUND IS ON OR NOT--DOESN"T WORK RIGHT NOW
-//                if soundBtn.texture!.isEqual("soundButtonSmallSquare"){
-//                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-//                    print("sound is turned OFF")
-//                }
-//                else{
-//                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-//                    print("sound is turned ON")
-//                }
-            }
-            else {
-                if pauseBtn.contains(location){
+            else if pauseBtn.contains(location){
                     if self.isPaused == false{
                         self.isPaused = true
                         timer.invalidate()
@@ -241,6 +234,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         timer.fire()
                         pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                     }
+            } else if soundBtn.contains(location) {
+                if mute {
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    mute = false
+                    backgroundSound.run(SKAction.stop())
+                } else {
+                    //This happens when the user doesn't want music
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    mute = true
+                    backgroundSound.run(SKAction.play())
                 }
             }
         }
