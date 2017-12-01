@@ -49,9 +49,15 @@ extension GameScene{
         wormsEatenLabel.fontColor = .red
         wormsEatenLabel.fontSize = 15
         wormsEatenLabel.fontName = "Avenir-BlackOblique"
-        wormsEatenLabel.text = String("Worms: ") + String(describing: (Int(wormsEaten)))
+        wormsEatenLabel.text = String("x ") + String(describing: (Int(wormsEaten % 3)))
         cameraNode.addChild(wormsEatenLabel)
+        let wormIcon = SKSpriteNode(imageNamed: "dragonfly")
+        cameraNode.addChild(wormIcon)
+        wormIcon.position = CGPoint(x: size.width / 3.45, y: size.height / 2.40)
+        wormIcon.xScale = 0.7
+        wormIcon.yScale = 0.7
     }
+    
     
     //Creates the restart button
     func createSoundBtn() {
@@ -86,4 +92,5 @@ extension GameScene{
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
 }
+
 
