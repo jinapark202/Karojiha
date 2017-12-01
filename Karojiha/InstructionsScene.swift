@@ -34,10 +34,10 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
-        let titleLabel = SKLabelNode(fontNamed: "Avenir-Light")
+        let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
-        titleLabel.fontColor = SKColor.gray
+        titleLabel.fontColor = SKColor.white
         titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
