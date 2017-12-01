@@ -46,6 +46,7 @@ extension GameScene{
     func createWormsEatenLabel(){
         wormsEatenLabel.horizontalAlignmentMode = .right
         wormsEatenLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.45)
+        wormsEatenLabel.zPosition = 10
         wormsEatenLabel.fontColor = .red
         wormsEatenLabel.fontSize = 15
         wormsEatenLabel.fontName = "Avenir-BlackOblique"

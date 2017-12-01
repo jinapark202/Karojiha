@@ -150,7 +150,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if wormsEaten % 3 == 0 {
             let scaleUpAction = SKAction.scale(to: 1.4, duration: 0.3)
-            wormsEatenLabel.fontColor = UIColor.green
+            wormsEatenLabel.fontColor = UIColor.lightGray
             wormsEatenLabel.run(scaleUpAction)
         
         

@@ -20,6 +20,9 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     
     override init(size: CGSize) {
         super.init(size: size)
+        
+        //Changed background to be black
+        backgroundColor = SKColor.black
     
         startBtn.size = CGSize(width: 250, height: 125)
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
