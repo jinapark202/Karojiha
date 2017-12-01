@@ -200,7 +200,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         //Start the timer counting
-        if gameStarted == false{
+        if gameStarted == false {
             scheduledTimerWithTimeInterval()
             gameStarted = true
             createBackground()
@@ -219,17 +219,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
-            }
-            else if pauseBtn.contains(location){
-                if self.isPaused == false{
-                    self.isPaused = true
-                    timer.invalidate()
-                    pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
-                } else {
-                    self.isPaused = false
-                    timer.fire()
-                    pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
-                }
             } else if soundBtn.contains(location) {
                 if mute {
                     run(buttonPressSound)
@@ -241,6 +230,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     mute = true
                     backgroundSound.run(SKAction.play())
+                }
+            } else if pauseBtn.contains(location){
+                if self.isPaused == false {
+                    self.isPaused = true
+                    timer.invalidate()
+                    pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
+                } else if self.isPaused == true {
+                    self.isPaused = false
+                    timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+                    pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                 }
             }
         }
