@@ -71,7 +71,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
-    let backgroundNames: [String] = ["background1","background2","background3","background4","testStarsBg"]
+    let backgroundNames: [String] = ["background1","background2","background3","background4New","testStarsBg"]
     var backgroundImages: [SKNode] = []
     let backgroundHeight = CGFloat(8.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
     var currentBackground: CGFloat = 1.0
