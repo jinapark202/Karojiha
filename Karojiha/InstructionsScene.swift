@@ -23,6 +23,10 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     override init(size: CGSize){
         super.init(size: size)
         
+        //Changed background to be black
+        backgroundColor = SKColor.black
+
+        
         //Adds and loops the background sound
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
@@ -37,7 +41,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
-        titleLabel.fontColor = SKColor.white
+        titleLabel.fontColor = SKColor.yellow
         titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
