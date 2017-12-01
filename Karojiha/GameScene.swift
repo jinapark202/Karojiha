@@ -221,7 +221,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.view?.presentScene(menuScene, transition: reveal)
             } else if soundBtn.contains(location) {
                 if mute {
-                    run(buttonPressSound)
+                    //run(buttonPressSound)
                     soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     mute = false
                     backgroundSound.run(SKAction.stop())
@@ -233,10 +233,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             } else if pauseBtn.contains(location){
                 if self.isPaused == false {
+                    run(buttonPressSound)
                     self.isPaused = true
                     timer.invalidate()
                     pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
-                } else if self.isPaused == true {
+                } else {
+                    run(buttonPressSound)
                     self.isPaused = false
                     timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
                     pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
