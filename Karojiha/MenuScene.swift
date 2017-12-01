@@ -15,6 +15,9 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
     
+    //Sound effects and music taken from freesfx.co.uk
+    let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
+    
     override init(size: CGSize) {
         super.init(size: size)
     
@@ -38,11 +41,13 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: self)
             if startBtn.contains(location){
+                run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = GameScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
             }
             if instructionsLabel.contains(location){
+                run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = InstructionsScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)

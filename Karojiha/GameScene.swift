@@ -9,7 +9,6 @@
 
 import SpriteKit
 import CoreMotion
-import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -42,8 +41,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameStarted = false
     var mute: Bool = true
     
-    let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
-    
     //All necessary to determine clicksRequired
     var timer = Timer()
     var time = 0.0
@@ -65,9 +62,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var birdVelocity = CGFloat(600.0)
     
-    //Sound effects taken from freesfx.co.uk
+    //Sound effects and music taken from freesfx.co.uk
     let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
-    let sparkSound = SKAction.playSoundFileNamed("single_flap_from_small_flag.mp3", waitForCompletion: true)
+    let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
+    let dyingSound = SKAction.playSoundFileNamed("slide_whistle_down.mp3", waitForCompletion: true)
+    let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
+    let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
 
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
@@ -170,6 +170,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createWormsEatenLabel()
         
         self.addChild(backgroundSound)
+        backgroundSound.autoplayLooped = true
         
         initBackgroundArray(names: backgroundNames)
         addChild(backgroundImages[0])
@@ -195,14 +196,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             bird.physicsBody?.velocity.dy = birdVelocity
         }
         
-        
         //Start the timer counting
         if gameStarted == false{
             scheduledTimerWithTimeInterval()
             gameStarted = true
             createBackground()
         }
-        
         
         //Implements the pause and restart button functionality
         for touch in touches{
@@ -212,35 +211,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
             
-            
-            //THIS MAY BE UNNECESSARY NOW!!!
-            
-//            if restartBtn.contains(location){
-//                dieAndRestart()
-//            }
-            
             if homeBtn.contains(location){
+                run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             }
             else if pauseBtn.contains(location){
-                    if self.isPaused == false{
-                        self.isPaused = true
-                        timer.invalidate()
-                        pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
-                    } else {
-                        self.isPaused = false
-                        timer.fire()
-                        pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
-                    }
+                if self.isPaused == false{
+                    self.isPaused = true
+                    timer.invalidate()
+                    pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
+                } else {
+                    self.isPaused = false
+                    timer.fire()
+                    pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
+                }
             } else if soundBtn.contains(location) {
                 if mute {
+                    run(buttonPressSound)
                     soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     mute = false
                     backgroundSound.run(SKAction.stop())
                 } else {
-                    //This happens when the user doesn't want music
+                    run(buttonPressSound)
                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     mute = true
                     backgroundSound.run(SKAction.play())
@@ -457,6 +451,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
+            run(dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score), wormCount: wormsEaten)
             self.view?.presentScene(gameOverScene, transition: reveal)
