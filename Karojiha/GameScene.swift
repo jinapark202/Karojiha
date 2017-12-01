@@ -74,13 +74,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
     
-    var bgFlavorImages  = [1: ["rainbow.png" , "pauseButtonSmallSquare.png"],
-                           2: ["rainbow.png"],
-                           3: ["rainbow.png"],
-                           4: ["rainbow.png"],
-                           5: ["rainbow.png"]
-        
-    ]
+    var bgFlavorImages  = [1: ["rainbow.png", "cloud"],   //First background (light blue)
+                           2: ["airplane", "cloud", "pigeon", "pigeon"],
+                           3: ["rainbow.png", "airplane","pigeon", "redPlane", "eagle", "eagle"],
+                           4: ["thunder1", "redPlane", "airplane"],
+                           5: ["planet","comet", "spaceship"]    //Last background (Space)
+        ]
+    
+    var bgFlavorCheckpoint = CGFloat(0.0)
+    let flavorFrequency = CGFloat(500.0)
     
     //creates a random function for us to use
     func random() -> CGFloat {
@@ -125,29 +127,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (bird.position.y > size.height / 2) {
             if (time.truncatingRemainder(dividingBy: 2) == 0) {
                 addWorm()
-                //addBackgroundFlavor()
             }
         }
     }
     
     func animateWormLabel(){
         
-        if wormsEaten == 1 {
+        if wormsEaten % 3 == 1 {
             let scaleUpAction = SKAction.scale(to: 1.1, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.orange
             wormsEatenLabel.run(scaleUpAction)
         }
         
-        if wormsEaten == 2 {
+        if wormsEaten % 3 == 2 {
             let scaleUpAction = SKAction.scale(to: 1.2, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.yellow
             wormsEatenLabel.run(scaleUpAction)
         }
         
-        if wormsEaten == 3 {
+        if wormsEaten % 3 == 0 {
             let scaleUpAction = SKAction.scale(to: 1.4, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.green
             wormsEatenLabel.run(scaleUpAction)
+        
+        
         }
     }
     
@@ -361,7 +364,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         animateWormLabel()
-        wormsEatenLabel.text = String("Worms: ") + String(describing: (Int(wormsEaten)))
+        if (wormsEaten % wormsNeeded == 0) {
+            wormsEatenLabel.text = ("x ") + String(describing: (3))}
+        else{
+            wormsEatenLabel.text = ("x ") + String(describing: (Int(wormsEaten % wormsNeeded))) }
+        
         newSparkNode(scene: self, Worm: worm)
     }
     
@@ -470,6 +477,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         adjustBackground()
         applyPowerUp()
         setupCameraNode()
+        addBackgroundFlavor()
     }
     
 }

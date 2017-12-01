@@ -58,18 +58,20 @@ extension GameScene{
     
     
     func addBackgroundFlavor(){
-        var choicesForImage = [String]()
-        
-        if currentBackground <= 4 {
-            choicesForImage = bgFlavorImages[Int(currentBackground)]!
+        if bird.position.y > flavorFrequency + bgFlavorCheckpoint {
+            bgFlavorCheckpoint = bird.position.y
+            
+            var choicesForImage = [String]()
+            if currentBackground <= 4 {
+                choicesForImage = bgFlavorImages[Int(currentBackground)]! }
+            else {
+                choicesForImage = bgFlavorImages[5]! }
+            
+            let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
+            let chosenImage = choicesForImage[Int(randomIndex)]
+            createFlavorSprite(imageName: chosenImage)
+            
         }
-        else{
-            choicesForImage = bgFlavorImages[5]!
-        }
-        
-        let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
-        let chosenImage = choicesForImage[Int(randomIndex)]
-        createFlavorSprite(imageName: chosenImage)
         
     }
     
