@@ -35,6 +35,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         newHighScoreLabel.fontSize = 13
         newHighScoreLabel.fontColor = SKColor.green
         newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        newHighScoreLabel.zPosition = 10
         
         
         // If score is higher than highScore, change highScore to current score.
@@ -48,12 +49,14 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         //Sets up the restart button
         restartBtn.size = CGSize(width: 225, height: 225)
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.45)
+        restartBtn.zPosition = 10
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Sets up the home button
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: homeBtn.size.width, y: size.height - homeBtn.size.height)
+        homeBtn.zPosition = 10
         addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
@@ -66,6 +69,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.fontSize = 60
         gameOverLabel.fontColor = SKColor.white
         gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
+        gameOverLabel.zPosition = 10
         addChild(gameOverLabel)
         
         //Creates score label from the past game.
@@ -74,6 +78,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 25
         scoreLabel.fontColor = SKColor.yellow
         scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.43)
+        scoreLabel.zPosition = 10
         addChild(scoreLabel)
         
         //Creates worm label for the number of worms eaten in the last game.
@@ -82,6 +87,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         wormLabel.fontSize = 20
         wormLabel.fontColor = SKColor.lightGray
         wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.6)
+        wormLabel.zPosition = 10
         addChild(wormLabel)
         
         
@@ -91,7 +97,27 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.text = "Record: \(highScore) ft"
         highScoreLabel.fontColor = SKColor.orange
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/8)
+        highScoreLabel.zPosition = 10
         addChild(highScoreLabel)
+        
+        
+        //Implements endless scrolling stars background
+        let backgroundTexture = SKTexture(imageNamed: "testStarsBg")
+        
+        for i in 0 ... 6 {
+            let background = SKSpriteNode(texture: backgroundTexture)
+            background.zPosition = 0
+            background.anchorPoint = CGPoint.zero
+            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
+            addChild(background)
+            
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
+            let moveLoop = SKAction.sequence([moveUp, moveReset])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            
+            background.run(moveForever)
+        }
     }
     
     //Takes you back to the GameScene when you touch the restart button
