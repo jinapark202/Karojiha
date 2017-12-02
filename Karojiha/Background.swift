@@ -33,14 +33,14 @@ extension GameScene{
     func adjustBackground(){
         
         //Adds the next background when the bird is close enough
-        if (bird.position.y > backgroundHeight*size.height*currentBackground - size.height){
+        if (bird.position.y > backgroundHeight * size.height * currentBackground - size.height){
             //Check if at end of BackgroundImages array, if so, re-add last Image
             if currentBackground >= CGFloat(backgroundImages.count) {
                 let backgroundImage = SKSpriteNode(imageNamed: backgroundNames.last!)
-                backgroundImage.xScale=size.width/backgroundImage.size.width
-                backgroundImage.yScale=size.height/backgroundImage.size.height*backgroundHeight
+                backgroundImage.xScale = size.width / backgroundImage.size.width
+                backgroundImage.yScale = size.height / backgroundImage.size.height * backgroundHeight
                 backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*currentBackground)
+                backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height * currentBackground)
                 backgroundImage.zPosition = -1
                 backgroundImages.append(backgroundImage)
             }
