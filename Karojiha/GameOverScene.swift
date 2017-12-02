@@ -12,10 +12,11 @@ import SpriteKit
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
-    let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
+    let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
     
     //Sound effects and music taken from freesfx.co.uk
-    let restartBtnSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
+    let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
+    let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
 
     init(size: CGSize, score: Int, wormCount: Int) {
         
@@ -31,9 +32,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         //Label for new high score
         let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
         newHighScoreLabel.text = "(New High Score)"
-        newHighScoreLabel.fontSize = 10
+        newHighScoreLabel.fontSize = 13
         newHighScoreLabel.fontColor = SKColor.green
-        newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
+        newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
         
         
         // If score is higher than highScore, change highScore to current score.
@@ -44,11 +45,17 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             addChild(newHighScoreLabel)
         }
         
-        //Creates the restart button
-        restartBtn.size = CGSize(width: 250, height: 250)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.4)
+        //Sets up the restart button
+        restartBtn.size = CGSize(width: 225, height: 225)
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.45)
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+        
+        //Sets up the home button
+        homeBtn.size = CGSize(width: 50, height: 50)
+        homeBtn.position = CGPoint(x: homeBtn.size.width, y: size.height - homeBtn.size.height)
+        addChild(homeBtn)
+        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
         backgroundColor = SKColor.black
         
@@ -58,7 +65,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.text = message
         gameOverLabel.fontSize = 60
         gameOverLabel.fontColor = SKColor.white
-        gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.25)
+        gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
         addChild(gameOverLabel)
         
         //Creates score label from the past game.
@@ -66,7 +73,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "Current Elevation: \(score) ft"
         scoreLabel.fontSize = 25
         scoreLabel.fontColor = SKColor.yellow
-        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.4)
+        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.43)
         addChild(scoreLabel)
         
         //Creates worm label for the number of worms eaten in the last game.
@@ -74,7 +81,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         wormLabel.text = "Worms Eaten: \(wormCount)"
         wormLabel.fontSize = 20
         wormLabel.fontColor = SKColor.lightGray
-        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.55)
+        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.6)
         addChild(wormLabel)
         
         
@@ -83,7 +90,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.fontSize = 25
         highScoreLabel.text = "Record: \(highScore) ft"
         highScoreLabel.fontColor = SKColor.orange
-        highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/6.5)
+        highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/8)
         addChild(highScoreLabel)
     }
     
@@ -91,11 +98,16 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
-            if restartBtn.contains(location){
-                run(restartBtnSound)
+            if restartBtn.contains(location) {
+                run(buttonClickSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
+            } else if homeBtn.contains(location) {
+                run(buttonClickSound)
+                let reveal = SKTransition.fade(withDuration: 0.5)
+                let scene = MenuScene(size: size)
+                self.view?.presentScene(scene, transition: reveal)
             }
         }
     }
