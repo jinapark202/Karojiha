@@ -14,12 +14,18 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     let instructionsLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
+    let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
+    var mute: Bool = true
     
     //Sound effects and music taken from freesfx.co.uk
+    let backgroundSound = SKAudioNode(fileNamed: "clear_skies.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
     
     override init(size: CGSize) {
         super.init(size: size)
+        
+        self.addChild(backgroundSound)
+        backgroundSound.autoplayLooped = true
         
         //Changed background to be black
         backgroundColor = SKColor.black
@@ -39,6 +45,11 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         instructionsLabel.zPosition = 10
         addChild(instructionsLabel)
         instructionsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
+        
+        soundBtn.size = CGSize(width: 50, height: 50)
+        soundBtn.position = CGPoint(x: size.width/2, y: size.height/4)
+        soundBtn.zPosition = 20
+        addChild(soundBtn)
         
         //Implements endless scrolling stars background
         let backgroundTexture = SKTexture(imageNamed: "testStarsBg")
@@ -67,12 +78,21 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = GameScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            }
-            if instructionsLabel.contains(location){
+            } else if instructionsLabel.contains(location) {
                 run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = InstructionsScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
+            } else if soundBtn.contains(location) {
+                if mute {
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    mute = false
+                    backgroundSound.run(SKAction.stop())
+                } else {
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    mute = true
+                    backgroundSound.run(SKAction.play())
+                }
             }
         }
     }
