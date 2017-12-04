@@ -12,6 +12,7 @@ extension GameScene{
     
     //Create the bird
     func createBird() -> SKSpriteNode {
+        
         //Set the size and position of the bird
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
         bird.size = CGSize(width: 150, height: 110)
@@ -38,7 +39,6 @@ extension GameScene{
         elevationLabel.fontName = "Avenir-BlackOblique"
         elevationLabel.text = String(describing:
             Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
-        
         cameraNode.addChild(elevationLabel)
     }
     

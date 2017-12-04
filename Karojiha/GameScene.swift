@@ -20,11 +20,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Bee: UInt32 = 4
         static let Carrot: UInt32 = 5
     }
-    var gravity = CGFloat(0.0)
     
-    let motionManager = CMMotionManager()
+    var gravity = CGFloat(0.0)
+    var birdVelocity = CGFloat(600.0)
 
-    let birdName = "bird"
+    let motionManager = CMMotionManager()
     
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
@@ -39,7 +39,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var pauseBtn = SKSpriteNode()
     var homeBtn = SKSpriteNode()
     
-    
     var gameStarted = false
     var mute: Bool = true
     
@@ -50,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var latestTime = 0.0
     var powerUpEndTime = 0.0
     
+    let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
@@ -60,9 +60,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let obstacleSpacing: CGFloat = 800
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
-    
-    
-    var birdVelocity = CGFloat(600.0)
     
     //Sound effects and music taken from freesfx.co.uk
     let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
@@ -80,6 +77,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let backgroundHeight = CGFloat(8.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
     var currentBackground: CGFloat = 1.0
     var previousBackground: CGFloat = 0.0
+    var bgFlavorCheckpoint = CGFloat(0.0)
+    let flavorFrequency = CGFloat(500.0)
     
     var bgFlavorImages  = [1: ["rainbow.png", "cloud"],   //First background (light blue)
                            2: ["airplane", "cloud", "pigeon", "pigeon"],
@@ -88,34 +87,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            5: ["planet","comet", "spaceship"]    //Last background (Space)
         ]
     
-    var bgFlavorCheckpoint = CGFloat(0.0)
-    let flavorFrequency = CGFloat(500.0)
+    
     
     //creates a random function for us to use
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
     
+    
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }
     
+    
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
+        bird.name = birdName
         playerBody.mass = 0.4
-        playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 4
-        
-        bird.physicsBody = playerBody
-        bird.physicsBody!.isDynamic = true
         bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
         bird.zPosition = 10
-        bird.name = birdName
         
+        playerBody.categoryBitMask = PhysicsCategory.Player
+        playerBody.collisionBitMask = 4
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Worm
         bird.physicsBody?.usesPreciseCollisionDetection = true
-        
-        //Prevents bird from rotating upon collision
+        bird.physicsBody = playerBody
+        bird.physicsBody!.isDynamic = true
         bird.physicsBody?.allowsRotation = false
     }
     
@@ -143,29 +140,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func animateWormLabel(){
         
+        //Change worms label color to orange when 1 worm is eaten
         if wormsEaten % 3 == 1 {
             let scaleUpAction = SKAction.scale(to: 1.1, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.orange
             wormsEatenLabel.run(scaleUpAction)
         }
         
+        //Change worms label color to yellow when 2 worms are eaten
         if wormsEaten % 3 == 2 {
             let scaleUpAction = SKAction.scale(to: 1.2, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.yellow
             wormsEatenLabel.run(scaleUpAction)
         }
         
+        //Change worms label color to light gray when 3 worms are eaten
         if wormsEaten % 3 == 0 {
             let scaleUpAction = SKAction.scale(to: 1.4, duration: 0.3)
             wormsEatenLabel.fontColor = UIColor.lightGray
             wormsEatenLabel.run(scaleUpAction)
-        
-        
         }
     }
     
+    
     //Adds the first background to the screen and sets up the scene.
     override func didMove(to view: SKView) {
+        
         //Prevents bird from leaving the frame
         let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000)) //Sloppy solution but it works
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
@@ -269,82 +269,59 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
 
-    
-    //Function to emit spark particles at worm position when worm collides with bird
-    func newFlyNode(scene: SKScene, Bird: SKNode) {
-        
-        run(sparkSound)
-        
-        guard let emitter = SKEmitterNode(fileNamed: "fire.sks") else {
-            return
-        }
-        emitter.particleBirthRate = 100
-        emitter.numParticlesToEmit = 15
-        emitter.particleLifetime = 0.2
-        
-        // Place the emitter at worm postition.
-        emitter.position = bird.position
-        emitter.name = "exhaust"
-        
-        // Send the particles to the scene.
-        emitter.targetNode = scene;
-        scene.addChild(emitter)
-    }
-    
+
     //Function that adds worms to screen
     func addWorm() {
-        
-        // Create sprite
+
         let worm = SKSpriteNode(imageNamed: "dragonfly.png")
         
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        worm.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+
         worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size)
         worm.physicsBody?.isDynamic = true
         worm.physicsBody?.affectedByGravity = false
         worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm
         worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm
         worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+
+        self.addChild(worm)
+
+    }
+    
+    
+    func addBee() {
+
+        let bee = SKSpriteNode(imageNamed: "bee.png")
+        bee.size = CGSize(width: 30, height: 30)
         
         // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/2
+        bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
-        // Position the worm
-        worm.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
-        
-        // Add the worm to the scene
-        self.addChild(worm)
-        
-        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
-    }
-    
-    func addBee() {
-        
-        // Create sprite
-        let bee = SKSpriteNode(imageNamed: "bee.png")
-        
-        bee.size = CGSize(width: 30, height: 30)
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
         bee.physicsBody?.isDynamic = true
         bee.physicsBody?.affectedByGravity = false
         bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
         bee.physicsBody?.collisionBitMask = PhysicsCategory.Bee
         bee.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        
-        // Determine where to spawn the worm along the Y axis
-        let actualY = bird.position.y + size.height/2
-        
-        // Position the worm
-        bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
-        
-        // Add the worm to the scene
-        self.addChild(bee)
-        
         bee.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+
+        self.addChild(bee)
+
     }
+    
     
     func addCarrot() {
         
         // Create sprite
         let carrot = SKSpriteNode(imageNamed: "carrot.png")
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        carrot.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         carrot.size = CGSize(width: 50, height: 50)
         carrot.physicsBody = SKPhysicsBody(rectangleOf: carrot.size)
@@ -353,17 +330,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         carrot.physicsBody?.categoryBitMask = PhysicsCategory.Carrot
         carrot.physicsBody?.collisionBitMask = PhysicsCategory.Carrot
         carrot.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        
-        // Determine where to spawn the worm along the Y axis
-        let actualY = bird.position.y + size.height/2
-        
-        // Position the worm
-        carrot.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
-        
-        // Add the worm to the scene
-        self.addChild(carrot)
-        
         carrot.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+        
+        self.addChild(carrot)
+    
     }
     
 
@@ -374,6 +344,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let emitter = SKEmitterNode(fileNamed: file) else {
             return
         }
+        
         emitter.particleBirthRate = 100
         emitter.numParticlesToEmit = 15
         emitter.particleLifetime = 0.2
@@ -387,9 +358,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.addChild(emitter)
     }
     
+    
     func startPowerUp() {
         powerUpEndTime = latestTime + 2
     }
+    
     
     //Collecting enough worms will apply an upward force to the bird
     func applyPowerUp(){
@@ -403,37 +376,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gravity = stopGravity
             
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
-            newFlyNode(scene: self, Bird: bird)
+            newSparkNode(scene: self, Object: bird, file: "fire")
         }
     }
     
-    //function to remove worm when it collides with bird
-    func collisionWithWorm(object: SKNode, bird: SKNode) {
-        run(wormHitSound)
-        object.removeFromParent()
+    
+    // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
+    func threeWormsEaten() {
+        animateWormLabel()
         wormsEaten += 1
         
         let wormsNeeded = 3
         if wormsEaten % wormsNeeded == 0 && wormsEaten > 1 {
             startPowerUp()
         }
-
-        animateWormLabel()
+        
         if (wormsEaten % wormsNeeded == 0) {
             wormsEatenLabel.text = ("x ") + String(describing: (3))}
         else{
             wormsEatenLabel.text = ("x ") + String(describing: (Int(wormsEaten % wormsNeeded))) }
-        
-        newSparkNode(scene: self, Object: object, file: "fire")
     }
     
     
+    //Removes worm, adds sound, and increases the number of worms eaten when a worm when it collides with bird
+    func collisionWithWorm(object: SKNode, bird: SKNode) {
+        run(wormHitSound)
+        object.removeFromParent()
+        threeWormsEaten()
+        newSparkNode(scene: self, Object: object, file: "spark")
+    }
+    
+    
+    //Makes sound and sparks when bird collides with bees
     func collisionWithBee(object: SKNode, bird: SKNode) {
         run(beeHitSound)
         object.removeFromParent()
         newSparkNode(scene: self, Object: object, file: "smoke1")
     }
     
+    
+    //Makes sound and sparks when bird collides with carrots
     func collisionWithCarrot(object: SKNode, bird: SKNode) {
         run(carrotHitSound)
         object.removeFromParent()
@@ -446,7 +428,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
         
-        //checks which categoryBitMask is larger, larger one is assigned to secondBody, smaller one is assigned to firstBody
+        //Checks which categoryBitMask is larger, larger one is assigned to secondBody, smaller one is assigned to firstBody
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB

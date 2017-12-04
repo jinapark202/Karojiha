@@ -76,7 +76,6 @@ extension GameScene{
     }
     
     
-    
     //Called in addBackgroundFlavor()
     
     func createFlavorSprite(imageName: String){
@@ -93,7 +92,6 @@ extension GameScene{
         
     }
     
- 
     
     //Scrolling background - parallax
     func createBackground() {
