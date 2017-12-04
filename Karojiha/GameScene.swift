@@ -40,7 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var homeBtn = SKSpriteNode()
     
     var gameStarted = false
-    var mute: Bool = true
+    var sound: Bool = true
     
     //All necessary to determine clicksRequired
     var timer = Timer()
@@ -222,30 +222,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.y -= cameraNode.position.y
             
             if homeBtn.contains(location){
-                run(buttonPressSound)
+                if sound == true {
+                    run(buttonPressSound)
+                }
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             } else if soundBtn.contains(location) {
-                if mute {
-                    //run(buttonPressSound)
+                if sound {
                     soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    mute = false
+                    sound = false
                     backgroundSound.run(SKAction.stop())
                 } else {
                     run(buttonPressSound)
                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    mute = true
+                    sound = true
                     backgroundSound.run(SKAction.play())
                 }
             } else if pauseBtn.contains(location){
                 if self.isPaused == false {
-                    run(buttonPressSound)
+                    if sound == true {
+                        run(buttonPressSound)
+                    }
                     self.isPaused = true
                     timer.invalidate()
                     pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
-                    run(buttonPressSound)
+                    if sound == true {
+                        run(buttonPressSound)
+                    }
                     self.isPaused = false
                     timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
                     pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
@@ -400,7 +405,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Removes worm, adds sound, and increases the number of worms eaten when a worm when it collides with bird
     func collisionWithWorm(object: SKNode, bird: SKNode) {
-        run(wormHitSound)
+        if sound == true {
+            run(wormHitSound)
+        }
         object.removeFromParent()
         threeWormsEaten()
         newSparkNode(scene: self, Object: object, file: "spark")
@@ -409,7 +416,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Makes sound and sparks when bird collides with bees
     func collisionWithBee(object: SKNode, bird: SKNode) {
-        run(beeHitSound)
+        if sound == true {
+            run(beeHitSound)
+        }
         object.removeFromParent()
         newSparkNode(scene: self, Object: object, file: "smoke1")
     }
@@ -417,7 +426,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Makes sound and sparks when bird collides with carrots
     func collisionWithCarrot(object: SKNode, bird: SKNode) {
-        run(carrotHitSound)
+        if sound == true {
+            run(carrotHitSound)
+        }
         object.removeFromParent()
         newSparkNode(scene: self, Object: object, file: "carrotSpark")
     }
