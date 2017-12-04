@@ -15,8 +15,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     struct PhysicsCategory {
         static let Player: UInt32 = 1
         static let Obstacle: UInt32 = 2
-        static let Edge: UInt32 = 4
+        static let Edge: UInt32 = 6
         static let Worm: UInt32 = 3
+        static let Bee: UInt32 = 4
+        static let Carrot: UInt32 = 5
     }
     var gravity = CGFloat(0.0)
     
@@ -130,6 +132,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (bird.position.y > size.height / 2) {
             if (time.truncatingRemainder(dividingBy: 2) == 0) {
                 addWorm()
+            } else if (time.truncatingRemainder(dividingBy: 3) == 0) {
+                addBee()
+                addCarrot()
             }
         }
     }
@@ -309,6 +314,56 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
     }
     
+    func addBee() {
+        
+        // Create sprite
+        let bee = SKSpriteNode(imageNamed: "bee.png")
+        
+        bee.size = CGSize(width: 30, height: 30)
+        bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
+        bee.physicsBody?.isDynamic = true
+        bee.physicsBody?.affectedByGravity = false
+        bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
+        bee.physicsBody?.collisionBitMask = PhysicsCategory.Bee
+        bee.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        
+        // Position the worm
+        bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        
+        // Add the worm to the scene
+        self.addChild(bee)
+        
+        bee.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+    }
+    
+    func addCarrot() {
+        
+        // Create sprite
+        let carrot = SKSpriteNode(imageNamed: "carrot.png")
+        
+        carrot.size = CGSize(width: 50, height: 50)
+        carrot.physicsBody = SKPhysicsBody(rectangleOf: carrot.size)
+        carrot.physicsBody?.isDynamic = true
+        carrot.physicsBody?.affectedByGravity = false
+        carrot.physicsBody?.categoryBitMask = PhysicsCategory.Carrot
+        carrot.physicsBody?.collisionBitMask = PhysicsCategory.Carrot
+        carrot.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        
+        // Position the worm
+        carrot.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        
+        // Add the worm to the scene
+        self.addChild(carrot)
+        
+        carrot.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+    }
+    
 
     
     //Function to emit spark particles at worm position when worm collides with bird
@@ -351,9 +406,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //function to remove worm when it collides with bird
-    func collisionBetween(worm: SKNode, bird: SKNode) {
+    func collisionBetween(object: SKNode, bird: SKNode) {
         run(wormHitSound)
-        worm.removeFromParent()
+        object.removeFromParent()
         wormsEaten += 1
         
         let wormsNeeded = 3
@@ -367,7 +422,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else{
             wormsEatenLabel.text = ("x ") + String(describing: (Int(wormsEaten % wormsNeeded))) }
         
-        newSparkNode(scene: self, Worm: worm)
+        newSparkNode(scene: self, Worm: object)
     }
     
     
@@ -385,9 +440,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        if (firstBody.categoryBitMask != secondBody.categoryBitMask) {
+        if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Worm {
             if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                collisionBetween(worm: worm, bird: bird)
+                collisionBetween(object: worm, bird: bird)
+            }
+        } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Bee {
+            if let bee = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
+                print("bee")
+            }
+        } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Carrot {
+            if let carrot = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
+                print("carrot")
             }
         }
     }
