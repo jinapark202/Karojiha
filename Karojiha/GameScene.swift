@@ -70,8 +70,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let dyingSound = SKAction.playSoundFileNamed("slide_whistle_down.mp3", waitForCompletion: true)
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
+    let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
+    let carrotHitSound = SKAction.playSoundFileNamed("bite_into_and_chew_apple.mp3", waitForCompletion: true)
 
-    
+
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames: [String] = ["background1","background2","background3","background4New","testStarsBg"]
     var backgroundImages: [SKNode] = []
@@ -366,10 +368,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
 
     
-    //Function to emit spark particles at worm position when worm collides with bird
-    func newSparkNode(scene: SKScene, Worm: SKNode) {
+    //Function to emit spark particles
+    func newSparkNode(scene: SKScene, Object: SKNode, file: String) {
         
-        guard let emitter = SKEmitterNode(fileNamed: "spark.sks") else {
+        guard let emitter = SKEmitterNode(fileNamed: file) else {
             return
         }
         emitter.particleBirthRate = 100
@@ -377,7 +379,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         emitter.particleLifetime = 0.2
         
         // Place the emitter at worm postition.
-        emitter.position = Worm.position
+        emitter.position = Object.position
         emitter.name = "exhaust"
         
         // Send the particles to the scene.
@@ -406,7 +408,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //function to remove worm when it collides with bird
-    func collisionBetween(object: SKNode, bird: SKNode) {
+    func collisionWithWorm(object: SKNode, bird: SKNode) {
         run(wormHitSound)
         object.removeFromParent()
         wormsEaten += 1
@@ -422,7 +424,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else{
             wormsEatenLabel.text = ("x ") + String(describing: (Int(wormsEaten % wormsNeeded))) }
         
-        newSparkNode(scene: self, Worm: object)
+        newSparkNode(scene: self, Object: object, file: "fire")
+    }
+    
+    
+    func collisionWithBee(object: SKNode, bird: SKNode) {
+        run(beeHitSound)
+        object.removeFromParent()
+        newSparkNode(scene: self, Object: object, file: "smoke1")
+    }
+    
+    func collisionWithCarrot(object: SKNode, bird: SKNode) {
+        run(carrotHitSound)
+        object.removeFromParent()
+        newSparkNode(scene: self, Object: object, file: "carrotSpark")
     }
     
     
@@ -442,15 +457,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Worm {
             if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                collisionBetween(object: worm, bird: bird)
+                collisionWithWorm(object: worm, bird: bird)
             }
         } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Bee {
             if let bee = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                print("bee")
+                collisionWithBee(object: bee, bird: bird)
             }
         } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Carrot {
             if let carrot = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                print("carrot")
+                collisionWithCarrot(object: carrot, bird: bird)
             }
         }
     }
