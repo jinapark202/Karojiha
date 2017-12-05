@@ -22,13 +22,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     var gravity = CGFloat(0.0)
-    var birdVelocity = CGFloat(600.0)
+    var initialFlapVelocity = CGFloat(600.0)
 
     let motionManager = CMMotionManager()
     
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
     var wormsEaten = 0
+    var beeEaten = 0
+    var carrotEaten = 0
     
     //Variables for click counter.
     var totalClickCounter = 0.0
@@ -198,12 +200,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        totalClickCounter += 1
         
         self.bird.run(repeatActionbird)
+
         
-        if (bird.physicsBody?.velocity.dy)! < birdVelocity {
-            bird.physicsBody?.velocity.dy = birdVelocity
+        let flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
+//print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
+        if (bird.physicsBody?.velocity.dy)! < flapVelocity {
+            bird.physicsBody?.velocity.dy = flapVelocity
+            totalClickCounter += 1
         }
         
         //Start the timer counting
@@ -421,6 +426,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         object.removeFromParent()
         newSparkNode(scene: self, Object: object, file: "smoke1")
+        beeEaten += 1
+//        gravity = gravity -
     }
     
     
@@ -482,9 +489,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Logistic Function for gravity increase, can graph this at
         //www.desmos.com/calculator/agxuc5gip8
         
-        let newGravity = CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
-        physicsWorld.gravity.dy = newGravity
-        gravity = newGravity
+//        let newGravity = CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
+//        physicsWorld.gravity.dy = newGravity
+//        gravity = newGravity
     }
 
     
