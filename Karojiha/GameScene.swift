@@ -64,6 +64,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
     
+    //needed for obstacle spawning
+    var lastWormAltitude = CGFloat(0.0)
+    var lastCarrotAltitude = CGFloat(0.0)
+    var lastBeeAltitude = CGFloat(0.0)
+    
     //Sound effects and music taken from freesfx.co.uk
     let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
     let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
@@ -126,9 +131,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
     
-    var lastWormAltitude = CGFloat(0.0)
-    var lastCarrotAltitude = CGFloat(0.0)
-    var lastBeeAltitude = CGFloat(0.0)
+    
     //Waits a while at beginning of game, then begins to calculate
     //Prevent worms from accumulating until after the bird gets halfway up the screen; waits 2 seconds, ensures bird's altiude has increased by atleast 4 and that its flapVelocity is at least 100 to spawn new worm; waits 4 seconds, ensures bird's altiude has increased by atleast 25 and that its flapVelocity is at least 100 to spawn new carrot; waits 5 seconds, ensures bird's altiude has increased by atleast 30 and that its flapVelocity is at least 100 to spawn new bee
     @objc func updateCounting(){
