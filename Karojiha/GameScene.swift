@@ -23,6 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
+    var flapVelocity = CGFloat(0.0)
 
     let motionManager = CMMotionManager()
     
@@ -125,17 +126,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
     
-    
+    var lastWormAltitude = CGFloat(0.0)
+    var lastCarrotAltitude = CGFloat(0.0)
+    var lastBeeAltitude = CGFloat(0.0)
     //Waits a while at beginning of game, then begins to calculate
-    //Prevent worms from accumulating until after the bird gets halfway up the screen
+    //Prevent worms from accumulating until after the bird gets halfway up the screen; waits 2 seconds, ensures bird's altiude has increased by atleast 4 and that its flapVelocity is at least 100 to spawn new worm; waits 4 seconds, ensures bird's altiude has increased by atleast 25 and that its flapVelocity is at least 100 to spawn new carrot; waits 5 seconds, ensures bird's altiude has increased by atleast 30 and that its flapVelocity is at least 100 to spawn new bee
     @objc func updateCounting(){
         time += 1
         if (bird.position.y > size.height / 2) {
-            if (time.truncatingRemainder(dividingBy: 2) == 0) {
+            if (Int(time) % 2 == 0 && score > lastWormAltitude + 4 && flapVelocity > 100 ) {
                 addWorm()
-            } else if (time.truncatingRemainder(dividingBy: 3) == 0) {
-                addBee()
+                lastWormAltitude = score
+            }
+            if (Int(time) % 4 == 0 && score > lastCarrotAltitude + 25 && flapVelocity > 100) {
                 addCarrot()
+                lastCarrotAltitude = score
+            }
+            if (Int(time) % 5 == 0 && score > lastBeeAltitude + 30 && flapVelocity > 100) {
+                addBee()
+                lastBeeAltitude = score
             }
         }
     }
@@ -204,7 +213,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.bird.run(repeatActionbird)
 
         
-        let flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
+        flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
 //print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
         if (bird.physicsBody?.velocity.dy)! < flapVelocity {
             bird.physicsBody?.velocity.dy = flapVelocity
