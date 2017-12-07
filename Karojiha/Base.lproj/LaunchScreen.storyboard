@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13526" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13524"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,12 +23,20 @@
                                 <rect key="frame" x="-407" y="-636" width="1080" height="1920"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="spaceBird" translatesAutoresizingMaskIntoConstraints="NO" id="dtd-Ct-wPX">
-                                <rect key="frame" x="67" y="244" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spaceBird" translatesAutoresizingMaskIntoConstraints="NO" id="dtd-Ct-wPX">
+                                <rect key="frame" x="74.5" y="273.5" width="225" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="225" id="Wa9-2g-zZT"/>
+                                    <constraint firstAttribute="height" constant="120" id="e8h-Ha-PoK"/>
+                                    <constraint firstAttribute="width" secondItem="dtd-Ct-wPX" secondAttribute="height" multiplier="15:8" id="qtJ-h3-SIR"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dtd-Ct-wPX" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="fjt-ac-dDg"/>
+                            <constraint firstItem="dtd-Ct-wPX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="xzs-9e-0Dn"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="rg2-r3-4B5"/>
                     </view>
                 </viewController>
