@@ -234,6 +234,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             var location = touch.location(in: self)
             
+            //makes bird flap its wings when tap occurrs
+            birdSprites.append(birdAtlas.textureNamed("bird_1"))
+            birdSprites.append(birdAtlas.textureNamed("bird_2"))
+            birdSprites.append(birdAtlas.textureNamed("bird_3"))
+            birdSprites.append(birdAtlas.textureNamed("bird_4"))
+            let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
+            self.repeatActionbird = SKAction.repeatForever(animatebird)
+            
             //Adjust for cameraNode position
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
@@ -281,14 +289,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createScene(){
         self.bird = createBird()
         self.addChild(bird)
-        
-        birdSprites.append(birdAtlas.textureNamed("bird_1"))
-        birdSprites.append(birdAtlas.textureNamed("bird_2"))
-        birdSprites.append(birdAtlas.textureNamed("bird_3"))
-        birdSprites.append(birdAtlas.textureNamed("bird_4"))
-        
-        let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
-        self.repeatActionbird = SKAction.repeatForever(animatebird)
     }
 
 
