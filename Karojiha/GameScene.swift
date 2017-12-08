@@ -26,6 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var flapVelocity = CGFloat(600.0)
 
     let motionManager = CMMotionManager()
+    var wormFrequency = CGFloat(6.0)
+    var beeFrequency = CGFloat(0.0)
     
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
@@ -44,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gameStarted = false
     var sound: Bool = true
+    var powerUpActive: Bool = false
     
     //All necessary to determine clicksRequired
     var timer = Timer()
@@ -67,11 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
     
-    //needed for obstacle spawning
     var lastWormAltitude = CGFloat(0.0)
-    var lastCarrotAltitude = CGFloat(0.0)
-    var lastBeeAltitude = CGFloat(0.0)
-    
     //Sound effects and music taken from freesfx.co.uk
     let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
     let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
@@ -83,6 +82,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
+    var parallaxBegan: Bool = false
     let backgroundNames: [String] = ["background1","background2","background3","background4New","testStarsBg"]
     var backgroundImages: [SKNode] = []
     let backgroundHeight = CGFloat(8.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
@@ -131,27 +131,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Starts timer in motion, calls updateCounting every second
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
     
     
     //Waits a while at beginning of game, then begins to calculate
     //Prevent worms from accumulating until after the bird gets halfway up the screen; waits 2 seconds, ensures bird's altiude has increased by atleast 4 and that its flapVelocity is at least 100 to spawn new worm; waits 4 seconds, ensures bird's altiude has increased by atleast 25 and that its flapVelocity is at least 100 to spawn new carrot; waits 5 seconds, ensures bird's altiude has increased by atleast 30 and that its flapVelocity is at least 100 to spawn new bee
     @objc func updateCounting(){
-        time += 1
+        time += 0.1
+        let randWorm = random(min: 0, max: 100)
+        let randBee = random(min: 0, max: 100)
+
         if (bird.position.y > size.height / 2) {
-            if (Int(time) % 4 == 0 && score > lastWormAltitude + 4) {
-                addWorm()
-                lastWormAltitude = score
+            if powerUpActive == false {
+                if (randWorm < wormFrequency) {
+                    addWorm()
+                }
+                
+                if (randBee < beeFrequency) {
+                    addBee()
+                }
             }
+
 //            if (Int(time) % 4 == 0 && score > lastCarrotAltitude + 25) {
 //                addCarrot()
 //                lastCarrotAltitude = score
 //            }
-            if (Int(time) % 2 == 0 && score > lastBeeAltitude + 30) {
-                addBee()
-                lastBeeAltitude = score
-            }
+            
+
         }
     }
     
@@ -194,7 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createSoundBtn()
         createPauseBtn()
         createHomeBtn()
-        createWormsEatenLabel()
+//        createWormsEatenLabel()
         
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
@@ -307,10 +314,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size)
         worm.physicsBody?.isDynamic = true
         worm.physicsBody?.affectedByGravity = false
+        worm.physicsBody?.allowsRotation = false
         worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm
         worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm
         worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        worm.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+        worm.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
 
         self.addChild(worm)
 
@@ -362,7 +370,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     }
     
-
+    func updateBeeFrequency() {
+        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, -0.05 * time)))))
+    }
+    
     
     //Function to emit spark particles
     func newSparkNode(scene: SKScene, Object: SKNode, file: String) {
@@ -403,6 +414,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
             newSparkNode(scene: self, Object: bird, file: "fire")
+            
+            powerUpActive = true
+            
+        } else {
+            powerUpActive = false
         }
     }
     
@@ -413,10 +429,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Collecting enough worms will apply an upward force to the bird
     func applyPenalty(){
-        if latestTime < penaltyEndTime{
+        if beeEaten > speedArray.count - 1 {
+            flapVelocity = CGFloat(speedArray.endIndex)
+        } else if latestTime < penaltyEndTime {
             flapVelocity = CGFloat(speedArray[beeEaten])
             print(flapVelocity)
-        }else{
+        } else {
             beeEaten = 0
             flapVelocity = initialFlapVelocity
         }
@@ -424,7 +442,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
     func threeWormsEaten() {
-        animateWormLabel()
+//        animateWormLabel()
         wormsEaten += 1
         
         let wormsNeeded = 3
@@ -441,34 +459,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Removes worm, adds sound, and increases the number of worms eaten when a worm when it collides with bird
     func collisionWithWorm(object: SKNode, bird: SKNode) {
-        if sound == true {
-            run(wormHitSound)
-        }
         object.removeFromParent()
-        threeWormsEaten()
-        newSparkNode(scene: self, Object: object, file: "spark")
+
+        if powerUpActive == false {
+            if sound == true {
+                run(wormHitSound)
+            }
+            threeWormsEaten()
+            newSparkNode(scene: self, Object: object, file: "spark")
+        }
     }
     
     
     //Makes sound and sparks when bird collides with bees
     func collisionWithBee(object: SKNode, bird: SKNode) {
-        if sound == true {
-            run(beeHitSound)
-        }
         object.removeFromParent()
-        newSparkNode(scene: self, Object: object, file: "smoke1")
-        beeEaten += 1
-        startPenalty()
+
+        if powerUpActive == false {
+            if sound == true {
+                run(beeHitSound)
+            }
+            newSparkNode(scene: self, Object: object, file: "smoke1")
+            beeEaten += 1
+            startPenalty()
+        }
+
     }
     
     
     //Makes sound and sparks when bird collides with carrots
     func collisionWithCarrot(object: SKNode, bird: SKNode) {
-        if sound == true {
-            run(carrotHitSound)
-        }
         object.removeFromParent()
-        newSparkNode(scene: self, Object: object, file: "carrotSpark")
+
+        if powerUpActive == false {
+            if sound == true {
+                run(carrotHitSound)
+            }
+            newSparkNode(scene: self, Object: object, file: "carrotSpark")
+        }
     }
     
     
@@ -567,7 +595,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         //Restarts the game when the bird hits the bottom of the screen
-        if playerPositionInCamera.y < -size.height / 2.0 {
+        if (playerPositionInCamera.y < -size.height / 2.0) || (bird.position.y + bird.size.height < cameraNode.position.y - size.height / 2) {
             run(dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score), wormCount: wormsEaten)
@@ -585,6 +613,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         adjustBackground()
         applyPowerUp()
         applyPenalty()
+        updateBeeFrequency()
         setupCameraNode()
 //        addBackgroundFlavor()
     }

@@ -81,16 +81,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = 10
         addChild(scoreLabel)
         
-        //Creates worm label for the number of worms eaten in the last game.
-        let wormLabel = SKLabelNode(fontNamed: "Avenir-Light")
-        wormLabel.text = "Worms Eaten: \(wormCount)"
-        wormLabel.fontSize = 20
-        wormLabel.fontColor = SKColor.lightGray
-        wormLabel.position = CGPoint(x: size.width/2, y: size.height/1.6)
-        wormLabel.zPosition = 10
-        addChild(wormLabel)
-        
-        
         //Creates label for highest score.
         let highScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
         highScoreLabel.fontSize = 25
