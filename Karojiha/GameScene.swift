@@ -23,7 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
-    var flapVelocity = CGFloat(0.0)
+    var flapVelocity = CGFloat(600.0)
 
     let motionManager = CMMotionManager()
     
@@ -51,6 +51,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var latestTime = 0.0
     var powerUpEndTime = 0.0
+    var penaltyEndTime = 0.0
+    
+    var speedArray = [600, 400, 200, 100, 0]
     
     let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
@@ -137,15 +140,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func updateCounting(){
         time += 1
         if (bird.position.y > size.height / 2) {
-            if (Int(time) % 2 == 0 && score > lastWormAltitude + 4 && flapVelocity > 100 ) {
+            if (Int(time) % 4 == 0 && score > lastWormAltitude + 4) {
                 addWorm()
                 lastWormAltitude = score
             }
-            if (Int(time) % 4 == 0 && score > lastCarrotAltitude + 25 && flapVelocity > 100) {
-                addCarrot()
-                lastCarrotAltitude = score
-            }
-            if (Int(time) % 5 == 0 && score > lastBeeAltitude + 30 && flapVelocity > 100) {
+//            if (Int(time) % 4 == 0 && score > lastCarrotAltitude + 25) {
+//                addCarrot()
+//                lastCarrotAltitude = score
+//            }
+            if (Int(time) % 2 == 0 && score > lastBeeAltitude + 30) {
                 addBee()
                 lastBeeAltitude = score
             }
@@ -216,8 +219,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.bird.run(repeatActionbird)
 
         
-        flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
-//print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
+//        flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
+////print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
         if (bird.physicsBody?.velocity.dy)! < flapVelocity {
             bird.physicsBody?.velocity.dy = flapVelocity
             totalClickCounter += 1
@@ -326,10 +329,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
         bee.physicsBody?.isDynamic = true
         bee.physicsBody?.affectedByGravity = false
+        bee.physicsBody?.allowsRotation = false
         bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
         bee.physicsBody?.collisionBitMask = PhysicsCategory.Bee
         bee.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        bee.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
+        bee.physicsBody?.velocity = CGVector(dx: random(min: -250, max: 250), dy: random(min: -100, max: -400))
 
         self.addChild(bee)
 
@@ -402,6 +406,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func startPenalty() {
+        penaltyEndTime = latestTime + 5
+    }
+    
+    
+    //Collecting enough worms will apply an upward force to the bird
+    func applyPenalty(){
+        if latestTime < penaltyEndTime{
+            flapVelocity = CGFloat(speedArray[beeEaten])
+            print(flapVelocity)
+        }else{
+            beeEaten = 0
+            flapVelocity = initialFlapVelocity
+        }
+    }
     
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
     func threeWormsEaten() {
@@ -439,7 +458,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         object.removeFromParent()
         newSparkNode(scene: self, Object: object, file: "smoke1")
         beeEaten += 1
-//        gravity = gravity -
+        startPenalty()
     }
     
     
@@ -565,8 +584,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         adjustLabels()
         adjustBackground()
         applyPowerUp()
+        applyPenalty()
         setupCameraNode()
-        addBackgroundFlavor()
+//        addBackgroundFlavor()
     }
     
 }
