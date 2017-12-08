@@ -60,9 +60,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
-    var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
-    var repeatActionbird = SKAction()
+    var flappingAction = SKAction()
     let playerBody = SKPhysicsBody(circleOfRadius: 30)
     
     var obstacles: [SKNode] = []
@@ -223,8 +222,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        self.bird.run(repeatActionbird)
-
+        self.bird.run(flappingAction)
         
 //        flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
 ////print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
@@ -236,14 +234,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Implements the pause and restart button functionality
         for touch in touches{
             var location = touch.location(in: self)
-            
-            //makes bird flap its wings when tap occurrs
-            birdSprites.append(birdAtlas.textureNamed("bird_1"))
-            birdSprites.append(birdAtlas.textureNamed("bird_2"))
-            birdSprites.append(birdAtlas.textureNamed("bird_3"))
-            birdSprites.append(birdAtlas.textureNamed("bird_4"))
-            let animatebird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
-            self.repeatActionbird = SKAction.repeatForever(animatebird)
             
             //Adjust for cameraNode position
             location.x -= cameraNode.position.x
@@ -426,7 +416,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             flapVelocity = CGFloat(speedArray.endIndex)
         } else if latestTime < penaltyEndTime {
             flapVelocity = CGFloat(speedArray[beeEaten])
-            print(flapVelocity)
         } else {
             beeEaten = 0
             flapVelocity = initialFlapVelocity
