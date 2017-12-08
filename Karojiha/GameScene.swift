@@ -233,13 +233,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             totalClickCounter += 1
         }
         
-        //Start the timer counting
-        if gameStarted == false {
-            scheduledTimerWithTimeInterval()
-            gameStarted = true
-            createBackground()
-        }
-        
         //Implements the pause and restart button functionality
         for touch in touches{
             var location = touch.location(in: self)
@@ -588,14 +581,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Adjusts the camera as the bird moves up the screen.
     func setupCameraNode() {
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
-        
+
         //Moves the camera up with the bird when the bird goes halfway up the screen
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y
+            
+            //Start the timer counting
+            if gameStarted == false {
+                scheduledTimerWithTimeInterval()
+                gameStarted = true
+                createBackground()
+            }
         }
         
         //Restarts the game when the bird hits the bottom of the screen
-        if (playerPositionInCamera.y < -size.height / 2.0) || (bird.position.y + bird.size.height < cameraNode.position.y - size.height / 2) {
+        if playerPositionInCamera.y < -size.height / 2.0 {
             run(dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score), wormCount: wormsEaten)
