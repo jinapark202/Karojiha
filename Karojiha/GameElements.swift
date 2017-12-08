@@ -31,7 +31,9 @@ extension GameScene{
         let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
-
+        
+    
+        
         return bird
     }
     

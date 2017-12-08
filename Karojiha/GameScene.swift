@@ -10,6 +10,16 @@
 import SpriteKit
 import CoreMotion
 
+//creates a random function for us to use
+func random() -> CGFloat {
+    return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+}
+
+func random(min: CGFloat, max: CGFloat) -> CGFloat {
+    return random() * (max - min) + min
+}
+
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     struct PhysicsCategory {
@@ -18,7 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Edge: UInt32 = 6
         static let Worm: UInt32 = 3
         static let Bee: UInt32 = 4
-        static let Carrot: UInt32 = 5
     }
     
     var gravity = CGFloat(0.0)
@@ -33,7 +42,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var previousCheckpoint = CGFloat(0.0)
     var wormsEaten = 0
     var beeEaten = 0
-    var carrotEaten = 0
     
     //Variables for click counter.
     var totalClickCounter = 0.0
@@ -69,7 +77,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
     
-    var lastWormAltitude = CGFloat(0.0)
     //Sound effects and music taken from freesfx.co.uk
     let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
     let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
@@ -79,36 +86,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
     let carrotHitSound = SKAction.playSoundFileNamed("bite_into_and_chew_apple.mp3", waitForCompletion: true)
 
-
-    //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
-    var parallaxBegan: Bool = false
-    let backgroundNames: [String] = ["background1","background2","background3","background4New","testStarsBg"]
-    var backgroundImages: [SKNode] = []
-    let backgroundHeight = CGFloat(8.0) //This is height of background in terms of # of screens (if Bg is gradient, changes speed of color change)
-    var currentBackground: CGFloat = 1.0
-    var previousBackground: CGFloat = 0.0
-    var bgFlavorCheckpoint = CGFloat(0.0)
-    let flavorFrequency = CGFloat(500.0)
+    let background = Background()
     
-    var bgFlavorImages  = [1: ["rainbow.png", "cloud"],   //First background (light blue)
-                           2: ["airplane", "cloud", "pigeon", "pigeon"],
-                           3: ["rainbow.png", "airplane","pigeon", "redPlane", "eagle", "eagle"],
-                           4: ["thunder1", "redPlane", "airplane"],
-                           5: ["planet","comet", "spaceship"]    //Last background (Space)
-        ]
-    
-    
-    
-    //creates a random function for us to use
-    func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    override init(size: CGSize) {
+        super.init(size: size)
+        background.scene = self
     }
     
-    
-    func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        background.scene = self
     }
-    
     
     //Initiates the position of the bird and sets up the playerBody.
     func createPlayerAndPosition() {
@@ -151,13 +139,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     addBee()
                 }
             }
-
-//            if (Int(time) % 4 == 0 && score > lastCarrotAltitude + 25) {
-//                addCarrot()
-//                lastCarrotAltitude = score
-//            }
-            
-
         }
     }
     
@@ -204,9 +185,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
-        
-        initBackgroundArray(names: backgroundNames)
-        addChild(backgroundImages[0])
         
         self.physicsWorld.contactDelegate = self
         
@@ -331,28 +309,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    func addCarrot() {
-        
-        // Create sprite
-        let carrot = SKSpriteNode(imageNamed: "carrot.png")
-        
-        // Determine where to spawn the worm along the Y axis
-        let actualY = bird.position.y + size.height/2
-        carrot.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
-        
-        carrot.size = CGSize(width: 50, height: 50)
-        carrot.physicsBody = SKPhysicsBody(rectangleOf: carrot.size)
-        carrot.physicsBody?.isDynamic = true
-        carrot.physicsBody?.affectedByGravity = false
-        carrot.physicsBody?.categoryBitMask = PhysicsCategory.Carrot
-        carrot.physicsBody?.collisionBitMask = PhysicsCategory.Carrot
-        carrot.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        carrot.physicsBody?.velocity = CGVector(dx: random(min: -25, max: 25), dy: random(min: -25, max: 25))
-        
-        self.addChild(carrot)
-    
-    }
-    
     func updateBeeFrequency() {
         beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, -0.05 * time)))))
     }
@@ -386,8 +342,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Collecting enough worms will apply an upward force to the bird
     func applyPowerUp(){
-        //expontential decay funtion to allow for more worms to be needed at the beginning of the game than at the end of the game
-        //let wormsNeeded = (pow((1/1.3),((abs(gravity))-21))).rounded(.up)
         
         if latestTime < powerUpEndTime {
             
@@ -469,19 +423,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //Makes sound and sparks when bird collides with carrots
-    func collisionWithCarrot(object: SKNode, bird: SKNode) {
-        object.removeFromParent()
-
-        if powerUpActive == false {
-            if sound == true {
-                run(carrotHitSound)
-            }
-            newSparkNode(scene: self, Object: object, file: "carrotSpark")
-        }
-    }
-    
-    
     //function to check for collision between worm and bird
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
@@ -504,10 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let bee = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
                 collisionWithBee(object: bee, bird: bird)
             }
-        } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Carrot {
-            if let carrot = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                collisionWithCarrot(object: carrot, bird: bird)
-            }
         }
     }
     
@@ -525,16 +462,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    //Changes gravity of the physics World
-    func calculateGravity(){
-        //Logistic Function for gravity increase, can graph this at
-        //www.desmos.com/calculator/agxuc5gip8
-        
-//        let newGravity = CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
-//        physicsWorld.gravity.dy = newGravity
-//        gravity = newGravity
-    }
-
     
     var altitude: CGFloat {
         return floor(bird.position.y - (ledge.position.y + 10) - 28)
@@ -579,7 +506,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
-                createBackground()
+                background.createParallax()
             }
         }
         
@@ -597,9 +524,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
         processUserMotion(forUpdate: currentTime)
-        calculateGravity()
         adjustLabels()
-        adjustBackground()
+        background.adjust(forBirdPosition: bird.position)
         applyPowerUp()
         applyPenalty()
         updateBeeFrequency()
