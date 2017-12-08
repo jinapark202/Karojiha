@@ -18,10 +18,12 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
     let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
 
-    init(size: CGSize, score: Int, wormCount: Int) {
+    init(size: CGSize, score: Int, fliesCount: Int) {
         
         super.init(size: size)
         
+        backgroundColor = SKColor.black
+
         let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
         
@@ -46,6 +48,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             addChild(newHighScoreLabel)
         }
         
+    
         //Sets up the restart button
         restartBtn.size = CGSize(width: 225, height: 225)
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.45)
@@ -60,7 +63,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
-        backgroundColor = SKColor.black
         
         //Creates game over label
         let message = "Game Over"

@@ -32,15 +32,13 @@ extension GameScene{
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
         
-    
-        
         return bird
     }
     
     //Set up click counter in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
-        elevationLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.25)
+        elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)
         elevationLabel.fontColor = .orange
         elevationLabel.fontSize = 20
         elevationLabel.fontName = "Avenir-BlackOblique"
@@ -49,30 +47,11 @@ extension GameScene{
         cameraNode.addChild(elevationLabel)
     }
     
-    //Set up maximum elevation counter in upper right corner
-    func createWormsEatenLabel(){
-        wormsEatenLabel.horizontalAlignmentMode = .right
-        wormsEatenLabel.position = CGPoint(x: size.width / 2.35, y: size.height / 2.45)
-        wormsEatenLabel.zPosition = 10
-        wormsEatenLabel.fontColor = .red
-        wormsEatenLabel.fontSize = 15
-        wormsEatenLabel.fontName = "Avenir-BlackOblique"
-        wormsEatenLabel.text = String("x ") + String(describing: (Int(wormsEaten % 3)))
-        cameraNode.addChild(wormsEatenLabel)
-        let wormIcon = SKSpriteNode(imageNamed: "dragonfly")
-        cameraNode.addChild(wormIcon)
-        wormIcon.position = CGPoint(x: size.width / 3.45, y: size.height / 2.40)
-        wormIcon.xScale = 0.7
-        wormIcon.yScale = 0.7
-    }
-    
-    
-    //Creates the restart button
+    //Creates the sound button button
     func createSoundBtn() {
         soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
         soundBtn.size = CGSize(width: 50, height: 50)
-//        soundBtn.position = CGPoint(x: -soundBtn.size.width + size.width/60, y: size.height/2.25)
-        soundBtn.position = CGPoint(x: 0 - size.width/10, y: size.height/2.25)
+        soundBtn.position = CGPoint(x: -size.width/10, y: size.height/2.25)
         soundBtn.zPosition = 6
         soundBtn.setScale(0)
         cameraNode.addChild(soundBtn)
@@ -83,8 +62,7 @@ extension GameScene{
     func createPauseBtn() {
         pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
         pauseBtn.size = CGSize(width: 50, height: 50)
-//        pauseBtn.position = CGPoint(x: -2 * pauseBtn.size.width + size.width/60, y: size.height/2.25)
-        pauseBtn.position = CGPoint(x: 0 - size.width/4, y: size.height/2.25)
+        pauseBtn.position = CGPoint(x: -size.width/4, y: size.height/2.25)
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
@@ -95,7 +73,7 @@ extension GameScene{
     func createHomeBtn() {
         homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
         homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: 0 - size.width/2.5 , y: size.height/2.25)
+        homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
         homeBtn.zPosition = 6
         homeBtn.setScale(0)
         cameraNode.addChild(homeBtn)

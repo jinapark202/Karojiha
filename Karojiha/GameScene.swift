@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Player: UInt32 = 1
         static let Obstacle: UInt32 = 2
         static let Edge: UInt32 = 6
-        static let Worm: UInt32 = 3
+        static let Fly: UInt32 = 3
         static let Bee: UInt32 = 4
     }
     
@@ -35,18 +35,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var flapVelocity = CGFloat(600.0)
 
     let motionManager = CMMotionManager()
-    var wormFrequency = CGFloat(6.0)
+    var fliesFrequency = CGFloat(6.0)
     var beeFrequency = CGFloat(0.0)
     
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
-    var wormsEaten = 0
+    var fliesEaten = 0
     var beeEaten = 0
     
     //Variables for click counter.
     var totalClickCounter = 0.0
     let elevationLabel = SKLabelNode()
-    let wormsEatenLabel = SKLabelNode()
+    let fliesEatenLabel = SKLabelNode()
     
     var soundBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
@@ -78,7 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let ledge = SKNode()
     
     //Sound effects and music taken from freesfx.co.uk
-    let wormHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
+    let fliesHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
     let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
     let dyingSound = SKAction.playSoundFileNamed("slide_whistle_down.mp3", waitForCompletion: true)
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
@@ -107,7 +107,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         playerBody.categoryBitMask = PhysicsCategory.Player
         playerBody.collisionBitMask = 4
-        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Worm
+        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Fly
         bird.physicsBody?.usesPreciseCollisionDetection = true
         bird.physicsBody = playerBody
         bird.physicsBody!.isDynamic = true
@@ -122,47 +122,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //Waits a while at beginning of game, then begins to calculate
-    //Prevent worms from accumulating until after the bird gets halfway up the screen; waits 2 seconds, ensures bird's altiude has increased by atleast 4 and that its flapVelocity is at least 100 to spawn new worm; waits 4 seconds, ensures bird's altiude has increased by atleast 25 and that its flapVelocity is at least 100 to spawn new carrot; waits 5 seconds, ensures bird's altiude has increased by atleast 30 and that its flapVelocity is at least 100 to spawn new bee
     @objc func updateCounting(){
         time += 0.1
-        let randWorm = random(min: 0, max: 100)
+        let randFly = random(min: 0, max: 100)
         let randBee = random(min: 0, max: 100)
 
         if (bird.position.y > size.height / 2) {
             if powerUpActive == false {
-                if (randWorm < wormFrequency) {
-                    addWorm()
+                if (randFly < fliesFrequency) {
+                    addFly()
                 }
                 
                 if (randBee < beeFrequency) {
                     addBee()
                 }
             }
-        }
-    }
-    
-    func animateWormLabel(){
-        
-        //Change worms label color to orange when 1 worm is eaten
-        if wormsEaten % 3 == 1 {
-            let scaleUpAction = SKAction.scale(to: 1.1, duration: 0.3)
-            wormsEatenLabel.fontColor = UIColor.orange
-            wormsEatenLabel.run(scaleUpAction)
-        }
-        
-        //Change worms label color to yellow when 2 worms are eaten
-        if wormsEaten % 3 == 2 {
-            let scaleUpAction = SKAction.scale(to: 1.2, duration: 0.3)
-            wormsEatenLabel.fontColor = UIColor.yellow
-            wormsEatenLabel.run(scaleUpAction)
-        }
-        
-        //Change worms label color to light gray when 3 worms are eaten
-        if wormsEaten % 3 == 0 {
-            let scaleUpAction = SKAction.scale(to: 1.4, duration: 0.3)
-            wormsEatenLabel.fontColor = UIColor.lightGray
-            wormsEatenLabel.run(scaleUpAction)
         }
     }
     
@@ -181,7 +155,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createSoundBtn()
         createPauseBtn()
         createHomeBtn()
-//        createWormsEatenLabel()
         
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
@@ -264,24 +237,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
     //Function that adds worms to screen
-    func addWorm() {
+    func addFly() {
 
-        let worm = SKSpriteNode(imageNamed: "dragonfly.png")
+        let fly = SKSpriteNode(imageNamed: "dragonfly.png")
         
         // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/2
-        worm.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
 
-        worm.physicsBody = SKPhysicsBody(rectangleOf: worm.size)
-        worm.physicsBody?.isDynamic = true
-        worm.physicsBody?.affectedByGravity = false
-        worm.physicsBody?.allowsRotation = false
-        worm.physicsBody?.categoryBitMask = PhysicsCategory.Worm
-        worm.physicsBody?.collisionBitMask = PhysicsCategory.Worm
-        worm.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        worm.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
+        fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
+        fly.physicsBody?.isDynamic = true
+        fly.physicsBody?.affectedByGravity = false
+        fly.physicsBody?.allowsRotation = false
+        fly.physicsBody?.categoryBitMask = PhysicsCategory.Fly
+        fly.physicsBody?.collisionBitMask = PhysicsCategory.Fly
+        fly.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        fly.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
 
-        self.addChild(worm)
+        self.addChild(fly)
 
     }
     
@@ -291,7 +264,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bee = SKSpriteNode(imageNamed: "bee.png")
         bee.size = CGSize(width: 30, height: 30)
         
-        // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/2
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
@@ -325,7 +297,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         emitter.numParticlesToEmit = 15
         emitter.particleLifetime = 0.2
         
-        // Place the emitter at worm postition.
+        // Place the emitter at fly postition.
         emitter.position = Object.position
         emitter.name = "exhaust"
         
@@ -340,7 +312,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //Collecting enough worms will apply an upward force to the bird
+    //Collecting enough flies will apply an upward force to the bird
     func applyPowerUp(){
         
         if latestTime < powerUpEndTime {
@@ -377,31 +349,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
-    func threeWormsEaten() {
-//        animateWormLabel()
-        wormsEaten += 1
+    func threeFliesEaten() {
+        fliesEaten += 1
         
-        let wormsNeeded = 3
-        if wormsEaten % wormsNeeded == 0 && wormsEaten > 1 {
+        let fliesNeeded = 3
+        if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
             startPowerUp()
         }
         
-        if (wormsEaten % wormsNeeded == 0) {
-            wormsEatenLabel.text = ("x ") + String(describing: (3))}
+        if (fliesEaten % fliesNeeded == 0) {
+            fliesEatenLabel.text = ("x ") + String(describing: (3))}
         else{
-            wormsEatenLabel.text = ("x ") + String(describing: (Int(wormsEaten % wormsNeeded))) }
+            fliesEatenLabel.text = ("x ") + String(describing: (Int(fliesEaten % fliesNeeded))) }
     }
     
     
     //Removes worm, adds sound, and increases the number of worms eaten when a worm when it collides with bird
-    func collisionWithWorm(object: SKNode, bird: SKNode) {
+    func collisionWithFlies(object: SKNode, bird: SKNode) {
         object.removeFromParent()
 
         if powerUpActive == false {
             if sound == true {
-                run(wormHitSound)
+                run(fliesHitSound)
             }
-            threeWormsEaten()
+            threeFliesEaten()
             newSparkNode(scene: self, Object: object, file: "spark")
         }
     }
@@ -437,9 +408,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Worm {
-            if let worm = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
-                collisionWithWorm(object: worm, bird: bird)
+        if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Fly {
+            if let flies = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
+                collisionWithFlies(object: flies, bird: bird)
             }
         } else if firstBody.categoryBitMask == PhysicsCategory.Player && secondBody.categoryBitMask == PhysicsCategory.Bee {
             if let bee = secondBody.node as? SKSpriteNode, let bird = firstBody.node as? SKSpriteNode {
@@ -514,7 +485,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if playerPositionInCamera.y < -size.height / 2.0 {
             run(dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size, score: Int(score), wormCount: wormsEaten)
+            let gameOverScene = GameOverScene(size: self.size, score: Int(score), fliesCount: fliesEaten)
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }

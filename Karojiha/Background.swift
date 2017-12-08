@@ -101,13 +101,11 @@ class Background {
     
     
     //Called in addBackgroundFlavor()
-    
     func createFlavorSprite(imageName: String, forBirdPosition position: CGPoint){
         let flavorSprite = SKSpriteNode(imageNamed: imageName)
         scene?.addChild(flavorSprite)
         flavorSprite.position = position
         flavorSprite.position.y += size.height
-        
         
         let moveAction = SKAction.moveBy(x:0, y: -1100, duration: 5.1)
         let deleteAction = SKAction.removeFromParent()
