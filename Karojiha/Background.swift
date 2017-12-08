@@ -21,6 +21,9 @@ class Background {
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames = ["background1","background2","background3","background4New","testStarsBg"]
+    static let dotsBackground = SKSpriteNode(imageNamed: "dotsBackground")
+    static let testStarsBg = SKSpriteNode(imageNamed: "testStarsBg")
+
     var backgroundImages: [SKNode] = []
     let backgroundHeight = CGFloat(8.0)
     var currentBackground: CGFloat = 1.0
@@ -116,8 +119,8 @@ class Background {
     
     
     //Scrolling background - parallax
-    func createParallax() {
-        let backgroundTexture = SKTexture(imageNamed: "dotsBackground")
+    func createParallax(imageName: String) {
+        let backgroundTexture = SKTexture(imageNamed: imageName)
         
         for i in 0 ... 6 {
             let background = SKSpriteNode(texture: backgroundTexture)

@@ -25,7 +25,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     struct PhysicsCategory {
         static let Player: UInt32 = 1
         static let Obstacle: UInt32 = 2
-        static let Edge: UInt32 = 6
         static let Fly: UInt32 = 3
         static let Bee: UInt32 = 4
     }
@@ -145,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         
         //Prevents bird from leaving the frame
-        let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000)) //Sloppy solution but it works
+        let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000))
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
         
         //Creates scene, bird, and buttons
@@ -174,9 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         self.bird.run(flappingAction)
-        
-//        flapVelocity = initialFlapVelocity * physicsWorld.gravity.dy / CGFloat(-1 * (65 / (1 + (100 * (pow(M_E, -0.025 * totalClickCounter))))) - 14)
-////print(flapVelocity, initialFlapVelocity, physicsWorld.gravity.dy)
+
         if (bird.physicsBody?.velocity.dy)! < flapVelocity {
             bird.physicsBody?.velocity.dy = flapVelocity
             totalClickCounter += 1
@@ -255,7 +252,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         fly.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
 
         self.addChild(fly)
-
     }
     
     
@@ -277,7 +273,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bee.physicsBody?.velocity = CGVector(dx: random(min: -250, max: 250), dy: random(min: -100, max: -400))
 
         self.addChild(bee)
-
     }
     
     
@@ -477,7 +472,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
-                background.createParallax()
+                background.createParallax(imageName: "dotsBackground")
             }
         }
         
