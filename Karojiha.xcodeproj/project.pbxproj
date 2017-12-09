@@ -20,6 +20,7 @@
 		D8984AEC1F8EBF5300B6D113 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */; };
 		D8984AF21F8EBF5300B6D113 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AF11F8EBF5300B6D113 /* GameScene.swift */; };
 		D8984AF41F8EBF5300B6D113 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984AF31F8EBF5300B6D113 /* GameViewController.swift */; };
+		D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8984AF51F8EBF5300B6D113 /* Main.storyboard */; };
 		D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8984AFA1F8EBF5300B6D113 /* LaunchScreen.storyboard */; };
 		D8984B071F8EBF5300B6D113 /* KarojihaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984B061F8EBF5300B6D113 /* KarojihaTests.swift */; };
 		D8984B121F8EBF5300B6D113 /* KarojihaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8984B111F8EBF5300B6D113 /* KarojihaUITests.swift */; };
@@ -66,6 +67,7 @@
 		D8984AEB1F8EBF5300B6D113 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8984AF11F8EBF5300B6D113 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D8984AF31F8EBF5300B6D113 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		D8984AF61F8EBF5300B6D113 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8984AF81F8EBF5300B6D113 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8984AFB1F8EBF5300B6D113 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8984AFD1F8EBF5300B6D113 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,12 +168,13 @@
 				D8984AF11F8EBF5300B6D113 /* GameScene.swift */,
 				D8984B1F1F8EC05400B6D113 /* GameElements.swift */,
 				022E34881FCCA23D001AF1D0 /* Background.swift */,
-				D8984AF31F8EBF5300B6D113 /* GameViewController.swift */,
-				D8984AFA1F8EBF5300B6D113 /* LaunchScreen.storyboard */,
 				8ACC10AC1FD9B3520054F63C /* Emitters */,
 				8ACC10AB1FD9B2D20054F63C /* SoundEffects */,
+				D8984AF31F8EBF5300B6D113 /* GameViewController.swift */,
+				D8984AF51F8EBF5300B6D113 /* Main.storyboard */,
 				D8984AF81F8EBF5300B6D113 /* Assets.xcassets */,
 				D8984B211F8EC1D300B6D113 /* player.atlas */,
+				D8984AFA1F8EBF5300B6D113 /* LaunchScreen.storyboard */,
 				D8984AFD1F8EBF5300B6D113 /* Info.plist */,
 			);
 			path = Karojiha;
@@ -308,6 +311,7 @@
 				D8984B221F8EC20D00B6D113 /* player.atlas in Resources */,
 				D84D4DF81FD4E7FF0060D050 /* wet_gooey_liquid_splat.mp3 in Resources */,
 				D8ADE5DE1FD0F5020082570B /* single_bubbleEDIT.wav in Resources */,
+				D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */,
 				D84D4DFC1FD4E8FF0060D050 /* carrotSpark.sks in Resources */,
 				D8ADE5E01FD0F55B0082570B /* opening_day.mp3 in Resources */,
 				8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */,
@@ -384,6 +388,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		D8984AF51F8EBF5300B6D113 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8984AF61F8EBF5300B6D113 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		D8984AFA1F8EBF5300B6D113 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -508,11 +520,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y4M5563D49;
+				DEVELOPMENT_TEAM = 96YG2WXYK5;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0121;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha012;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -525,11 +537,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y4M5563D49;
+				DEVELOPMENT_TEAM = 96YG2WXYK5;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0121;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha012;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
