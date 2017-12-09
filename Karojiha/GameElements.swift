@@ -46,6 +46,49 @@ extension GameScene{
         return bird
     }
     
+    //Function that adds worms to screen
+    func createFly() {
+        
+        let fly = SKSpriteNode(imageNamed: "dragonfly.png")
+        
+        // Determine where to spawn the worm along the Y axis
+        let actualY = bird.position.y + size.height/2
+        fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        
+        fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
+        fly.physicsBody?.isDynamic = true
+        fly.physicsBody?.affectedByGravity = false
+        fly.physicsBody?.allowsRotation = false
+        fly.physicsBody?.categoryBitMask = PhysicsCategory.Fly
+        fly.physicsBody?.collisionBitMask = PhysicsCategory.Fly
+        fly.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        fly.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
+        
+        self.addChild(fly)
+    }
+    
+    
+    func createBee() {
+        
+        let bee = SKSpriteNode(imageNamed: "bee.png")
+        let actualY = bird.position.y + size.height/2
+        
+        bee.size = CGSize(width: 30, height: 30)
+        bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        
+        bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
+        bee.physicsBody?.isDynamic = true
+        bee.physicsBody?.affectedByGravity = false
+        bee.physicsBody?.allowsRotation = false
+        bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
+        bee.physicsBody?.collisionBitMask = PhysicsCategory.Bee
+        bee.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        bee.physicsBody?.velocity = CGVector(dx: random(min: -250, max: 250), dy: random(min: -100, max: -400))
+        
+        self.addChild(bee)
+    }
+    
+    
     //Set up click counter in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
