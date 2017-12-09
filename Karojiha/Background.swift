@@ -21,8 +21,6 @@ class Background {
     
     //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
     let backgroundNames = ["background1","background2","background3","background4New","testStarsBg"]
-    static let dotsBackground = SKSpriteNode(imageNamed: "dotsBackground")
-    static let testStarsBg = SKSpriteNode(imageNamed: "testStarsBg")
 
     var backgroundImages: [SKNode] = []
     let backgroundHeight = CGFloat(8.0)

@@ -15,22 +15,33 @@ extension GameScene{
         
         //Set the size and position of the bird
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
+        
+        playerBody.mass = 0.4
+        playerBody.categoryBitMask = PhysicsCategory.Player
+        playerBody.collisionBitMask = 4
+        
         bird.size = CGSize(width: 150, height: 110)
-        bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+        bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
+        bird.zPosition = 10
+        bird.name = birdName
         
         //Define the bird to be a SKPhysicsBody object.
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.width / 2)
         bird.physicsBody?.linearDamping = 1.1
         bird.physicsBody?.restitution = 0
-        
-        //Set the bird to be affected by gravity.
-        bird.physicsBody?.affectedByGravity = false
+        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Fly
+        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Bee
+        bird.physicsBody?.usesPreciseCollisionDetection = true
+        bird.physicsBody = playerBody
+        bird.physicsBody?.affectedByGravity = true
         bird.physicsBody?.isDynamic = true
+        bird.physicsBody?.allowsRotation = false
 
         //makes bird flap its wings when tap occurrs
         let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
+
         
         return bird
     }

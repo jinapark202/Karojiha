@@ -13,15 +13,17 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
+
     
     //Sound effects and music taken from freesfx.co.uk
     let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
     let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
-
+    
+    
     init(size: CGSize, score: Int, fliesCount: Int) {
         
         super.init(size: size)
-        
+                
         backgroundColor = SKColor.black
 
         let highScoreDefault = UserDefaults.standard
@@ -102,12 +104,12 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             background.anchorPoint = CGPoint.zero
             background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
             addChild(background)
-            
+
             let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
             let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
             let moveLoop = SKAction.sequence([moveUp, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
-            
+
             background.run(moveForever)
         }
     }
@@ -129,7 +131,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

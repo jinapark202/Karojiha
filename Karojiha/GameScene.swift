@@ -63,8 +63,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var powerUpEndTime = 0.0
     var penaltyEndTime = 0.0
     
-    var speedArray = [600, 400, 200, 100, 0]
-    
     let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
     var bird = SKSpriteNode()
@@ -83,7 +81,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
-    let carrotHitSound = SKAction.playSoundFileNamed("bite_into_and_chew_apple.mp3", waitForCompletion: true)
 
     let background = Background()
     
@@ -95,22 +92,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         background.scene = self
-    }
-    
-    //Initiates the position of the bird and sets up the playerBody.
-    func createPlayerAndPosition() {
-        bird.name = birdName
-        playerBody.mass = 0.4
-        bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
-        bird.zPosition = 10
-        
-        playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 4
-        bird.physicsBody?.contactTestBitMask = PhysicsCategory.Fly
-        bird.physicsBody?.usesPreciseCollisionDetection = true
-        bird.physicsBody = playerBody
-        bird.physicsBody!.isDynamic = true
-        bird.physicsBody?.allowsRotation = false
     }
     
 
@@ -149,7 +130,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Creates scene, bird, and buttons
         createScene()
-        createPlayerAndPosition()
         createElevationLabel()
         createSoundBtn()
         createPauseBtn()
@@ -258,9 +238,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func addBee() {
 
         let bee = SKSpriteNode(imageNamed: "bee.png")
-        bee.size = CGSize(width: 30, height: 30)
-        
         let actualY = bird.position.y + size.height/2
+        
+        bee.size = CGSize(width: 30, height: 30)
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
@@ -333,6 +313,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Collecting enough worms will apply an upward force to the bird
     func applyPenalty(){
+        var speedArray = [600, 400, 200, 100, 0]
+
         if beeEaten > speedArray.count - 1 {
             flapVelocity = CGFloat(speedArray.endIndex)
         } else if latestTime < penaltyEndTime {
@@ -351,11 +333,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
             startPowerUp()
         }
-        
-        if (fliesEaten % fliesNeeded == 0) {
-            fliesEatenLabel.text = ("x ") + String(describing: (3))}
-        else{
-            fliesEatenLabel.text = ("x ") + String(describing: (Int(fliesEaten % fliesNeeded))) }
     }
     
     
@@ -458,8 +435,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    
     //Adjusts the camera as the bird moves up the screen.
     func setupCameraNode() {
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
@@ -485,7 +460,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
@@ -498,6 +472,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupCameraNode()
 //        addBackgroundFlavor()
     }
-    
 }
 
