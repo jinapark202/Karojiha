@@ -219,20 +219,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     //Function to emit spark particles
-    func newSparkNode(scene: SKScene, Object: SKNode, file: String) {
+    func newSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
         
         guard let emitter = SKEmitterNode(fileNamed: file) else {
             return
         }
         
-        emitter.particleBirthRate = 100
-        emitter.numParticlesToEmit = 15
-        emitter.particleLifetime = 0.2
+        emitter.particleBirthRate = 100 //100
+        emitter.numParticlesToEmit = 15 //15
+        emitter.particleLifetime = 0.2 //.2
+        emitter.particleSize = size
         
         // Place the emitter at fly postition.
         emitter.position = Object.position
         emitter.name = "exhaust"
-        
+
         // Send the particles to the scene.
         emitter.targetNode = scene;
         scene.addChild(emitter)
@@ -253,8 +254,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             physicsWorld.gravity.dy = stopGravity
             gravity = stopGravity
             
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 1000))
-            newSparkNode(scene: self, Object: bird, file: "fire")
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))//changed from 1000
+            newSparkNode(scene: self, Object: bird, file: "fire", size: CGSize(width: 75, height: 75))
             
             powerUpActive = true
             
@@ -285,6 +286,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
     func threeFliesEaten() {
         fliesEaten += 1
+        print (fliesEaten)
         
         let fliesNeeded = 3
         if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
@@ -302,7 +304,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 run(fliesHitSound)
             }
             threeFliesEaten()
-            newSparkNode(scene: self, Object: object, file: "spark")
+            let remainder = fliesEaten % 3
+//            newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: remainder*100, height: remainder*100) )
+            if remainder == 1{
+                newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
+            }
+            if remainder == 2{
+                newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
+            }
         }
     }
     
@@ -315,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if sound == true {
                 run(beeHitSound)
             }
-            newSparkNode(scene: self, Object: object, file: "smoke1")
+            newSparkNode(scene: self, Object: object, file: "smoke1", size: CGSize(width: 50, height: 50))
             beeEaten += 1
             startPenalty()
         }
