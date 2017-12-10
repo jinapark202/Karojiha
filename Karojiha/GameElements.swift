@@ -105,7 +105,7 @@ extension GameScene{
     func createSoundBtn() {
         soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
         soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.50)
+        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
         soundBtn.zPosition = 6
         soundBtn.setScale(0)
         cameraNode.addChild(soundBtn)
@@ -116,7 +116,7 @@ extension GameScene{
     func createPauseBtn() {
         pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
         pauseBtn.size = CGSize(width: 50, height: 50)
-        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.75)
+        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
