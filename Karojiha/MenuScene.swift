@@ -52,7 +52,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         addChild(soundBtn)
         
         //Implements endless scrolling stars background
-        let backgroundTexture = SKTexture(imageNamed: "parallax_800")
+        let backgroundTexture = SKTexture(imageNamed: "parallax_125")
         
         for i in 0 ... 6 {
             let background = SKSpriteNode(texture: backgroundTexture)
