@@ -68,7 +68,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
         soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: size.width/4, y: size.height/1.05)
+        soundBtn.position = CGPoint(x: size.width/3.8, y: size.height/1.05)
         soundBtn.zPosition = 6
         soundBtn.setScale(0)
         addChild(soundBtn)
