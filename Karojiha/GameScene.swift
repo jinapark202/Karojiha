@@ -140,9 +140,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
+        
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+        
+        let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
+        cameraNode.addChild(backgroundSprites!)
+        backgroundSprites?.position.y = size.height
+
             
         //Starts generating accelerometer data
         motionManager.startAccelerometerUpdates()
@@ -413,7 +419,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
-                background.createParallax(imageName: "dotsBackground")
+                //background.createParallax(imageName: "dotsBackground")
             }
         }
         
