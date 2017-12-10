@@ -12,7 +12,6 @@
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
 		8AB3D1201FDB525200540BE2 /* clear_skies.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8AB3D11F1FDB525200540BE2 /* clear_skies.mp3 */; };
 		8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AF8565B1FB2327D002BA0EB /* fire.sks */; };
-		A22954E91FDDFB0700713AB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A22954E71FDDFB0700713AB2 /* Assets.xcassets */; };
 		A22954EB1FDDFB6500713AB2 /* bgParallax.sks in Resources */ = {isa = PBXBuildFile; fileRef = A22954EA1FDDFB6500713AB2 /* bgParallax.sks */; };
 		D8014BFC1FC386AB00E6510F /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8014BFB1FC386AB00E6510F /* MenuScene.swift */; };
 		D82C77DF1FC25A1600B3ED74 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82C77DE1FC25A1600B3ED74 /* GameOverScene.swift */; };
@@ -60,7 +59,6 @@
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		8AB3D11F1FDB525200540BE2 /* clear_skies.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clear_skies.mp3; sourceTree = "<group>"; };
 		8AF8565B1FB2327D002BA0EB /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
-		A22954E71FDDFB0700713AB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A22954EA1FDDFB6500713AB2 /* bgParallax.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = bgParallax.sks; sourceTree = "<group>"; };
 		D8014BFB1FC386AB00E6510F /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		D82C77DE1FC25A1600B3ED74 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
@@ -134,6 +132,7 @@
 		8ACC10AC1FD9B3520054F63C /* Emitters */ = {
 			isa = PBXGroup;
 			children = (
+				A22954EA1FDDFB6500713AB2 /* bgParallax.sks */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
 				8AAE84E01FA8DFE2003E0738 /* spark.sks */,
 				D84D4DFB1FD4E8FF0060D050 /* carrotSpark.sks */,
@@ -145,8 +144,6 @@
 		D8984ADF1F8EBF5200B6D113 = {
 			isa = PBXGroup;
 			children = (
-				A22954EA1FDDFB6500713AB2 /* bgParallax.sks */,
-				A22954E71FDDFB0700713AB2 /* Assets.xcassets */,
 				D8984AEA1F8EBF5300B6D113 /* Karojiha */,
 				D8984B051F8EBF5300B6D113 /* KarojihaTests */,
 				D8984B101F8EBF5300B6D113 /* KarojihaUITests */,
@@ -327,7 +324,6 @@
 				A22954EB1FDDFB6500713AB2 /* bgParallax.sks in Resources */,
 				D8ADE5E21FD0FA290082570B /* slide_whistle_down.mp3 in Resources */,
 				D8DD14A71FCF35D4003D4BAD /* Assets.xcassets in Resources */,
-				A22954E91FDDFB0700713AB2 /* Assets.xcassets in Resources */,
 				8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
