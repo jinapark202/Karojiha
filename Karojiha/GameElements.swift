@@ -56,7 +56,7 @@ extension GameScene{
         fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
-        fly.physicsBody?.isDynamic = false
+        fly.physicsBody?.isDynamic = true
         fly.physicsBody?.affectedByGravity = false
         fly.physicsBody?.allowsRotation = false
         fly.physicsBody?.categoryBitMask = PhysicsCategory.Fly
@@ -77,7 +77,7 @@ extension GameScene{
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
-        bee.physicsBody?.isDynamic = false
+        bee.physicsBody?.isDynamic = true
         bee.physicsBody?.affectedByGravity = false
         bee.physicsBody?.allowsRotation = false
         bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
