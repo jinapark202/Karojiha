@@ -13,7 +13,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
+    let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
 
+    var sound: Bool = true
     
     //Sound effects and music taken from freesfx.co.uk
     let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
@@ -60,11 +62,17 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         //Sets up the home button
         homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: homeBtn.size.width, y: size.height - homeBtn.size.height)
+        homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.05)
         homeBtn.zPosition = 10
         addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
+        soundBtn.size = CGSize(width: 50, height: 50)
+        soundBtn.position = CGPoint(x: size.width/4, y: size.height/1.05)
+        soundBtn.zPosition = 6
+        soundBtn.setScale(0)
+        addChild(soundBtn)
+        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Creates game over label
         let message = "Game Over"
@@ -93,7 +101,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/8)
         highScoreLabel.zPosition = 10
         addChild(highScoreLabel)
-        
+    
         
         //Implements endless scrolling stars background
         let backgroundTexture = SKTexture(imageNamed: "testStarsBg")
@@ -128,6 +136,16 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
+            } else if soundBtn.contains(location) {
+                if sound {
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    sound = false
+                    backgroundSound.run(SKAction.stop())
+                } else {
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    sound = true
+                    backgroundSound.run(SKAction.play())
+                }
             }
         }
     }
