@@ -56,7 +56,7 @@ extension GameScene{
         fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
-        fly.physicsBody?.isDynamic = true
+        fly.physicsBody?.isDynamic = false
         fly.physicsBody?.affectedByGravity = false
         fly.physicsBody?.allowsRotation = false
         fly.physicsBody?.categoryBitMask = PhysicsCategory.Fly
@@ -77,7 +77,7 @@ extension GameScene{
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
-        bee.physicsBody?.isDynamic = true
+        bee.physicsBody?.isDynamic = false
         bee.physicsBody?.affectedByGravity = false
         bee.physicsBody?.allowsRotation = false
         bee.physicsBody?.categoryBitMask = PhysicsCategory.Bee
@@ -105,7 +105,7 @@ extension GameScene{
     func createSoundBtn() {
         soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
         soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: -size.width/10, y: size.height/2.25)
+        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.50)
         soundBtn.zPosition = 6
         soundBtn.setScale(0)
         cameraNode.addChild(soundBtn)
@@ -116,7 +116,7 @@ extension GameScene{
     func createPauseBtn() {
         pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
         pauseBtn.size = CGSize(width: 50, height: 50)
-        pauseBtn.position = CGPoint(x: -size.width/4, y: size.height/2.25)
+        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.75)
         pauseBtn.zPosition = 6
         pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
