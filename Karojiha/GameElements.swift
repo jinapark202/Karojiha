@@ -70,7 +70,7 @@ extension GameScene{
     
     func createBee() {
         
-        let bee = SKSpriteNode(imageNamed: "bee.png")
+        let bee = SKSpriteNode(imageNamed: "outlinedBee_200.png")
         let actualY = bird.position.y + size.height/2
         
         bee.size = CGSize(width: 30, height: 30)
