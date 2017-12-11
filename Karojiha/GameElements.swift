@@ -37,13 +37,16 @@ extension GameScene{
         bird.physicsBody?.isDynamic = true
         bird.physicsBody?.allowsRotation = false
 
-        //makes bird flap its wings when tap occurrs
-        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
-        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
-        flappingAction = SKAction.repeat(animatebird, count: 2)
-
+        animateBird()
         
         return bird
+    }
+    
+    //makes bird flap its wings when tap occurrs
+    func animateBird(){
+    let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
+    let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
+    flappingAction = SKAction.repeat(animatebird, count: 2)
     }
     
     //Function that adds worms to screen
