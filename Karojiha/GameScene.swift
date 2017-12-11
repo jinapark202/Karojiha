@@ -146,6 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
         let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
+        backgroundSprites?.zPosition = -4
         cameraNode.addChild(backgroundSprites!)
         backgroundSprites?.position.y = size.height
 

@@ -46,7 +46,7 @@ class Background {
             backgroundImage.yScale = size.height/backgroundImage.size.height*backgroundHeight
             backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
             backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*x)
-            backgroundImage.zPosition = -2
+            backgroundImage.zPosition = -5
             backgroundImages.append(backgroundImage)
             x += 1
         }
@@ -54,7 +54,7 @@ class Background {
         let mountainImage = SKSpriteNode(imageNamed: "mountains_700")
         mountainImage.size = CGSize(width: size.width, height: size.height/1.05)
         mountainImage.position = CGPoint(x: size.width/2, y: size.height/3)
-        mountainImage.zPosition = -1
+        mountainImage.zPosition = 1
         
         scene?.addChild(backgroundImages[0])
         scene?.addChild(mountainImage)
@@ -130,7 +130,7 @@ class Background {
         
         for i in 0 ... 6 {
             let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = -1.5
+            background.zPosition = -2
             background.anchorPoint = CGPoint.zero
             background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
             scene?.addChild(background)
