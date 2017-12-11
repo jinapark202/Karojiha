@@ -82,7 +82,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
     
     let background = Background()
-    let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
 
     
     override init(size: CGSize) {
@@ -145,10 +144,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
-        
-        backgroundSprites?.zPosition = -4
-        cameraNode.addChild(backgroundSprites!)
-        backgroundSprites?.position.y = size.height/2
 
             
         //Starts generating accelerometer data
@@ -420,6 +415,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
+                background.createParallax(imageName: "parallax_125")
             }
         }
         

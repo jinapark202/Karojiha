@@ -124,4 +124,26 @@ class Background {
         flavorSprite.run(flavorAction)
         
     }
+    
+    //Scrolling background - parallax
+    func createParallax(imageName: String) {
+        let backgroundTexture = SKTexture(imageNamed: imageName)
+        
+        for i in 0 ... 6 {
+            let background = SKSpriteNode(texture: backgroundTexture)
+            background.zPosition = -1.5
+            background.anchorPoint = CGPoint.zero
+            background.xScale = size.width / background.size.width
+            background.yScale = size.height / background.size.height * backgroundHeight
+            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
+            scene?.addChild(background)
+            
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
+            let moveLoop = SKAction.sequence([moveUp, moveReset])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            
+            background.run(moveForever)
+        }
+    }
 }
