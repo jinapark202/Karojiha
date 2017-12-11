@@ -54,7 +54,7 @@ class Background {
         let mountainImage = SKSpriteNode(imageNamed: "mountains_700")
         mountainImage.size = CGSize(width: size.width, height: size.height/1.05)
         mountainImage.position = CGPoint(x: size.width/2, y: size.height/3)
-        mountainImage.zPosition = -1
+        mountainImage.zPosition = 1
         
         scene?.addChild(backgroundImages[0])
         scene?.addChild(mountainImage)
@@ -100,9 +100,11 @@ class Background {
             else {
                 choicesForImage = bgFlavorImages[5]! }
             
-            let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
-            let chosenImage = choicesForImage[Int(randomIndex)]
-            createFlavorSprite(imageName: chosenImage, forBirdPosition: position)
+            if choicesForImage.count > 0 {
+                let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
+                let chosenImage = choicesForImage[Int(randomIndex)]
+                createFlavorSprite(imageName: chosenImage, forBirdPosition: position)
+            }
             
         }
         
@@ -122,5 +124,4 @@ class Background {
         flavorSprite.run(flavorAction)
         
     }
-    
 }
