@@ -292,8 +292,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
     func threeFliesEaten() {
         fliesEaten += 1
-        print (fliesEaten)
-        
+  
         let fliesNeeded = 3
         if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
             startPowerUp()
@@ -385,7 +384,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score = CGFloat(0.0)
     
     
-
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         

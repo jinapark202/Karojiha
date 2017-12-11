@@ -65,8 +65,13 @@ extension GameScene{
         fly.physicsBody?.velocity = CGVector(dx: random(min: -100, max: 100), dy: random(min: -50, max: -100))
         
         self.addChild(fly)
+        
+        let wait = SKAction.wait(forDuration: 10)
+        let remove = SKAction.removeFromParent()
+        let sequence = SKAction.sequence([wait, remove])
+        fly.run(sequence)
     }
-    
+
     
     func createBee() {
         
@@ -86,8 +91,13 @@ extension GameScene{
         bee.physicsBody?.velocity = CGVector(dx: random(min: -250, max: 250), dy: random(min: -100, max: -400))
         
         self.addChild(bee)
+        let wait = SKAction.wait(forDuration: 10)
+        let remove = SKAction.removeFromParent()
+        let sequence = SKAction.sequence([wait, remove])
+        bee.run(sequence)
+
     }
-    
+
     
     //Set up click counter in upper right corner
     func createElevationLabel(){
