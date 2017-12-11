@@ -130,7 +130,7 @@ class Background {
     // Code altered from https://www.hackingwithswift.com/read/36/3/sky-background-and-ground-parallax-scrolling-with-spritekit
     //Scrolling background - parallax
     func createParallax() {
-        let backgroundTexture = SKTexture(imageNamed: "parallax_125")
+        let backgroundTexture = SKTexture(imageNamed: "parallax_white")
         
         for i in 0 ... 50 {
             let background = SKSpriteNode(texture: backgroundTexture)
