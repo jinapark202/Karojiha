@@ -17,6 +17,8 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     var mute: Bool = true
     
+    let background = Background()
+    
     //Sound effects and music taken from freesfx.co.uk
     let backgroundSound = SKAudioNode(fileNamed: "clear_skies.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
@@ -52,21 +54,21 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         addChild(soundBtn)
         
         //Implements endless scrolling stars background
-        let backgroundTexture = SKTexture(imageNamed: "testStarsBg")
-        
-        for i in 0 ... 6 {
+        let backgroundTexture = SKTexture(imageNamed: "parallax_125")
+    
+        for i in 0 ... 50 {
             let background = SKSpriteNode(texture: backgroundTexture)
             background.zPosition = 0
             background.anchorPoint = CGPoint.zero
             background.xScale = size.width/background.size.width
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
+            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i)))
             addChild(background)
-            
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 10)
             let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
             let moveLoop = SKAction.sequence([moveUp, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
-            
+
             background.run(moveForever)
         }
     }
@@ -97,7 +99,6 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -415,7 +415,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
-                background.createParallax(imageName: "parallax_125")
+                background.createParallax()
             }
         }
         
