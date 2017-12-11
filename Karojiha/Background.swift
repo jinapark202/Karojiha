@@ -115,6 +115,8 @@ class Background {
     func createFlavorSprite(imageName: String, forBirdPosition position: CGPoint){
         let flavorSprite = SKSpriteNode(imageNamed: imageName)
         scene?.addChild(flavorSprite)
+        flavorSprite.size.width = flavorSprite.size.width/2
+        flavorSprite.size.height = flavorSprite.size.height/2
         flavorSprite.position = position
         flavorSprite.position.y += size.height
         
