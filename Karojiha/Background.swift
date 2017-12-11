@@ -129,7 +129,7 @@ class Background {
     func createParallax(imageName: String) {
         let backgroundTexture = SKTexture(imageNamed: imageName)
         
-        for i in 0 ... 6 {
+        for i in 0 ... 25 {
             let background = SKSpriteNode(texture: backgroundTexture)
             background.zPosition = -1.5
             background.anchorPoint = CGPoint.zero
