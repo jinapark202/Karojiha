@@ -232,6 +232,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createScene(){
         self.bird = createBird()
         self.addChild(bird)
+        animateBird()
     }
     
     

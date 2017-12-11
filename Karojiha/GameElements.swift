@@ -36,8 +36,6 @@ extension GameScene{
         bird.physicsBody?.affectedByGravity = true
         bird.physicsBody?.isDynamic = true
         bird.physicsBody?.allowsRotation = false
-
-        animateBird()
         
         return bird
     }

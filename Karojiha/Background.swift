@@ -31,9 +31,9 @@ class Background {
     
     var bgFlavorImages  = [
         1: ["background1Cloud"],   //First background (light blue)
-        2: [],
-        3: [],
-        4: [],
+        2: ["lightning"],
+        3: ["blueClouds"],
+        4: ["purplePlanet"],
         5: ["comet", "planet"]    //Last background (Space)
     ]
 
