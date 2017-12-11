@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0229471B1FDE0E8B008345B3 /* powerUpNoise.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0229471A1FDE0E8B008345B3 /* powerUpNoise.wav */; };
+		0229471D1FDE0EA3008345B3 /* powerUpNoise.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0229471C1FDE0EA2008345B3 /* powerUpNoise.wav */; };
 		022E34891FCCA23D001AF1D0 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022E34881FCCA23D001AF1D0 /* Background.swift */; };
 		0239C34E1FCC7C9B004C44E8 /* InstructionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */; };
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
@@ -54,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0229471A1FDE0E8B008345B3 /* powerUpNoise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = powerUpNoise.wav; path = "../../../../Downloads/Karojiha Sounds/powerUpNoise.wav"; sourceTree = "<group>"; };
+		0229471C1FDE0EA2008345B3 /* powerUpNoise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = powerUpNoise.wav; path = "../../../../Downloads/Karojiha Sounds/powerUpNoise.wav"; sourceTree = "<group>"; };
 		022E34881FCCA23D001AF1D0 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsScene.swift; sourceTree = "<group>"; };
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
@@ -117,6 +121,7 @@
 		8ACC10AB1FD9B2D20054F63C /* SoundEffects */ = {
 			isa = PBXGroup;
 			children = (
+				0229471C1FDE0EA2008345B3 /* powerUpNoise.wav */,
 				D8ADE5D71FD0EA220082570B /* city_pulse.mp3 */,
 				D84D4DF71FD4E7FF0060D050 /* wet_gooey_liquid_splat.mp3 */,
 				D8ADE5DD1FD0F5020082570B /* single_bubbleEDIT.wav */,
@@ -132,6 +137,7 @@
 		8ACC10AC1FD9B3520054F63C /* Emitters */ = {
 			isa = PBXGroup;
 			children = (
+				0229471A1FDE0E8B008345B3 /* powerUpNoise.wav */,
 				A22954EA1FDDFB6500713AB2 /* bgParallax.sks */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
 				8AAE84E01FA8DFE2003E0738 /* spark.sks */,
@@ -314,12 +320,14 @@
 				D8984B221F8EC20D00B6D113 /* player.atlas in Resources */,
 				D84D4DF81FD4E7FF0060D050 /* wet_gooey_liquid_splat.mp3 in Resources */,
 				D8ADE5DE1FD0F5020082570B /* single_bubbleEDIT.wav in Resources */,
+				0229471B1FDE0E8B008345B3 /* powerUpNoise.wav in Resources */,
 				D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */,
 				D84D4DFC1FD4E8FF0060D050 /* carrotSpark.sks in Resources */,
 				D8ADE5E01FD0F55B0082570B /* opening_day.mp3 in Resources */,
 				8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */,
 				D8ADE5E41FD0FBF00082570B /* slide_whistle_up.mp3 in Resources */,
 				D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */,
+				0229471D1FDE0EA3008345B3 /* powerUpNoise.wav in Resources */,
 				D8DD14A91FCF405C003D4BAD /* open_lighter.mp3 in Resources */,
 				A22954EB1FDDFB6500713AB2 /* bgParallax.sks in Resources */,
 				D8ADE5E21FD0FA290082570B /* slide_whistle_down.mp3 in Resources */,
@@ -524,11 +532,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GU44U5NASD;
+				DEVELOPMENT_TEAM = 5HELNZVN42;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0129;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -541,11 +549,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GU44U5NASD;
+				DEVELOPMENT_TEAM = 5HELNZVN42;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0129;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

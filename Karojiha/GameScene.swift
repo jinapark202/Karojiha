@@ -80,7 +80,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
-
+    let powerUpSound = SKAction.playSoundFileNamed("powerUpNoise.wav", waitForCompletion: true)
+    
     let background = Background()
     
     override init(size: CGSize) {
@@ -247,13 +248,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func startPowerUp() {
+        if sound == true {
+            run(powerUpSound)
+        }
         powerUpEndTime = latestTime + 2
     }
     
     
     //Collecting enough flies will apply an upward force to the bird
     func applyPowerUp(){
-        
+    
         if latestTime < powerUpEndTime {
             
             let stopGravity = CGFloat(-10.0)
