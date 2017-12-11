@@ -96,6 +96,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.scene = self
     }
     
+    //makes bird flap its wings when tap occurrs
+    func animateBird(){
+        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
+        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
+        flappingAction = SKAction.repeat(animatebird, count: 2)
+    }
+    
+    //    //makes bird flap its wings when tap occurrs
+    //    func animateAstroBird(){
+    //        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("birdHelmet_\(n)") }
+    //        print(birdSprites)
+    //        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
+    //        flappingAction = SKAction.repeat(animatebird, count: 2)
+    //    }
+    
 
     //Starts timer in motion, calls updateCounting every second
     func scheduledTimerWithTimeInterval(){
