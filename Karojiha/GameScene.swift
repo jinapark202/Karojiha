@@ -29,6 +29,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Bee: UInt32 = 4
     }
     
+    let backgroundNames = ["background1","background2","background3","background4New","testStarsBg"]
+
     var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
     var flapVelocity = CGFloat(600.0)
@@ -134,6 +136,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createSoundBtn()
         createPauseBtn()
         createHomeBtn()
+        background.initBackgroundArray(names: backgroundNames)
         
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true

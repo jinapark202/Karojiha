@@ -26,12 +26,16 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     override init(size: CGSize) {
         super.init(size: size)
         
+        //Set up background
+        background.scene = self
+        backgroundColor = SKColor.black
+        background.createParallax()
+        
+        //Set up background music
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
-        
-        //Changed background to be black
-        backgroundColor = SKColor.black
     
+        //Set up start button
         startBtn.size = CGSize(width: 250, height: 125)
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         startBtn.zPosition = 10
@@ -39,6 +43,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         addChild(startBtn)
         startBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     
+        //Set up instructions label
         let message = "Instructions"
         instructionsLabel.text = message
         instructionsLabel.fontSize = 30
@@ -48,29 +53,12 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         addChild(instructionsLabel)
         instructionsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
         
+        //Set up sound button
         soundBtn.size = CGSize(width: 50, height: 50)
         soundBtn.position = CGPoint(x: size.width/2, y: size.height/4)
         soundBtn.zPosition = 20
         addChild(soundBtn)
         
-        //Implements endless scrolling stars background
-        let backgroundTexture = SKTexture(imageNamed: "parallax_125")
-    
-        for i in 0 ... 50 {
-            let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = 0
-            background.anchorPoint = CGPoint.zero
-            background.xScale = size.width/background.size.width
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i)))
-            addChild(background)
-
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 10)
-            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
-            let moveLoop = SKAction.sequence([moveUp, moveReset])
-            let moveForever = SKAction.repeatForever(moveLoop)
-
-            background.run(moveForever)
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

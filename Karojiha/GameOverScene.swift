@@ -27,8 +27,11 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     init(size: CGSize, score: Int, fliesCount: Int) {
         
         super.init(size: size)
-                
+        
+        //Set up background
+        background.scene = self
         backgroundColor = SKColor.black
+        background.createParallax()
 
         let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
@@ -103,26 +106,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/8)
         highScoreLabel.zPosition = 10
         addChild(highScoreLabel)
-    
-        
-        //Implements endless scrolling stars background
-        let backgroundTexture = SKTexture(imageNamed: "parallax_125")
-        
-        for i in 0 ... 50 {
-            let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = 0
-            background.anchorPoint = CGPoint.zero
-            background.xScale = size.width/background.size.width
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i)))
-            addChild(background)
-            
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 10)
-            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
-            let moveLoop = SKAction.sequence([moveUp, moveReset])
-            let moveForever = SKAction.repeatForever(moveLoop)
-            
-            background.run(moveForever)
-        }
+
     }
     
     //Takes you back to the GameScene when you touch the restart button

@@ -15,7 +15,7 @@ class Background {
     weak var scene: SKScene? {
         didSet {
             self.size = scene?.size ?? CGSize.zero
-            initBackgroundArray(names: backgroundNames)
+            //initBackgroundArray(names: backgroundNames)
         }
     }
     
@@ -130,7 +130,7 @@ class Background {
     func createParallax() {
         let backgroundTexture = SKTexture(imageNamed: "parallax_125")
         
-        for i in 0 ... 25 {
+        for i in 0 ... 50 {
             let background = SKSpriteNode(texture: backgroundTexture)
             background.zPosition = -1.5
             background.anchorPoint = CGPoint.zero
@@ -139,7 +139,7 @@ class Background {
             background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
             scene?.addChild(background)
             
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
+            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 10)
             let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
             let moveLoop = SKAction.sequence([moveUp, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
