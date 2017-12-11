@@ -30,11 +30,11 @@ class Background {
     let flavorFrequency = CGFloat(500.0)
     
     var bgFlavorImages  = [
-        1: ["rainbow.png", "cloud"],   //First background (light blue)
-        2: ["airplane", "cloud", "pigeon", "pigeon"],
-        3: ["rainbow.png", "airplane","pigeon", "redPlane", "eagle", "eagle"],
-        4: ["thunder1", "redPlane", "airplane"],
-        5: ["planet","comet", "spaceship"]    //Last background (Space)
+        1: ["background1Cloud"],   //First background (light blue)
+        2: [],
+        3: [],
+        4: [],
+        5: ["comet"]    //Last background (Space)
     ]
 
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
@@ -54,7 +54,7 @@ class Background {
         let mountainImage = SKSpriteNode(imageNamed: "mountains_700")
         mountainImage.size = CGSize(width: size.width, height: size.height/1.05)
         mountainImage.position = CGPoint(x: size.width/2, y: size.height/3)
-        mountainImage.zPosition = -1
+        mountainImage.zPosition = 1
         
         scene?.addChild(backgroundImages[0])
         scene?.addChild(mountainImage)
@@ -62,7 +62,7 @@ class Background {
     }
     
     
-    //Perform Necessary Background checks, making changes as necesary called in continously in update()
+    //Perform Necessary Background checks, making changes as necesary... called in continously in update()
     func adjust(forBirdPosition position: CGPoint){
         
         //Adds the next background when the bird is close enough
@@ -89,7 +89,7 @@ class Background {
         }
     }
     
-    
+    //Adds images to the background, choosing randomly from the correct array in bgFlavorImages
     func addBackgroundFlavor(forBirdPosition position: CGPoint){
         if position.y > flavorFrequency + bgFlavorCheckpoint {
             bgFlavorCheckpoint = position.y
@@ -100,9 +100,11 @@ class Background {
             else {
                 choicesForImage = bgFlavorImages[5]! }
             
-            let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
-            let chosenImage = choicesForImage[Int(randomIndex)]
-            createFlavorSprite(imageName: chosenImage, forBirdPosition: position)
+            if choicesForImage.count > 0 {
+                let randomIndex = random(min: 0, max: CGFloat((choicesForImage.endIndex)))
+                let chosenImage = choicesForImage[Int(randomIndex)]
+                createFlavorSprite(imageName: chosenImage, forBirdPosition: position)
+            }
             
         }
         
@@ -121,26 +123,5 @@ class Background {
         let flavorAction = SKAction.sequence([moveAction, deleteAction])
         flavorSprite.run(flavorAction)
         
-    }
-    
-    
-    //Scrolling background - parallax
-    func createParallax(imageName: String) {
-        let backgroundTexture = SKTexture(imageNamed: imageName)
-        
-        for i in 0 ... 6 {
-            let background = SKSpriteNode(texture: backgroundTexture)
-            background.zPosition = -1.5
-            background.anchorPoint = CGPoint.zero
-            background.position = CGPoint(x: 0, y: (backgroundTexture.size().height * CGFloat(i) - CGFloat(1 * i)))
-            scene?.addChild(background)
-            
-            let moveUp = SKAction.moveBy(x: 0, y: -backgroundTexture.size().height, duration: 20)
-            let moveReset = SKAction.moveBy(x: 0, y: backgroundTexture.size().height, duration: 0)
-            let moveLoop = SKAction.sequence([moveUp, moveReset])
-            let moveForever = SKAction.repeatForever(moveLoop)
-            
-            background.run(moveForever)
-        }
     }
 }
