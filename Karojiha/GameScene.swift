@@ -29,7 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Bee: UInt32 = 4
     }
     
-    let backgroundNames = ["background1","background2","background3","background4New","testStarsBg"]
+    let backgroundNames = ["background1","background2","background3","background4New","blackBackground"]
 
     var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
