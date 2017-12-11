@@ -76,7 +76,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Sound effects and music taken from freesfx.co.uk
     let fliesHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
-    let sparkSound = SKAction.playSoundFileNamed("ascending_zip_glissEDIT.wav", waitForCompletion: true)
     let dyingSound = SKAction.playSoundFileNamed("slide_whistle_down.mp3", waitForCompletion: true)
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
@@ -419,7 +418,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameStarted == false {
                 scheduledTimerWithTimeInterval()
                 gameStarted = true
-                //background.createParallax(imageName: "dotsBackground")
             }
         }
         
@@ -442,7 +440,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         applyPenalty()
         updateBeeFrequency()
         setupCameraNode()
-//        addBackgroundFlavor()
+        background.addBackgroundFlavor(forBirdPosition: bird.position)
     }
 }
 
