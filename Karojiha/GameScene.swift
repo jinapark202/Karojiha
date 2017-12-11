@@ -80,7 +80,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
-
+    let powerUpSound = SKAction.playSoundFileNamed("powerUpNoise.wav", waitForCompletion: true)
+    
     let background = Background()
     let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
 
@@ -250,13 +251,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func startPowerUp() {
+        if sound == true {
+            run(powerUpSound)
+        }
         powerUpEndTime = latestTime + 2
     }
     
     
     //Collecting enough flies will apply an upward force to the bird
     func applyPowerUp(){
-        
+    
         if latestTime < powerUpEndTime {
             
             let stopGravity = CGFloat(-10.0)
@@ -295,8 +299,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // If 3 worms are eaten, start power up. Change labels depending on number of worms eaten.
     func threeFliesEaten() {
         fliesEaten += 1
-        print (fliesEaten)
-        
+  
         let fliesNeeded = 3
         if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
             startPowerUp()
@@ -388,7 +391,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score = CGFloat(0.0)
     
     
-
     //Updates the text of the labels on the game screen
     func adjustLabels(){
         
