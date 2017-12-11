@@ -34,7 +34,7 @@ class Background {
         2: [],
         3: [],
         4: [],
-        5: ["comet"]    //Last background (Space)
+        5: ["comet", "planet"]    //Last background (Space)
     ]
 
     //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
@@ -46,7 +46,7 @@ class Background {
             backgroundImage.yScale = size.height/backgroundImage.size.height*backgroundHeight
             backgroundImage.anchorPoint = CGPoint(x: 0.5, y: 0.0)
             backgroundImage.position = CGPoint(x: size.width/2, y: backgroundImage.size.height*x)
-            backgroundImage.zPosition = -2
+            backgroundImage.zPosition = -5
             backgroundImages.append(backgroundImage)
             x += 1
         }

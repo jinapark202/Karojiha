@@ -82,6 +82,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
 
     let background = Background()
+    let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
+
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -144,10 +146,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
         
-        let backgroundSprites = SKEmitterNode(fileNamed: "bgParallax.sks")
         backgroundSprites?.zPosition = -4
         cameraNode.addChild(backgroundSprites!)
-        backgroundSprites?.position.y = size.height
+        backgroundSprites?.position.y = size.height/2
 
             
         //Starts generating accelerometer data
@@ -158,12 +159,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Makes the bird flap its wings once screen is clicked, adds a number to the counter every time screen is clicked.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        self.bird.run(flappingAction)
-
-        if (bird.physicsBody?.velocity.dy)! < flapVelocity {
-            bird.physicsBody?.velocity.dy = flapVelocity
-            totalClickCounter += 1
-        }
         
         //Implements the pause and restart button functionality
         for touch in touches{
@@ -206,6 +201,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.isPaused = false
                     timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
                     pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
+                }
+            }
+            else{
+                self.bird.run(flappingAction)
+                
+                if (bird.physicsBody?.velocity.dy)! < flapVelocity {
+                    bird.physicsBody?.velocity.dy = flapVelocity
+                    totalClickCounter += 1
                 }
             }
         }
