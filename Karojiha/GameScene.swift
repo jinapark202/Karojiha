@@ -273,8 +273,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             physicsWorld.gravity.dy = stopGravity
             gravity = stopGravity
             
-            //bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))
-            bird.physicsBody?.velocity.dy = (bird.physicsBody?.velocity.dy)! + 50
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))
             newSparkNode(scene: self, Object: bird, file: "fire", size: CGSize(width: 75, height: 75))
             
             powerUpActive = true
