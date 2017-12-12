@@ -72,12 +72,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let ledge = SKNode()
     
     //Sound effects and music taken from freesfx.co.uk
-    let fliesHitSound = SKAction.playSoundFileNamed("open_lighter.mp3", waitForCompletion: true)
     let dyingSound = SKAction.playSoundFileNamed("slide_whistle_down.mp3", waitForCompletion: true)
     let backgroundSound = SKAudioNode(fileNamed: "city_pulse.mp3")
     let buttonPressSound = SKAction.playSoundFileNamed("single_bubbleEDIT.wav", waitForCompletion: true)
     let beeHitSound = SKAction.playSoundFileNamed("wet_gooey_liquid_splat.mp3", waitForCompletion: true)
     let powerUpSound = SKAction.playSoundFileNamed("powerUpNoise.wav", waitForCompletion: true)
+    let fly2Sound = SKAction.playSoundFileNamed("fly2.wav", waitForCompletion: true)
+    let fly1Sound = SKAction.playSoundFileNamed("fly1.wav", waitForCompletion: true)
     
     let background = Background()
 
@@ -231,6 +232,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func startPowerUp() {
+        if sound == true {
+            run(powerUpSound)
+        }
         powerUpEndTime = latestTime + 2
     }
     
@@ -239,9 +243,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func applyPowerUp(){
     
         if latestTime < powerUpEndTime {
-            if sound == true {
-                run(powerUpSound)
-            }
             let stopGravity = CGFloat(-10.0)
             physicsWorld.gravity.dy = stopGravity
             gravity = stopGravity
@@ -291,16 +292,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         object.removeFromParent()
 
         if powerUpActive == false {
-            if sound == true {
-                run(fliesHitSound)
-            }
             threeFliesEaten()
             let remainder = fliesEaten % 3
 //            newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: remainder*100, height: remainder*100) )
             if remainder == 1{
+                if sound == true {
+                    run(fly1Sound)
+                }
                 newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
             }
             if remainder == 2{
+                if sound == true {
+                    run(fly2Sound)
+                }
                 newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
             }
         }
