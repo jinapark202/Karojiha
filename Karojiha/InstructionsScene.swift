@@ -58,7 +58,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
         titleLabel.fontColor = SKColor.yellow
-        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
+        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
     
@@ -68,16 +68,16 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         instructions.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Add bird and flapping animation
-        let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
+        let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("birdHelmet_1"))
         bird.size = CGSize(width: 200, height: 150)
-        bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY/2)
+        bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY/2.5)
         bird.zPosition = 10
         addChild(bird)
         
-        birdSprites.append(birdAtlas.textureNamed("bird_1"))
-        birdSprites.append(birdAtlas.textureNamed("bird_2"))
-        birdSprites.append(birdAtlas.textureNamed("bird_3"))
-        birdSprites.append(birdAtlas.textureNamed("bird_4"))
+        birdSprites.append(birdAtlas.textureNamed("birdHelmet_1"))
+        birdSprites.append(birdAtlas.textureNamed("birdHelmet_2"))
+        birdSprites.append(birdAtlas.textureNamed("birdHelmet_3"))
+        birdSprites.append(birdAtlas.textureNamed("birdHelmet_4"))
         
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.3)
         repeatActionbird = SKAction.repeatForever(animatebird)
