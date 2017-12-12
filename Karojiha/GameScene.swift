@@ -38,6 +38,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var fliesFrequency = CGFloat(6.0)
     var beeFrequency = CGFloat(0.0)
     
+    var worm_fly_checkpoint = 0.0
+    
     //For label animation
     var previousCheckpoint = CGFloat(0.0)
     var fliesEaten = 0
@@ -55,10 +57,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameStarted = false
     var sound: Bool = true
     var powerUpActive: Bool = false
-    
-    //All necessary to determine clicksRequired
-    var timer = Timer()
-    var time = 0.0
     
     var latestTime = 0.0
     var powerUpEndTime = 0.0
@@ -107,33 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
     }
-    
 
-    //Starts timer in motion, calls updateCounting every second
-    func scheduledTimerWithTimeInterval(){
-        // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
-    }
-    
-    
-    @objc func updateCounting(){
-        time += 0.1
-        let randFly = random(min: 0, max: 100)
-        let randBee = random(min: 0, max: 100)
-
-        if (bird.position.y > size.height / 2) {
-            if powerUpActive == false {
-                if (randFly < fliesFrequency) {
-                    createFly()
-                }
-                
-                if (randBee < beeFrequency) {
-                    createBee()
-                }
-            }
-        }
-    }
-    
     
     //Adds the first background to the screen and sets up the scene.
     override func didMove(to view: SKView) {
@@ -202,14 +174,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         run(buttonPressSound)
                     }
                     self.isPaused = true
-                    timer.invalidate()
                     pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
                     if sound == true {
                         run(buttonPressSound)
                     }
                     self.isPaused = false
-                    timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
                     pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                 }
             }
@@ -234,9 +204,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func updateBeeFrequency() {
-        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, -0.05 * time)))))
+        let exponent = Double(-0.12 * (bird.position.y / 1000))
+        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
     }
-    
     
     //Function to emit spark particles
     func newSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
@@ -435,9 +405,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if playerPositionInCamera.y > 0 {
             cameraNode.position.y = bird.position.y
             
-            //Start the timer counting
             if gameStarted == false {
-                scheduledTimerWithTimeInterval()
                 gameStarted = true
                 background.createParallax()
             }
@@ -456,6 +424,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupCameraNode()
     }
     
+    func addBeeAndFly(){
+        if latestTime - worm_fly_checkpoint > 0.1 {
+            worm_fly_checkpoint = latestTime
+            let randBee = random(min: 0, max: 100)
+            if (randBee < beeFrequency) {
+                createBee()
+            }
+            
+            let randFly = random(min: 0, max: 100)
+            if (bird.position.y > size.height / 2) {
+                if powerUpActive == false {
+                    if (randFly < fliesFrequency) {
+                        createFly()
+                    }
+                }
+            }
+        }
+    }
+    
+    
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
@@ -466,6 +454,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         applyPenalty()
         updateBeeFrequency()
         background.addBackgroundFlavor(forBirdPosition: bird.position)
+        addBeeAndFly()
     }
 }
 
