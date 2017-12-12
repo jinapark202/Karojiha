@@ -27,7 +27,7 @@ extension GameScene{
         
         //Define the bird to be a SKPhysicsBody object.
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.width / 2)
-        bird.physicsBody?.linearDamping = 1.1
+        bird.physicsBody?.linearDamping = 0
         bird.physicsBody?.restitution = 0
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Fly
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Bee
