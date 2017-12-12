@@ -58,12 +58,12 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
         titleLabel.fontColor = SKColor.yellow
-        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
     
         instructions.size = CGSize(width: size.width/1.05, height: 200)
-        instructions.position = CGPoint(x: size.width/2, y: size.height/2)
+        instructions.position = CGPoint(x: size.width/2, y: size.height/1.8)
         addChild(instructions)
         instructions.run(SKAction.scale(to: 1.0, duration: 0.0))
         
