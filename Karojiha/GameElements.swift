@@ -47,7 +47,7 @@ extension GameScene{
         let fly = SKSpriteNode(imageNamed: "dragonfly.png")
         
         // Determine where to spawn the worm along the Y axis
-        let actualY = bird.position.y + size.height/2
+        let actualY = bird.position.y + size.height/1.5
         fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
         
         fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
@@ -61,7 +61,7 @@ extension GameScene{
         
         self.addChild(fly)
         
-        let wait = SKAction.wait(forDuration: 10)
+        let wait = SKAction.wait(forDuration: 7)
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([wait, remove])
         fly.run(sequence)
@@ -71,7 +71,7 @@ extension GameScene{
     func createBee() {
         
         let bee = SKSpriteNode(imageNamed: "outlinedBee_200.png")
-        let actualY = bird.position.y + size.height/2
+        let actualY = bird.position.y + size.height/1.5
         
         bee.size = CGSize(width: 30, height: 30)
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
@@ -86,7 +86,7 @@ extension GameScene{
         bee.physicsBody?.velocity = CGVector(dx: random(min: -250, max: 250), dy: random(min: -100, max: -400))
         
         self.addChild(bee)
-        let wait = SKAction.wait(forDuration: 10)
+        let wait = SKAction.wait(forDuration: 7)
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([wait, remove])
         bee.run(sequence)
