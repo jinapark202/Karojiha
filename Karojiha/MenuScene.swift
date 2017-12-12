@@ -54,7 +54,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         instructionsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Set up sound button
-        soundBtn.size = CGSize(width: 50, height: 50)
+        soundBtn.size = CGSize(width: 60, height: 60)
         soundBtn.position = CGPoint(x: size.width/2, y: size.height/4)
         soundBtn.zPosition = 20
         addChild(soundBtn)
