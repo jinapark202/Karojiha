@@ -119,6 +119,7 @@ class Background {
         flavorSprite.size.height = flavorSprite.size.height/2
         flavorSprite.position.y = position.y + size.height
         flavorSprite.position.x = random(min: 0, max: size.width)
+        flavorSprite.zPosition = 3
         let moveAction = SKAction.moveBy(x:0, y: -1100, duration: 5.1)
         let deleteAction = SKAction.removeFromParent()
         let flavorAction = SKAction.sequence([moveAction, deleteAction])

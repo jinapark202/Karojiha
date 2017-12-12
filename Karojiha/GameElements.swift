@@ -22,7 +22,7 @@ extension GameScene{
         
         bird.size = CGSize(width: 150, height: 110)
         bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
-        bird.zPosition = 10
+        bird.zPosition = 6
         bird.name = birdName
         
         //Define the bird to be a SKPhysicsBody object.
@@ -49,6 +49,7 @@ extension GameScene{
         // Determine where to spawn the worm along the Y axis
         let actualY = bird.position.y + size.height/1.5
         fly.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        fly.zPosition = 5
         
         fly.physicsBody = SKPhysicsBody(rectangleOf: fly.size)
         fly.physicsBody?.isDynamic = true
@@ -75,6 +76,7 @@ extension GameScene{
         
         bee.size = CGSize(width: 30, height: 30)
         bee.position = CGPoint(x: random(min:10, max: size.width - 10), y: actualY)
+        bee.zPosition = 5
         
         bee.physicsBody = SKPhysicsBody(rectangleOf: bee.size)
         bee.physicsBody?.isDynamic = true
@@ -92,7 +94,30 @@ extension GameScene{
         bee.run(sequence)
 
     }
-
+    
+    func updateBeeFrequency() {
+        let exponent = Double(-0.12 * (bird.position.y / 1000))
+        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
+    }
+    
+    func addBeeAndFly(){
+        if latestTime - worm_fly_checkpoint > 0.1 {
+            worm_fly_checkpoint = latestTime
+            let randBee = random(min: 0, max: 100)
+            if (randBee < beeFrequency) {
+                createBee()
+            }
+            
+            let randFly = random(min: 0, max: 100)
+            if (bird.position.y > size.height / 2) {
+                if powerUpActive == false {
+                    if (randFly < fliesFrequency) {
+                        createFly()
+                    }
+                }
+            }
+        }
+    }
     
     //Set up click counter in upper right corner
     func createElevationLabel(){
@@ -100,6 +125,7 @@ extension GameScene{
         elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)
         elevationLabel.fontColor = .orange
         elevationLabel.fontSize = 20
+        elevationLabel.zPosition = 6
         elevationLabel.fontName = "Avenir-BlackOblique"
         elevationLabel.text = String(describing:
             Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")

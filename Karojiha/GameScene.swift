@@ -62,6 +62,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var powerUpEndTime = 0.0
     var penaltyEndTime = 0.0
     
+    var score = CGFloat(0.0)
+    
     let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
     var bird = SKSpriteNode()
@@ -202,10 +204,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    func updateBeeFrequency() {
-        let exponent = Double(-0.12 * (bird.position.y / 1000))
-        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
-    }
+    
+
     
     //Function to emit spark particles
     func newSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
@@ -370,7 +370,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return floor(bird.position.y - (ledge.position.y + 10) - 28)
     }
 
-    var score = CGFloat(0.0)
     
     
     //Updates the text of the labels on the game screen
@@ -419,25 +418,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didSimulatePhysics() {
         setupCameraNode()
-    }
-    
-    func addBeeAndFly(){
-        if latestTime - worm_fly_checkpoint > 0.1 {
-            worm_fly_checkpoint = latestTime
-            let randBee = random(min: 0, max: 100)
-            if (randBee < beeFrequency) {
-                createBee()
-            }
-            
-            let randFly = random(min: 0, max: 100)
-            if (bird.position.y > size.height / 2) {
-                if powerUpActive == false {
-                    if (randFly < fliesFrequency) {
-                        createFly()
-                    }
-                }
-            }
-        }
     }
     
     
