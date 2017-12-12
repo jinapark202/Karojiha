@@ -100,13 +100,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         flappingAction = SKAction.repeat(animatebird, count: 2)
     }
     
-//    //makes bird flap its wings when tap occurrs
-//    func animateAstroBird(){
-//        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("birdHelmet_\(n)") }
-//        print(birdSprites)
-//        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
-//        flappingAction = SKAction.repeat(animatebird, count: 2)
-//    }
+    //makes bird flap its wings when tap occurrs
+    func animateAstroBird(){
+        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("birdHelmet_\(n)") }
+        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
+        flappingAction = SKAction.repeat(animatebird, count: 2)
+    }
     
 
     //Starts timer in motion, calls updateCounting every second
@@ -229,7 +228,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createScene(){
         self.bird = createBird()
         self.addChild(bird)
-        animateBird()
+        animateAstroBird()
     }
     
     
@@ -451,6 +450,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    override func didSimulatePhysics() {
+        setupCameraNode()
+    }
+    
     //Updates several parts of the game, including background/bird/labels/gravity
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
@@ -460,7 +463,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         applyPowerUp()
         applyPenalty()
         updateBeeFrequency()
-        setupCameraNode()
         background.addBackgroundFlavor(forBirdPosition: bird.position)
     }
 }
