@@ -18,7 +18,7 @@ extension GameScene{
         
         playerBody.mass = 0.4
         playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 4
+        playerBody.collisionBitMask = 1
         
         bird.size = CGSize(width: 150, height: 110)
         bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
