@@ -58,7 +58,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
         titleLabel.fontColor = SKColor.yellow
-        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.45)
+        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
         addChild(titleLabel)
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
     
@@ -70,7 +70,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         //Add bird and flapping animation
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("birdHelmet_1"))
         bird.size = CGSize(width: 200, height: 150)
-        bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY/2)
+        bird.position = CGPoint(x:self.frame.midX, y:self.frame.midY/2.5)
         bird.zPosition = 10
         addChild(bird)
         
