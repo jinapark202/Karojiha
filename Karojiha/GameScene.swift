@@ -24,7 +24,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     struct PhysicsCategory {
         static let Player: UInt32 = 1
-        static let Obstacle: UInt32 = 2
         static let Fly: UInt32 = 3
         static let Bee: UInt32 = 4
     }
@@ -71,8 +70,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var flappingAction = SKAction()
     let playerBody = SKPhysicsBody(circleOfRadius: 30)
     
-    var obstacles: [SKNode] = []
-    let obstacleSpacing: CGFloat = 800
     let cameraNode = SKCameraNode()
     let ledge = SKNode()
     
