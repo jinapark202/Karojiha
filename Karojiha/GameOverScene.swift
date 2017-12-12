@@ -43,12 +43,12 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         //Label for new high score
         let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
         newHighScoreLabel.text = "(New High Score)"
-        newHighScoreLabel.fontSize = 13
+        newHighScoreLabel.fontSize = 15
         newHighScoreLabel.fontColor = SKColor.green
-        newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.5)
+        newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.65)
         newHighScoreLabel.zPosition = 10
         
-        
+
         // If score is higher than highScore, change highScore to current score.
         if (score > highScore) {
             highScore = score
@@ -57,10 +57,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             addChild(newHighScoreLabel)
         }
         
-    
         //Sets up the restart button
         restartBtn.size = CGSize(width: 225, height: 225)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.45)
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.48)
         restartBtn.zPosition = 10
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
@@ -85,16 +84,16 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.text = message
         gameOverLabel.fontSize = 60
         gameOverLabel.fontColor = SKColor.white
-        gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
+        gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/1.4)
         gameOverLabel.zPosition = 10
         addChild(gameOverLabel)
         
         //Creates score label from the past game.
         let scoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
         scoreLabel.text = "Current Elevation: \(score) ft"
-        scoreLabel.fontSize = 25
+        scoreLabel.fontSize = 23
         scoreLabel.fontColor = SKColor.yellow
-        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.43)
+        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.55)
         scoreLabel.zPosition = 10
         addChild(scoreLabel)
         
