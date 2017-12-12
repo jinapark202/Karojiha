@@ -319,13 +319,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
-
-    func collisionWithFloor(object: SKNode, bird: SKNode) {
-        
-        
-    }
-    
-    
     //function to check for collision between worm and bird
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
