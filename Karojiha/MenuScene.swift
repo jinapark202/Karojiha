@@ -11,9 +11,9 @@ import SpriteKit
 
 class MenuScene: SKScene, SKPhysicsContactDelegate {
     
-    let instructionsLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let playLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
+    let instructBtn = SKSpriteNode(imageNamed: "instructionsButton_400")
     let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     var mute: Bool = true
     
@@ -44,14 +44,12 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         startBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     
         //Set up instructions label
-        let message = "Instructions"
-        instructionsLabel.text = message
-        instructionsLabel.fontSize = 30
-        instructionsLabel.fontColor = SKColor.yellow
-        instructionsLabel.position = CGPoint(x: size.width/2, y: size.height/2.2)
-        instructionsLabel.zPosition = 10
-        addChild(instructionsLabel)
-        instructionsLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
+        instructBtn.size = CGSize(width: 200, height: 27)
+        instructBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
+        instructBtn.zPosition = 10
+        startBtn.setScale(0)
+        addChild(instructBtn)
+        instructBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Set up sound button
         soundBtn.size = CGSize(width: 60, height: 60)
@@ -69,7 +67,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = GameScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            } else if instructionsLabel.contains(location) {
+            } else if instructBtn.contains(location) {
                 run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = InstructionsScene(size: size)
