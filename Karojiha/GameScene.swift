@@ -28,12 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Bee: UInt32 = 4
     }
     
-<<<<<<< HEAD
-=======
-    let backgroundNames = ["background1","background2","background3","background4","blackBackground"]
-
->>>>>>> 0b4094602d5748ae1ae0acf296aba6d67626c1d1
-    var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
     var flapVelocity = CGFloat(600.0)
 
@@ -132,6 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         music.backgroundSound.autoplayLooped = true
         
         self.physicsWorld.contactDelegate = self
+        self.physicsWorld.gravity.dy = CGFloat(-10.0)
         
         addChild(cameraNode)
         camera = cameraNode
@@ -204,30 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         animateAstroBird()
     }
  
-    func startPowerUp() {
-        if soundOn == true {
-            run(music.powerUpSound)
-        }
-        powerUpEndTime = latestTime + 2
-    }
-    
-    
-    //Collecting enough flies will apply an upward force to the bird
-    func applyPowerUp(){
-        if latestTime < powerUpEndTime {
-            let stopGravity = CGFloat(-10.0)
-            physicsWorld.gravity.dy = stopGravity
-            gravity = stopGravity
-            
-            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))
-            addSparkNode(scene: self, Object: bird, file: "fire", size: CGSize(width: 75, height: 75))
-            
-            powerUpActive = true
-            
-        } else {
-            powerUpActive = false
-        }
-    }
+
     
     func startPenalty() {
         penaltyEndTime = latestTime + 5
@@ -247,35 +219,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             flapVelocity = initialFlapVelocity
         }
     }
-    
-    //Keep track of flies eaten. If 3 flies are eaten, start power up.
-    func threeFliesEaten() {
-        fliesEaten += 1
-  
-        let fliesNeeded = 3
-        if fliesEaten % fliesNeeded == 0 && fliesEaten > 1 {
-            startPowerUp()
-        }
-    }
+
     
     func updateBeeFrequency() {
         let exponent = Double(-0.12 * (bird.position.y / 1000))
         beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
     }
     
-    //Removes fly, adds sound and sparks when bird collides with flies.
+
+    
+    //Called continuously in update(), once a powerUp has been started, stops applying force after 2 seconds
+    func applyPowerUp(){
+        if latestTime < powerUpEndTime {
+            bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))
+            addSparkNode(scene: self, Object: bird, file: "fire", size: CGSize(width: 75, height: 75))
+            powerUpActive = true
+        } else {
+            powerUpActive = false
+        }
+    }
+    
+    //Called when the bird eats its third fly... see collisionWithFlies()
+    func startPowerUp() {
+        if soundOn == true {
+            run(music.powerUpSound)
+        }
+        powerUpEndTime = latestTime + 2
+    }
+    
+    
+    //Adds sparks/sounds when bird eats flies, starts a power up if 3 flies have been eaten
     func collisionWithFlies(object: SKNode, bird: SKNode) {
         object.removeFromParent()
+        fliesEaten += 1
+        let remainder = fliesEaten % 3
 
         if powerUpActive == false {
-            threeFliesEaten()
-            let remainder = fliesEaten % 3
+            if remainder == 0 && fliesEaten > 1 {
+                startPowerUp()
+            }
             if remainder == 1{
                 if soundOn == true {
                     run(music.fly1Sound)
                 }
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
-
             }
             if remainder == 2{
                 if soundOn == true {
@@ -387,26 +374,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
+    //We override this function to avoid lag that possibly resulted from conflict between update() and didSimulatePhysics()
     override func didSimulatePhysics() {
         setupCameraNode()
     }
     
-    
-    //Updates several parts of the game, including background/bird/labels/gravity
+    //Updates several parts of the game, including background/bird/labels
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
         processUserMotion(forUpdate: currentTime)
         adjustLabels()
         background.adjust(forBirdPosition: bird.position)
+        background.addBackgroundFlavor(forBirdPosition: bird.position)
         applyPowerUp()
         applyPenalty()
         applyFlapAnimation()
         updateBeeFrequency()
-        background.addBackgroundFlavor(forBirdPosition: bird.position)
-        
-        if gameStarted == true {
-            addBeeAndFly()
-        }
+        addBeeAndFly()
     }
 }
 

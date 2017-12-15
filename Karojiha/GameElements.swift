@@ -95,7 +95,7 @@ extension GameScene{
 
     }
     
-    //Set up click counter in upper right corner
+    //Set up score in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
         elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)
@@ -108,7 +108,6 @@ extension GameScene{
         cameraNode.addChild(elevationLabel)
     }
     
-    //Creates the sound button button
     func createSoundBtn() {
         soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
         soundBtn.size = CGSize(width: 50, height: 50)
@@ -117,7 +116,6 @@ extension GameScene{
         cameraNode.addChild(soundBtn)
     }
     
-    //Creates the pause button
     func createPauseBtn() {
         pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
         pauseBtn.size = CGSize(width: 50, height: 50)
@@ -128,7 +126,6 @@ extension GameScene{
     }
     
 
-    //Creates the restart button
     func createHomeBtn() {
         homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
         homeBtn.size = CGSize(width: 50, height: 50)
@@ -141,11 +138,10 @@ extension GameScene{
     
     //Adds spark particles
     func addSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
-        
         guard let emitter = SKEmitterNode(fileNamed: file) else {
             return
         }
-    
+
         emitter.particleBirthRate = 100 
         emitter.numParticlesToEmit = 15
         emitter.particleLifetime = 0.2
@@ -160,19 +156,24 @@ extension GameScene{
         scene.addChild(emitter)
     }
     
+    //Called every 1/10th of a second, adds sprites if randomly generated number falls below threshold
     func addBeeAndFly(){
-        if latestTime - worm_fly_checkpoint > 0.1 {
-            worm_fly_checkpoint = latestTime
-            let randBee = random(min: 0, max: 100)
-            if (randBee < beeFrequency) {
-                createBee()
-            }
-            
-            let randFly = random(min: 0, max: 100)
-            if (bird.position.y > size.height / 2) {
-                if powerUpActive == false {
-                    if (randFly < fliesFrequency) {
-                        createFly()
+        if gameStarted == true {
+            if latestTime - worm_fly_checkpoint > 0.1 {
+                worm_fly_checkpoint = latestTime
+                let randBee = random(min: 0, max: 100)
+                //Threshold check
+                if (randBee < beeFrequency) {
+                    createBee()
+                }
+                
+                let randFly = random(min: 0, max: 100)
+                if (bird.position.y > size.height / 2) {
+                    if powerUpActive == false {
+                        //Threshold check
+                        if (randFly < fliesFrequency) {
+                            createFly()
+                        }
                     }
                 }
             }
