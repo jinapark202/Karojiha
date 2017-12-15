@@ -59,7 +59,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         //Sets up the restart button
         restartBtn.size = CGSize(width: 225, height: 225)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.48)
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
         restartBtn.zPosition = 10
         addChild(restartBtn)
         restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
@@ -103,7 +103,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.fontSize = 25
         highScoreLabel.text = "Record: \(highScore) ft"
         highScoreLabel.fontColor = SKColor.orange
-        highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/8)
+        highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/9)
         highScoreLabel.zPosition = 10
         addChild(highScoreLabel)
 

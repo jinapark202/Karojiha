@@ -95,30 +95,6 @@ extension GameScene{
 
     }
     
-    func updateBeeFrequency() {
-        let exponent = Double(-0.12 * (bird.position.y / 1000))
-        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
-    }
-    
-    func addBeeAndFly(){
-        if latestTime - worm_fly_checkpoint > 0.1 {
-            worm_fly_checkpoint = latestTime
-            let randBee = random(min: 0, max: 100)
-            if (randBee < beeFrequency) {
-                createBee()
-            }
-            
-            let randFly = random(min: 0, max: 100)
-            if (bird.position.y > size.height / 2) {
-                if powerUpActive == false {
-                    if (randFly < fliesFrequency) {
-                        createFly()
-                    }
-                }
-            }
-        }
-    }
-    
     //Set up click counter in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
@@ -164,6 +140,47 @@ extension GameScene{
         cameraNode.addChild(homeBtn)
         homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
+    
+    //Adds spark particles
+    func addSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
+        
+        guard let emitter = SKEmitterNode(fileNamed: file) else {
+            return
+        }
+    
+        emitter.particleBirthRate = 100 
+        emitter.numParticlesToEmit = 15
+        emitter.particleLifetime = 0.2
+        emitter.particleSize = size
+        
+        // Place the emitter at object postition.
+        emitter.position = Object.position
+        emitter.name = "exhaust"
+        
+        // Send the particles to the scene.
+        emitter.targetNode = scene;
+        scene.addChild(emitter)
+    }
+    
+    func addBeeAndFly(){
+        if latestTime - worm_fly_checkpoint > 0.1 {
+            worm_fly_checkpoint = latestTime
+            let randBee = random(min: 0, max: 100)
+            if (randBee < beeFrequency) {
+                createBee()
+            }
+            
+            let randFly = random(min: 0, max: 100)
+            if (bird.position.y > size.height / 2) {
+                if powerUpActive == false {
+                    if (randFly < fliesFrequency) {
+                        createFly()
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 
