@@ -431,7 +431,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         applyPenalty()
         updateBeeFrequency()
         background.addBackgroundFlavor(forBirdPosition: bird.position)
-        addBeeAndFly()
+        
+        if gameStarted == true {
+            addBeeAndFly()
+        }
     }
 }
 
