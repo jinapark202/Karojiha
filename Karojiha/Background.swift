@@ -25,7 +25,7 @@ class Background {
     var bgFlavorCheckpoint = CGFloat(0.0)
     let flavorFrequency = CGFloat(500.0)
     
-    let backgroundNames = ["background1","background2","background3","background4New","blackBackground"]
+    let backgroundNames = ["background1","background2","background3","background4","blackBackground"]
     var bgFlavorImages  = [
         1: ["background1Cloud"],   //First background (light blue)
         2: ["lightning"],
