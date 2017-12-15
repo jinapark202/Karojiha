@@ -8,6 +8,9 @@
 
 import SpriteKit
 
+
+//Note that this is technically the same class as GameScene - the two files share the same functions and instance variables
+
 extension GameScene{
     
     //Create the bird
@@ -16,14 +19,15 @@ extension GameScene{
         //Set the size and position of the bird
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
         
-        playerBody.mass = 0.4
-        playerBody.categoryBitMask = PhysicsCategory.Player
-        playerBody.collisionBitMask = 1
+        let birdBody = SKPhysicsBody(circleOfRadius: 30)
+        birdBody.mass = 0.4
+        birdBody.categoryBitMask = PhysicsCategory.Player
+        birdBody.collisionBitMask = 1
         
         bird.size = CGSize(width: 150, height: 110)
-        bird.position = CGPoint(x: self.frame.midX, y: ledge.position.y + 15)
+        bird.position = CGPoint(x: self.frame.midX, y: 15)
         bird.zPosition = 6
-        bird.name = birdName
+        bird.name = "bird"
         
         //Define the bird to be a SKPhysicsBody object.
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.width / 2)
@@ -32,7 +36,7 @@ extension GameScene{
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Fly
         bird.physicsBody?.contactTestBitMask = PhysicsCategory.Bee
         bird.physicsBody?.usesPreciseCollisionDetection = true
-        bird.physicsBody = playerBody
+        bird.physicsBody = birdBody
         bird.physicsBody?.affectedByGravity = true
         bird.physicsBody?.isDynamic = true
         bird.physicsBody?.allowsRotation = false
@@ -104,8 +108,29 @@ extension GameScene{
         elevationLabel.zPosition = 6
         elevationLabel.fontName = "Avenir-BlackOblique"
         elevationLabel.text = String(describing:
-            Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
+            Int((bird.position.y) - 10)) + String(" ft")
         cameraNode.addChild(elevationLabel)
+    }
+    
+    
+    //Updates the text of the elevation label on the game screen
+    func adjustLabels(){
+        
+        if (altitude >= score) {
+            score = altitude
+        }
+        
+        elevationLabel.text = String(describing: "\(Int(score)) ft")
+        let scaleUpAction = SKAction.scale(to: 1.5, duration: 0.3)
+        let scaleDownAction = SKAction.scale(to: 1.0, duration: 0.3)
+        let scaleActionSequence = SKAction.sequence([scaleUpAction, scaleDownAction])
+        
+        //Used to decide when to animate ElevationLabel
+        let currentCheckpoint = floor(altitude/1000)
+        if (currentCheckpoint > previousCheckpoint) {
+            previousCheckpoint = currentCheckpoint
+            elevationLabel.run(scaleActionSequence)
+        }
     }
     
     func createSoundBtn() {
