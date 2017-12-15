@@ -153,6 +153,7 @@ extension GameScene{
         cameraNode.addChild(pauseBtn)
         pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
+    
 
     //Creates the restart button
     func createHomeBtn() {

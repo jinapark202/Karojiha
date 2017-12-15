@@ -108,6 +108,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
     }
+    
+    //checks whether bird is high enough for space helmet; applies it if so
+    func applyFlapAnimation(){
+        if altitude < 18000{
+            animateBird()
+        }else{
+            animateAstroBird()
+        }
+    }
+    
+    
 
     
     //Adds the first background to the screen and sets up the scene.
@@ -210,19 +221,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     //Function to emit spark particles
-    func newSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
+    func newSparkNode(scene: SKScene, objectX: CGFloat, objectY: CGFloat, file: String, size: CGSize, num: Int) {
         
         guard let emitter = SKEmitterNode(fileNamed: file) else {
             return
         }
         
-        emitter.particleBirthRate = 100 //100
-        emitter.numParticlesToEmit = 15 //15
-        emitter.particleLifetime = 0.2 //.2
+        emitter.particleBirthRate = 10000
+        emitter.numParticlesToEmit = num
+        emitter.particleLifetime = 0.2
         emitter.particleSize = size
         
         // Place the emitter at fly postition.
-        emitter.position = Object.position
+        emitter.position.x = objectX
+        emitter.position.y = objectY
         emitter.name = "exhaust"
 
         // Send the particles to the scene.
@@ -248,7 +260,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gravity = stopGravity
             
             bird.physicsBody?.applyForce(CGVector(dx: 0, dy: 900))
-            newSparkNode(scene: self, Object: bird, file: "fire", size: CGSize(width: 75, height: 75))
+            newSparkNode(scene: self, objectX: bird.position.x, objectY: bird.position.y, file: "fire", size: CGSize(width: 75, height: 75), num:15)
             
             powerUpActive = true
             
@@ -294,18 +306,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if powerUpActive == false {
             threeFliesEaten()
             let remainder = fliesEaten % 3
-//            newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: remainder*100, height: remainder*100) )
             if remainder == 1{
                 if sound == true {
                     run(fly1Sound)
                 }
-                newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
+                newSparkNode(scene: self, objectX: bird.position.x, objectY: bird.position.y, file: "spark", size: CGSize(width: 75, height: 75), num: 15)
             }
             if remainder == 2{
                 if sound == true {
                     run(fly2Sound)
                 }
-                newSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
+                newSparkNode(scene: self, objectX: bird.position.x, objectY: bird.position.y, file: "spark", size: CGSize(width: 200, height: 200), num: 15)
             }
         }
     }
@@ -319,7 +330,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if sound == true {
                 run(beeHitSound)
             }
-            newSparkNode(scene: self, Object: object, file: "smoke1", size: CGSize(width: 50, height: 50))
+            newSparkNode(scene: self, objectX: bird.position.x, objectY: bird.position.y, file: "smoke1", size: CGSize(width: 50, height: 50), num: 15)
             beeEaten += 1
             startPenalty()
         }
@@ -429,6 +440,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.adjust(forBirdPosition: bird.position)
         applyPowerUp()
         applyPenalty()
+        applyFlapAnimation()
         updateBeeFrequency()
         background.addBackgroundFlavor(forBirdPosition: bird.position)
         addBeeAndFly()
