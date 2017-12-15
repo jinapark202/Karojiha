@@ -95,9 +95,69 @@ extension GameScene{
 
     }
     
-    func updateBeeFrequency() {
-        let exponent = Double(-0.12 * (bird.position.y / 1000))
-        beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
+    //Set up click counter in upper right corner
+    func createElevationLabel(){
+        elevationLabel.horizontalAlignmentMode = .right
+        elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)
+        elevationLabel.fontColor = .orange
+        elevationLabel.fontSize = 20
+        elevationLabel.zPosition = 6
+        elevationLabel.fontName = "Avenir-BlackOblique"
+        elevationLabel.text = String(describing:
+            Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
+        cameraNode.addChild(elevationLabel)
+    }
+    
+    //Creates the sound button button
+    func createSoundBtn() {
+        soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
+        soundBtn.size = CGSize(width: 50, height: 50)
+        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
+        soundBtn.zPosition = 6
+        cameraNode.addChild(soundBtn)
+    }
+    
+    //Creates the pause button
+    func createPauseBtn() {
+        pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
+        pauseBtn.size = CGSize(width: 50, height: 50)
+        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
+        pauseBtn.zPosition = 6
+        cameraNode.addChild(pauseBtn)
+        pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+    }
+    
+
+    //Creates the restart button
+    func createHomeBtn() {
+        homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
+        homeBtn.size = CGSize(width: 50, height: 50)
+        homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
+        homeBtn.zPosition = 6
+        homeBtn.setScale(0)
+        cameraNode.addChild(homeBtn)
+        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+    }
+    
+    //Adds spark particles
+    func addSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
+        
+        guard let emitter = SKEmitterNode(fileNamed: file) else {
+            return
+        }
+    
+        emitter.particleBirthRate = 100 
+        emitter.numParticlesToEmit = 15
+        emitter.particleLifetime = 0.2
+        emitter.particleSize = size
+        
+        // Place the emitter at object postition.
+        emitter.position = Object.position
+        emitter.name = "exhaust"
+        
+        // Send the particles to the scene.
+        emitter.targetNode = scene;
+        scene.addChild(emitter)
     }
     
     func addBeeAndFly(){
@@ -118,53 +178,7 @@ extension GameScene{
             }
         }
     }
-    
-    //Set up click counter in upper right corner
-    func createElevationLabel(){
-        elevationLabel.horizontalAlignmentMode = .right
-        elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)
-        elevationLabel.fontColor = .orange
-        elevationLabel.fontSize = 20
-        elevationLabel.zPosition = 6
-        elevationLabel.fontName = "Avenir-BlackOblique"
-        elevationLabel.text = String(describing:
-            Int((bird.position.y) - (ledge.position.y + 10))) + String(" ft")
-        cameraNode.addChild(elevationLabel)
-    }
-    
-    //Creates the sound button button
-    func createSoundBtn() {
-        soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
-        soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
-        soundBtn.zPosition = 6
-        soundBtn.setScale(0)
-        cameraNode.addChild(soundBtn)
-        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
-    }
-    
-    //Creates the pause button
-    func createPauseBtn() {
-        pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
-        pauseBtn.size = CGSize(width: 50, height: 50)
-        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
-        pauseBtn.zPosition = 6
-        pauseBtn.setScale(0)
-        cameraNode.addChild(pauseBtn)
-        pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
-    }
-    
 
-    //Creates the restart button
-    func createHomeBtn() {
-        homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
-        homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
-        homeBtn.zPosition = 6
-        homeBtn.setScale(0)
-        cameraNode.addChild(homeBtn)
-        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
-    }
 }
 
 
