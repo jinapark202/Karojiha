@@ -28,4 +28,10 @@ class Sound {
     public let fly2Sound = SKAction.playSoundFileNamed("fly2.wav", waitForCompletion: true)
     
     public let fly1Sound = SKAction.playSoundFileNamed("fly1.wav", waitForCompletion: true)
+    
+    public let menuSceneBackgroundSound = SKAudioNode(fileNamed: "clear_skies.mp3")
+    
+    public let backgroundSound1 = SKAudioNode(fileNamed: "opening_day.mp3")
+    
+    public let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
 }
