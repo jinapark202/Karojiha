@@ -15,12 +15,8 @@ class Background {
     weak var scene: SKScene? {
         didSet {
             self.size = scene?.size ?? CGSize.zero
-            //initBackgroundArray(names: backgroundNames)
         }
     }
-    
-    //Add desired background images to this array of strings. Makes sure background images are in Assets.xcassets
-    let backgroundNames = ["background1","background2","background3","background4New","blackBackground"]
 
     var backgroundImages: [SKNode] = []
     let backgroundHeight = CGFloat(8.0)
@@ -29,6 +25,7 @@ class Background {
     var bgFlavorCheckpoint = CGFloat(0.0)
     let flavorFrequency = CGFloat(500.0)
     
+    let backgroundNames = ["background1","background2","background3","background4New","blackBackground"]
     var bgFlavorImages  = [
         1: ["background1Cloud"],   //First background (light blue)
         2: ["lightning"],
@@ -62,7 +59,10 @@ class Background {
     }
     
     
-    //Perform Necessary Background checks, making changes as necesary... called in continously in update()
+    /*
+     Removes the previous background when the bird is far enough above it.
+     Repeats the last stars background in the end.
+    */
     func adjust(forBirdPosition position: CGPoint){
         
         //Adds the next background when the bird is close enough
@@ -82,7 +82,6 @@ class Background {
             currentBackground += 1
         }
         
-        //Removes the previous background when the bird is far enough above it
         if (position.y > backgroundHeight * size.height * (previousBackground + 1) + size.height){
             (backgroundImages[Int(previousBackground)]).removeFromParent()
             previousBackground += 1
@@ -105,11 +104,8 @@ class Background {
                 let chosenImage = choicesForImage[Int(randomIndex)]
                 createFlavorSprite(imageName: chosenImage, forBirdPosition: position)
             }
-            
         }
-        
     }
-    
     
     //Called in addBackgroundFlavor()
     func createFlavorSprite(imageName: String, forBirdPosition position: CGPoint){
@@ -127,8 +123,8 @@ class Background {
         
     }
     
-    // Code altered from https://www.hackingwithswift.com/read/36/3/sky-background-and-ground-parallax-scrolling-with-spritekit
-    //Scrolling background - parallax
+    /*Code altered from https://www.hackingwithswift.com/read/36/3/sky-background-and-ground-parallax-scrolling-with-spritekit. Implements the parallax background.
+    */
     func createParallax() {
         let backgroundTexture = SKTexture(imageNamed: "parallax_white")
         

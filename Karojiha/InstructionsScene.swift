@@ -45,28 +45,26 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.05)
         homeBtn.zPosition = 10
         addChild(homeBtn)
-        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Sets up the sound button
         soundBtn.size = CGSize(width: 50, height: 50)
         soundBtn.position = CGPoint(x: size.width/3.8, y: size.height/1.05)
         soundBtn.zPosition = 6
-        soundBtn.setScale(0)
         addChild(soundBtn)
-        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
+        //Sets up 'How to Play' Label
         let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
         titleLabel.fontColor = SKColor.yellow
         titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
         addChild(titleLabel)
-        titleLabel.run(SKAction.scale(to: 1.0, duration: 0.0))
     
+        //Sets up instructions button
         instructions.size = CGSize(width: size.width/1.05, height: 200)
         instructions.position = CGPoint(x: size.width/2, y: size.height/1.8)
         addChild(instructions)
-        instructions.run(SKAction.scale(to: 1.0, duration: 0.0))
+
         
         //Add bird and flapping animation
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("birdHelmet_1"))

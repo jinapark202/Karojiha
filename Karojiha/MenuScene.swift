@@ -39,17 +39,15 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         startBtn.size = CGSize(width: 250, height: 125)
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         startBtn.zPosition = 10
-        startBtn.setScale(0)
         addChild(startBtn)
-        startBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     
+        
         //Set up instructions label
         instructBtn.size = CGSize(width: 200, height: 27)
         instructBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
         instructBtn.zPosition = 10
-        startBtn.setScale(0)
         addChild(instructBtn)
-        instructBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
+        
         
         //Set up sound button
         soundBtn.size = CGSize(width: 60, height: 60)
