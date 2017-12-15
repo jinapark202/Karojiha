@@ -114,9 +114,7 @@ extension GameScene{
         soundBtn.size = CGSize(width: 50, height: 50)
         soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
         soundBtn.zPosition = 6
-        soundBtn.setScale(0)
         cameraNode.addChild(soundBtn)
-        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }
     
     //Creates the pause button
@@ -125,7 +123,6 @@ extension GameScene{
         pauseBtn.size = CGSize(width: 50, height: 50)
         pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
         pauseBtn.zPosition = 6
-        pauseBtn.setScale(0)
         cameraNode.addChild(pauseBtn)
         pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
     }

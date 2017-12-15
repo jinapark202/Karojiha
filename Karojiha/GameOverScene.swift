@@ -62,22 +62,18 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
         restartBtn.zPosition = 10
         addChild(restartBtn)
-        restartBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Sets up the home button
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.05)
         homeBtn.zPosition = 10
         addChild(homeBtn)
-        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
 
         //Sets up the sound button
         soundBtn.size = CGSize(width: 50, height: 50)
         soundBtn.position = CGPoint(x: size.width/3.8, y: size.height/1.05)
         soundBtn.zPosition = 6
-        soundBtn.setScale(0)
         addChild(soundBtn)
-        soundBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
         
         //Creates game over label
         let message = "Game Over"
