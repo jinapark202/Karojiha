@@ -15,7 +15,6 @@ class Background {
     weak var scene: SKScene? {
         didSet {
             self.size = scene?.size ?? CGSize.zero
-            //initBackgroundArray(names: backgroundNames)
         }
     }
 
