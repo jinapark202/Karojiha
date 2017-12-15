@@ -13,12 +13,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let background = Background()
     var sound: Bool = true
+    let music = Sound()
     
-    //Sound effects and music taken from freesfx.co.uk
-    let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
-    let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
     let buttons = Buttons()
-    
     
     init(size: CGSize, score: Int, fliesCount: Int) {
         
@@ -30,8 +27,8 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         background.createParallax()
         
         //Adds and loops the background sound
-        self.addChild(backgroundSound)
-        backgroundSound.autoplayLooped = true
+        self.addChild(music.backgroundSound1)
+        music.backgroundSound1.autoplayLooped = true
         
         buttons.scene = self
         buttons.addRestartButton()
@@ -59,7 +56,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             addChild(newHighScoreLabel)
         }
 
-    
 
         //Creates game over label
         let message = "Game Over"
@@ -96,12 +92,12 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: self)
             if buttons.restartBtn.contains(location) {
-                run(buttonClickSound)
+                run(music.buttonClickSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             } else if buttons.homeBtn.contains(location) {
-                run(buttonClickSound)
+                run(music.buttonClickSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
@@ -109,11 +105,11 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
                 if sound {
                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     sound = false
-                    backgroundSound.run(SKAction.stop())
+                    music.backgroundSound1.run(SKAction.stop())
                 } else {
                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     sound = true
-                    backgroundSound.run(SKAction.play())
+                    music.backgroundSound1.run(SKAction.play())
                 }
             }
         }
