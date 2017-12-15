@@ -11,17 +11,13 @@ import SpriteKit
 
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
-    let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
-    let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
-    let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
-
     let background = Background()
-    
     var sound: Bool = true
     
     //Sound effects and music taken from freesfx.co.uk
     let backgroundSound = SKAudioNode(fileNamed: "opening_day.mp3")
     let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
+    let buttons = Buttons()
     
     
     init(size: CGSize, score: Int, fliesCount: Int) {
@@ -32,13 +28,20 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         background.scene = self
         backgroundColor = SKColor.black
         background.createParallax()
-
-        let highScoreDefault = UserDefaults.standard
-        var highScore = highScoreDefault.integer(forKey: "highScore")
         
         //Adds and loops the background sound
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
+        
+        buttons.scene = self
+        buttons.addRestartButton()
+        buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
+        buttons.addSoundButton(position: CGPoint(x: size.width/3.8, y: size.height/1.05))
+        
+        
+        let highScoreDefault = UserDefaults.standard
+        var highScore = highScoreDefault.integer(forKey: "highScore")
+        
         
         //Label for new high score
         let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
@@ -48,7 +51,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         newHighScoreLabel.position = CGPoint(x: size.width/2, y: size.height/1.65)
         newHighScoreLabel.zPosition = 10
         
-
         // If score is higher than highScore, change highScore to current score.
         if (score > highScore) {
             highScore = score
@@ -56,25 +58,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             highScoreDefault.synchronize()
             addChild(newHighScoreLabel)
         }
-        
-        //Sets up the restart button
-        restartBtn.size = CGSize(width: 225, height: 225)
-        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
-        restartBtn.zPosition = 10
-        addChild(restartBtn)
-        
-        //Sets up the home button
-        homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.05)
-        homeBtn.zPosition = 10
-        addChild(homeBtn)
 
-        //Sets up the sound button
-        soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: size.width/3.8, y: size.height/1.05)
-        soundBtn.zPosition = 6
-        addChild(soundBtn)
-        
+    
+
         //Creates game over label
         let message = "Game Over"
         let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
@@ -109,23 +95,23 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
-            if restartBtn.contains(location) {
+            if buttons.restartBtn.contains(location) {
                 run(buttonClickSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
-            } else if homeBtn.contains(location) {
+            } else if buttons.homeBtn.contains(location) {
                 run(buttonClickSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            } else if soundBtn.contains(location) {
+            } else if buttons.soundBtn.contains(location) {
                 if sound {
-                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     sound = false
                     backgroundSound.run(SKAction.stop())
                 } else {
-                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     sound = true
                     backgroundSound.run(SKAction.play())
                 }

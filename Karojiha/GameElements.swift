@@ -133,34 +133,6 @@ extension GameScene{
         }
     }
     
-    func createSoundBtn() {
-        soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
-        soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
-        soundBtn.zPosition = 6
-        cameraNode.addChild(soundBtn)
-    }
-    
-    func createPauseBtn() {
-        pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
-        pauseBtn.size = CGSize(width: 50, height: 50)
-        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
-        pauseBtn.zPosition = 6
-        cameraNode.addChild(pauseBtn)
-        pauseBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
-    }
-    
-
-    func createHomeBtn() {
-        homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
-        homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
-        homeBtn.zPosition = 6
-        homeBtn.setScale(0)
-        cameraNode.addChild(homeBtn)
-        homeBtn.run(SKAction.scale(to: 1.0, duration: 0.0))
-    }
-    
     //Adds spark particles
     func addSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {
         guard let emitter = SKEmitterNode(fileNamed: file) else {

@@ -13,9 +13,7 @@ import UIKit
 class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
     let stepsLabel = SKLabelNode(fontNamed: "Avenir-Light")
-    let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
     let instructions = SKSpriteNode(imageNamed: "instructions")
-    let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     
     var sound: Bool = true
     
@@ -27,10 +25,13 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
     var repeatActionbird = SKAction()
+    let buttons = Buttons()
 
 
     override init(size: CGSize){
         super.init(size: size)
+        buttons.scene = self
+        
         
         //Changed background to be black
         backgroundColor = SKColor.black
@@ -40,17 +41,9 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         self.addChild(backgroundSound)
         backgroundSound.autoplayLooped = true
 
-        //Sets up the home button
-        homeBtn.size = CGSize(width: 50, height: 50)
-        homeBtn.position = CGPoint(x: size.width/10, y: size.height/1.05)
-        homeBtn.zPosition = 10
-        addChild(homeBtn)
-        
-        //Sets up the sound button
-        soundBtn.size = CGSize(width: 50, height: 50)
-        soundBtn.position = CGPoint(x: size.width/3.8, y: size.height/1.05)
-        soundBtn.zPosition = 6
-        addChild(soundBtn)
+        buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
+        buttons.addSoundButton(position: CGPoint(x: size.width/3.8, y: size.height/1.05))
+
 
         //Sets up 'How to Play' Label
         let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
@@ -87,18 +80,18 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
-            if homeBtn.contains(location) {
+            if buttons.homeBtn.contains(location) {
                 run(buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            } else if soundBtn.contains(location) {
+            } else if buttons.soundBtn.contains(location) {
                 if sound {
-                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     sound = false
                     backgroundSound.run(SKAction.stop())
                 } else {
-                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     sound = true
                     backgroundSound.run(SKAction.play())
                 }
