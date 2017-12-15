@@ -19,6 +19,7 @@ func random(min: CGFloat, max: CGFloat) -> CGFloat {
     return random() * (max - min) + min
 }
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     struct PhysicsCategory {
@@ -27,53 +28,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Bee: UInt32 = 4
     }
     
-    let backgroundNames = ["background1","background2","background3","background4New","blackBackground"]
-
     var gravity = CGFloat(0.0)
     var initialFlapVelocity = CGFloat(600.0)
     var flapVelocity = CGFloat(600.0)
 
-    let motionManager = CMMotionManager()
     var fliesFrequency = CGFloat(6.0)
     var beeFrequency = CGFloat(0.0)
-    
     var worm_fly_checkpoint = 0.0
-    
-    //For label animation
-    var previousCheckpoint = CGFloat(0.0)
     var fliesEaten = 0
     var beeEaten = 0
     
-    //Variables for click counter.
-    var totalClickCounter = 0.0
+    //Variables for score counter.
     let elevationLabel = SKLabelNode()
-    let fliesEatenLabel = SKLabelNode()
+    var score = CGFloat(0.0)
+    var previousCheckpoint = CGFloat(0.0)      //For label animation
     
     var soundBtn = SKSpriteNode()
     var pauseBtn = SKSpriteNode()
     var homeBtn = SKSpriteNode()
     
     var gameStarted = false
-    var sound: Bool = true
+    var soundOn: Bool = true
     var powerUpActive: Bool = false
     
     var latestTime = 0.0
     var powerUpEndTime = 0.0
     var penaltyEndTime = 0.0
     
-    var score = CGFloat(0.0)
     
     let birdName = "bird"
     let birdAtlas = SKTextureAtlas(named:"player")
     var bird = SKSpriteNode()
     var flappingAction = SKAction()
     let playerBody = SKPhysicsBody(circleOfRadius: 30)
+    let ledge = SKNode()    //Bottom of screen
+
+    
     
     let cameraNode = SKCameraNode()
-    let ledge = SKNode()
-    
     let background = Background()
     let music = Sound()
+    let motionManager = CMMotionManager()
+
 
     
     override init(size: CGSize) {
@@ -125,7 +121,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createSoundBtn()
         createPauseBtn()
         createHomeBtn()
-        background.initBackgroundArray(names: backgroundNames)
+        background.initBackgroundArray(names: background.backgroundNames)
         
         self.addChild(music.backgroundSound)
         music.backgroundSound.autoplayLooped = true
@@ -153,32 +149,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.y -= cameraNode.position.y
             
             if homeBtn.contains(location){
-                if sound == true {
+                if soundOn == true {
                     run(music.buttonPressSound)
                 }
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             } else if soundBtn.contains(location) {
-                if sound {
+                if soundOn {
                     soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    sound = false
+                    soundOn = false
                     music.backgroundSound.run(SKAction.stop())
                 } else {
                     run(music.buttonPressSound)
                     soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    sound = true
+                    soundOn = true
                     music.backgroundSound.run(SKAction.play())
                 }
             } else if pauseBtn.contains(location){
                 if self.isPaused == false {
-                    if sound == true {
+                    if soundOn == true {
                         run(music.buttonPressSound)
                     }
                     self.isPaused = true
                     pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
-                    if sound == true {
+                    if soundOn == true {
                         run(music.buttonPressSound)
                     }
                     self.isPaused = false
@@ -190,7 +186,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 if (bird.physicsBody?.velocity.dy)! < flapVelocity {
                     bird.physicsBody?.velocity.dy = flapVelocity
-                    totalClickCounter += 1
                 }
             }
         }
@@ -205,7 +200,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
  
     func startPowerUp() {
-        if sound == true {
+        if soundOn == true {
             run(music.powerUpSound)
         }
         powerUpEndTime = latestTime + 2
@@ -271,14 +266,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             threeFliesEaten()
             let remainder = fliesEaten % 3
             if remainder == 1{
-                if sound == true {
+                if soundOn == true {
                     run(music.fly1Sound)
                 }
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
 
             }
             if remainder == 2{
-                if sound == true {
+                if soundOn == true {
                     run(music.fly2Sound)
                 }
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
@@ -292,7 +287,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         object.removeFromParent()
 
         if powerUpActive == false {
-            if sound == true {
+            if soundOn == true {
                 run(music.beeHitSound)
             }
             addSparkNode(scene: self, Object: object, file: "smoke1", size: CGSize(width: 50, height: 50))
