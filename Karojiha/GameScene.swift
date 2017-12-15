@@ -189,7 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             else{
                 self.bird.run(flappingAction)
-                
+
                 if (bird.physicsBody?.velocity.dy)! < flapVelocity {
                     bird.physicsBody?.velocity.dy = flapVelocity
                 }
@@ -200,27 +200,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //checks whether bird is high enough for space helmet; applies it if so
     func applyFlapAnimation(){
-        if altitude < 18000{
-            animateBird()
+        if altitude < 1000{
+            animateBird(fileName: "bird" )
         }else{
-            animateAstroBird()
+            animateBird(fileName: "birdHelmet")
         }
     }
    
     //Makes bird flap its wings when tap occurrs
-    func animateBird(){
-        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("bird_\(n)") }
+    func animateBird(fileName: String){
+        let birdSprites = (1...4).map { n in birdAtlas.textureNamed(fileName+"_\(n)") }
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
     }
-    
-    //Makes bird flap its wings when tap occurrs
-    func animateAstroBird(){
-        let birdSprites = (1...4).map { n in birdAtlas.textureNamed("birdHelmet_\(n)") }
-        let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
-        flappingAction = SKAction.repeat(animatebird, count: 2)
-    }
-    
     
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
