@@ -13,7 +13,7 @@ import SpriteKit
 
 extension GameScene{
     
-    //Create the bird
+    //Create the bird. Source:http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
     func createBird() -> SKSpriteNode {
         
         //Set the size and position of the bird

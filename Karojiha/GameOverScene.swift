@@ -87,7 +87,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
-    //Takes you back to the GameScene when you touch the restart button
+    //Takes you back to the GameScene when you touch the restart button.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
