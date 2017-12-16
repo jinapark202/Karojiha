@@ -26,6 +26,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var flappingAction = SKAction()
     var flapVelocity = CGFloat(600.0)
 
+    let instructions = SKSpriteNode(imageNamed: "instructions")
+    var instructionsAdded = true
+    
     var fliesEaten = 0
     var beeEaten = 0
     var fliesFrequency = CGFloat(6.0)
@@ -109,6 +112,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.initBackgroundArray(names: background.backgroundNames)
         bird = createBird()
         addChild(bird)
+       
+        //TRYING SOMETHING IT"s SLOPPY FOR NOW
+        instructions.size = CGSize(width: size.width/1.05, height: 200)
+        instructions.position = CGPoint(x: size.width/2, y: size.height/1.8)
+        instructions.zPosition = CGFloat(10)
+        addChild(instructions)
+
         
         //Prevents bird from leaving the frame
         let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000))
@@ -145,7 +155,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gameStarted = true
             background.createParallax()
         }
-        
+        if instructionsAdded == true{
+            instructions.removeFromParent()
+            instructionsAdded = false
+        }
         
         for touch in touches{
             var location = touch.location(in: self)
