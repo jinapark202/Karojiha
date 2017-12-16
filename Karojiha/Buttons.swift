@@ -18,9 +18,11 @@ class Buttons {
             self.size = scene?.size ?? CGSize.zero
         }
     }
+   
     
     let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
+    
     
     //GameScene only
     let pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
@@ -29,11 +31,9 @@ class Buttons {
     let instructBtn = SKSpriteNode(imageNamed: "instructionsButton_400")
     let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
     
-    
     //GameOverScene only
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
 
-    
     
     func addSoundButton(position: CGPoint){
         soundBtn.size = CGSize(width: 50, height: 50)
@@ -41,7 +41,6 @@ class Buttons {
         soundBtn.zPosition = 20
         scene?.addChild(soundBtn)
     }
-    
     
     func addHomeButton(position: CGPoint){
         homeBtn.size = CGSize(width: 50, height: 50)
@@ -56,7 +55,6 @@ class Buttons {
         pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
         pauseBtn.zPosition = 6
     }
-    
     
     func addInstructionButton(){
         instructBtn.size = CGSize(width: 200, height: 27)
