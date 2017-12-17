@@ -112,6 +112,16 @@ extension GameScene{
         cameraNode.addChild(elevationLabel)
     }
     
+    func createEncouragingLabel(){
+        encouragingLabel.text = "Tap the screen to fly!"
+        encouragingLabel.fontName = "AvenirNextCondensed-DemiBold"
+        encouragingLabel.fontSize = 30
+        encouragingLabel.fontColor = .white
+        encouragingLabel.position = CGPoint(x: size.width/2, y: size.height/2.5)
+        encouragingLabel.zPosition = 10
+        self.addChild(encouragingLabel)
+    }
+    
     
     //Updates the text of the elevation label on the game screen
     func adjustLabels(){

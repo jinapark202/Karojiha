@@ -29,6 +29,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let instructions = SKSpriteNode(imageNamed: "instructions")
     var instructionsAdded = true
     
+    let encouragingLabel = SKLabelNode()
+    
+    
     var fliesEaten = 0
     var beeEaten = 0
     var fliesFrequency = CGFloat(6.0)
@@ -72,8 +75,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         background.scene = self
+        music.scene = self
         buttons.scene = self
-
     }
     
     
@@ -97,6 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Adds all neccessary physical components to the screen
     func createScene(){
         createElevationLabel()
+        createEncouragingLabel()
         
         buttons.addHomeButton(position: CGPoint(x: -size.width/2.5 , y: size.height/2.25))
         buttons.homeBtn.removeFromParent()
@@ -113,13 +117,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.initBackgroundArray(names: background.backgroundNames)
         bird = createBird()
         addChild(bird)
-       
-        //TRYING SOMETHING IT"s SLOPPY FOR NOW
-        instructions.size = CGSize(width: size.width/1.05, height: 200)
-        instructions.position = CGPoint(x: size.width/2, y: size.height/1.8)
-        instructions.zPosition = CGFloat(10)
-        addChild(instructions)
-
         
         //Prevents bird from leaving the frame
         let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000))
@@ -154,9 +151,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gameStarted = true
             background.createParallax()
         }
-        if instructionsAdded == true{
-            instructions.removeFromParent()
-            instructionsAdded = false
+        if encouragingLabel.inParentHierarchy(self) == true {
+            print("deleting label")
+            encouragingLabel.removeFromParent()
         }
         
         for touch in touches{
@@ -203,7 +200,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //checks whether bird is high enough for space helmet; applies it if so
     func applyFlapAnimation(){
-        if altitude < 1000{
+        if altitude < 18000{
             animateBird(fileName: "bird" )
         }else{
             animateBird(fileName: "birdHelmet")
