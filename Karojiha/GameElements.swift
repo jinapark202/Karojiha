@@ -13,10 +13,9 @@ import SpriteKit
 
 extension GameScene{
     
-    //Create the bird. Source:http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
+    //Source:http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
     func createBird() -> SKSpriteNode {
         
-        //Set the size and position of the bird
         let bird = SKSpriteNode(texture: SKTextureAtlas(named:"player").textureNamed("bird_1"))
         
         let birdBody = SKPhysicsBody(circleOfRadius: 30)
@@ -45,7 +44,6 @@ extension GameScene{
     }
 
     
-    //Function that adds worms to screen
     func createFly() {
         
         let fly = SKSpriteNode(imageNamed: "dragonfly.png")
@@ -99,7 +97,6 @@ extension GameScene{
 
     }
     
-    //Set up score in upper right corner
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
         elevationLabel.position = CGPoint(x: size.width/2.35, y: size.height/2.25)

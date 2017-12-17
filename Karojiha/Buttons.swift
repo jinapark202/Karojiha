@@ -19,7 +19,6 @@ class Buttons {
         }
     }
    
-    
     let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
     
@@ -68,7 +67,6 @@ class Buttons {
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         startBtn.zPosition = 10
         scene?.addChild(startBtn)
-        
     }
 
     func addRestartButton() {
@@ -77,5 +75,4 @@ class Buttons {
         restartBtn.zPosition = 10
         scene?.addChild(restartBtn)
     }
-    
 }
