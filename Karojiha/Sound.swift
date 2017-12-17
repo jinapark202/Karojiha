@@ -35,47 +35,49 @@ class Sound {
     
     public let restartButtonSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
     
-
-    var sound = true
+   static var sound = true
+    
     var scene: SKScene?
     
     
     func switchSound(){
-        if sound == true{
-            sound = false
-        }
-        else{
-            sound = true
+        if Sound.sound == true{
+            Sound.sound = false
+        }else{
+            Sound.sound = true
         }
     }
     
     func checkForSound() -> Bool {
-        if sound == true{
+        if Sound.sound == true{
             return true
         }
         return false
     }
     
     func playSoundEffect(file: SKAction){
-        if sound == true {
+        if Sound.sound == true {
            scene?.run(file)
         }
     }
     
     func switchBGMusic(file: SKAudioNode){
-        if sound == false{
-            file.run(SKAction.pause())
-        }
-        else{
+        if Sound.sound == false{
+            file.run(SKAction.stop())
+        }else if file.inParentHierarchy(scene!) == false {
+            scene?.addChild(file)
+        }else{
             file.run(SKAction.play())
         }
     }
     
     func beginBGMusic(file: SKAudioNode){
-        if sound != false{
-            file.autoplayLooped = true
+        file.autoplayLooped = true
+        if Sound.sound == true{
             scene?.addChild(file)
+        }else{
+            scene?.removeFromParent()
         }
     }
-
+    
 }
