@@ -47,7 +47,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let buttons = Buttons()
     
     var gameStarted = false
-    var soundOn: Bool = true
     var powerUpActive: Bool = false
     
     let cameraNode = SKCameraNode()
@@ -66,6 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         super.init(size: size)
         background.scene = self
         buttons.scene = self
+        music.scene = self
     }
     
     //TODO: WHAT IS THIS?
@@ -73,6 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         super.init(coder: aDecoder)
         background.scene = self
         buttons.scene = self
+
     }
     
     
@@ -80,8 +81,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         createScene()
 
-        addChild(music.backgroundSound)
-        music.backgroundSound.autoplayLooped = true
+        music.beginBGMusic(file: music.backgroundSound)
+
         physicsWorld.contactDelegate = self
         physicsWorld.gravity.dy = CGFloat(-10.0)
         addChild(cameraNode)
@@ -125,8 +126,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
     }
     
-    
-    
     //Responsible for the setting up and maintaing correct viewing frame as the bird moves up the screen. Source: https://www.raywenderlich.com/145318/spritekit-swift-3-tutorial-beginners
     func setupCameraNode() {
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
@@ -138,7 +137,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
-            run(music.dyingSound)
+            music.playSoundEffect(file: music.dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score), fliesCount: fliesEaten)
             self.view?.presentScene(gameOverScene, transition: reveal)
@@ -168,34 +167,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.y -= cameraNode.position.y
             
             if buttons.homeBtn.contains(location){
-                if soundOn == true {
-                    run(music.buttonPressSound)
-                }
+                music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             } else if buttons.soundBtn.contains(location) {
-                if soundOn {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    soundOn = false
-                    music.backgroundSound.run(SKAction.stop())
-                } else {
-                    run(music.buttonPressSound)
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    soundOn = true
-                    music.backgroundSound.run(SKAction.play())
+                music.switchSound()
+                music.playSoundEffect(file: music.buttonPressSound)
+                music.switchBGMusic(file: music.backgroundSound)
+                if music.checkForSound() == true {
+                     buttons.soundBtn.texture =  SKTexture(imageNamed: "soundButtonSmallSquare")
+                }else{
+                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                 }
             } else if buttons.pauseBtn.contains(location){
+                music.playSoundEffect(file: music.buttonPressSound)
                 if self.isPaused == false {
-                    if soundOn == true {
-                        run(music.buttonPressSound)
-                    }
                     self.isPaused = true
                     buttons.pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
-                    if soundOn == true {
-                        run(music.buttonPressSound)
-                    }
                     self.isPaused = false
                     buttons.pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                 }
@@ -276,15 +266,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 startPowerUp()
             }
             if remainder == 1{
-                if soundOn == true {
-                    run(music.fly1Sound)
-                }
+                music.playSoundEffect(file: music.fly1Sound)
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
             }
             if remainder == 2{
-                if soundOn == true {
-                    run(music.fly2Sound)
-                }
+                music.playSoundEffect(file: music.fly2Sound)
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
             }
         }
@@ -293,9 +279,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Called when the bird eats its third fly... see collisionWithFlies() above
     func startPowerUp() {
-        if soundOn == true {
-            run(music.powerUpSound)
-        }
+        music.playSoundEffect(file: music.powerUpSound)
         powerUpEndTime = latestTime + 2
     }
     
@@ -310,17 +294,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    
-    
     //Removes bee, adds sound and sparks, and starts a 5 second penalty.
     func collisionWithBee(object: SKNode, bird: SKNode) {
         object.removeFromParent()
-        
         if powerUpActive == false {
-            if soundOn == true {
-                run(music.beeHitSound)
-            }
+            music.playSoundEffect(file: music.beeHitSound)
             addSparkNode(scene: self, Object: object, file: "smoke1", size: CGSize(width: 50, height: 50))
             beeEaten += 1
             startPenalty()
@@ -332,7 +310,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func startPenalty() {
         penaltyEndTime = latestTime + 5
     }
-    
     
     //Further slows the bird as it collides with more bees within 5 seconds
     func applyPenalty(){

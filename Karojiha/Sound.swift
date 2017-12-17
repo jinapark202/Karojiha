@@ -33,5 +33,49 @@ class Sound {
     
     public let backgroundSound1 = SKAudioNode(fileNamed: "opening_day.mp3")
     
-    public let buttonClickSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
+    public let restartButtonSound = SKAction.playSoundFileNamed("slide_whistle_up.mp3", waitForCompletion: true)
+    
+
+    var sound = true
+    var scene: SKScene?
+    
+    
+    func switchSound(){
+        if sound == true{
+            sound = false
+        }
+        else{
+            sound = true
+        }
+    }
+    
+    func checkForSound() -> Bool {
+        if sound == true{
+            return true
+        }
+        return false
+    }
+    
+    func playSoundEffect(file: SKAction){
+        if sound == true {
+           scene?.run(file)
+        }
+    }
+    
+    func switchBGMusic(file: SKAudioNode){
+        if sound == false{
+            file.run(SKAction.pause())
+        }
+        else{
+            file.run(SKAction.play())
+        }
+    }
+    
+    func beginBGMusic(file: SKAudioNode){
+        if sound != false{
+            file.autoplayLooped = true
+            scene?.addChild(file)
+        }
+    }
+
 }

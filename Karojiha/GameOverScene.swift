@@ -12,7 +12,6 @@ import SpriteKit
 class GameOverScene: SKScene, SKPhysicsContactDelegate {
     
     let background = Background()
-    var sound: Bool = true
     let music = Sound()
     
     let buttons = Buttons()
@@ -20,15 +19,14 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     init(size: CGSize, score: Int, fliesCount: Int) {
         
         super.init(size: size)
+        music.scene = self
         
         //Set up background
         background.scene = self
         backgroundColor = SKColor.black
         background.createParallax()
         
-        //Adds and loops the background sound
-        self.addChild(music.backgroundSound1)
-        music.backgroundSound1.autoplayLooped = true
+        music.beginBGMusic(file: music.backgroundSound1)
         
         buttons.scene = self
         buttons.addRestartButton()
@@ -92,24 +90,23 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: self)
             if buttons.restartBtn.contains(location) {
-                run(music.buttonClickSound)
+                music.playSoundEffect(file: music.restartButtonSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
             } else if buttons.homeBtn.contains(location) {
-                run(music.buttonClickSound)
+                music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
             } else if buttons.soundBtn.contains(location) {
-                if sound {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    sound = false
-                    music.backgroundSound1.run(SKAction.stop())
-                } else {
+                music.switchSound()
+                music.playSoundEffect(file: music.buttonPressSound)
+                music.switchBGMusic(file: music.backgroundSound1)
+                if music.checkForSound() == true {
                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    sound = true
-                    music.backgroundSound1.run(SKAction.play())
+                } else {
+                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                 }
             }
         }

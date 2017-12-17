@@ -11,7 +11,7 @@ import SpriteKit
 
 class MenuScene: SKScene, SKPhysicsContactDelegate {
     
-    var mute: Bool = true
+  
     let buttons = Buttons()
     let background = Background()
     let music = Sound()
@@ -20,6 +20,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
     override init(size: CGSize) {
         super.init(size: size)
         buttons.scene = self
+        music.scene = self
         
         //Set up background
         background.scene = self
@@ -27,9 +28,8 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         background.createParallax()
         
         //Set up background music
-        self.addChild(music.menuSceneBackgroundSound)
-        music.menuSceneBackgroundSound.autoplayLooped = true
-
+        music.beginBGMusic(file: music.menuSceneBackgroundSound)
+      
         buttons.addSoundButton(position: CGPoint(x: size.width/2, y: size.height/4))
         buttons.addInstructionButton()
         buttons.addStartButton()
@@ -41,25 +41,24 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches{
             let location = touch.location(in: scene!)
             if buttons.startBtn.contains(location){
-                self.scene?.run(music.buttonPressSound)
+                music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = GameScene(size: size)
                 self.scene?.view?.presentScene(scene, transition: reveal)
             } else if buttons.instructBtn.contains(location) {
-                self.scene?.run(music.buttonPressSound)
+                music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = InstructionsScene(size: size)
                 self.scene?.view?.presentScene(scene, transition: reveal)
             }
             else if buttons.soundBtn.contains(location) {
-                if mute {
+                music.switchSound()
+                music.playSoundEffect(file: music.buttonPressSound)
+                music.switchBGMusic(file: music.menuSceneBackgroundSound)
+                if music.checkForSound() == false{
                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    mute = false
-                    music.menuSceneBackgroundSound.run(SKAction.stop())
                 } else {
                     buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    mute = true
-                    music.menuSceneBackgroundSound.run(SKAction.play())
                 }
             }
         }
