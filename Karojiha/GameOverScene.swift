@@ -31,7 +31,7 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         buttons.scene = self
         buttons.addRestartButton()
         buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
-        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.15))
+        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.17))
         
         
         let highScoreDefault = UserDefaults.standard

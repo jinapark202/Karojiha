@@ -35,7 +35,7 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         music.beginBGMusic(file: music.backgroundSound1)
 
         buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
-        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.15))
+        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.20))
 
         
         //Sets up 'How to Play' Label

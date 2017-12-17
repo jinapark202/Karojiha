@@ -40,10 +40,10 @@ class Sound {
     var scene: SKScene?
     
     
-    func switchSound(){
+    func switchSound() {
         if Sound.sound == true{
             Sound.sound = false
-        }else{
+        } else {
             Sound.sound = true
         }
     }
@@ -61,23 +61,22 @@ class Sound {
         }
     }
     
-    func switchBGMusic(file: SKAudioNode){
-        if Sound.sound == false{
+    func switchBGMusic(file: SKAudioNode) {
+        if Sound.sound == false {
             file.run(SKAction.stop())
-        }else if file.inParentHierarchy(scene!) == false {
+        } else if file.inParentHierarchy(scene!) == false {
             scene?.addChild(file)
-        }else{
+        } else {
             file.run(SKAction.play())
         }
     }
     
-    func beginBGMusic(file: SKAudioNode){
+    func beginBGMusic(file: SKAudioNode) {
         file.autoplayLooped = true
         if Sound.sound == true{
             scene?.addChild(file)
-        }else{
+        } else {
             scene?.removeFromParent()
         }
     }
-    
 }
