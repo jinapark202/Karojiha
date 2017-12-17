@@ -152,7 +152,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.createParallax()
         }
         if encouragingLabel.inParentHierarchy(self) == true {
-            print("deleting label")
             encouragingLabel.removeFromParent()
         }
         

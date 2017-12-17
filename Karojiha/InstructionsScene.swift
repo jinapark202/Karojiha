@@ -35,20 +35,20 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         music.beginBGMusic(file: music.backgroundSound1)
 
         buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
-        buttons.addSoundButton(position: CGPoint(x: size.width/3.8, y: size.height/1.05))
+        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.15))
 
-
+        
         //Sets up 'How to Play' Label
         let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
         titleLabel.fontSize = 50
         titleLabel.fontColor = SKColor.yellow
-        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.3)
+        titleLabel.position = CGPoint(x: size.width/2, y: size.height/1.4)
         addChild(titleLabel)
     
         //Sets up instructions button
         instructions.size = CGSize(width: size.width/1.05, height: 200)
-        instructions.position = CGPoint(x: size.width/2, y: size.height/1.8)
+        instructions.position = CGPoint(x: size.width/2, y: size.height/1.85)
         addChild(instructions)
 
         
