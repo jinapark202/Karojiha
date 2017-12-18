@@ -18,9 +18,10 @@ class Buttons {
             self.size = scene?.size ?? CGSize.zero
         }
     }
-    
+   
     let soundBtn = SKSpriteNode(imageNamed: "soundButtonSmallSquare")
     let homeBtn = SKSpriteNode(imageNamed: "homeButtonSmallSquare")
+    
     
     //GameScene only
     let pauseBtn = SKSpriteNode(imageNamed: "pauseButtonSmallSquare")
@@ -29,21 +30,18 @@ class Buttons {
     let instructBtn = SKSpriteNode(imageNamed: "instructionsButton_400")
     let startBtn = SKSpriteNode(imageNamed: "startButtonCentered_400")
     
-    
     //GameOverScene only
     let restartBtn = SKSpriteNode(imageNamed: "restartButton_400")
 
     
-    
-    func addSoundButton(position: CGPoint){
+    func addSoundButton(position: CGPoint) {
         soundBtn.size = CGSize(width: 50, height: 50)
         soundBtn.position = position
         soundBtn.zPosition = 20
         scene?.addChild(soundBtn)
     }
     
-    
-    func addHomeButton(position: CGPoint){
+    func addHomeButton(position: CGPoint) {
         homeBtn.size = CGSize(width: 50, height: 50)
         homeBtn.position = position
         homeBtn.zPosition = 10
@@ -51,34 +49,30 @@ class Buttons {
     }
     
 
-    func createPauseButton(){
+    func createPauseButton() {
         pauseBtn.size = CGSize(width: 50, height: 50)
         pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
         pauseBtn.zPosition = 6
     }
     
-    
-    func addInstructionButton(){
+    func addInstructionButton() {
         instructBtn.size = CGSize(width: 200, height: 27)
         instructBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
         instructBtn.zPosition = 10
         scene?.addChild(instructBtn)
     }
     
-    func addStartButton(){
-        //Set up start button
+    func addStartButton() {
         startBtn.size = CGSize(width: 250, height: 125)
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         startBtn.zPosition = 10
         scene?.addChild(startBtn)
-        
     }
 
-    func addRestartButton(){
+    func addRestartButton() {
         restartBtn.size = CGSize(width: 225, height: 225)
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
         restartBtn.zPosition = 10
         scene?.addChild(restartBtn)
     }
-    
 }

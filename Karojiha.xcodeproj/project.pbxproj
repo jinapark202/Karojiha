@@ -16,7 +16,6 @@
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
 		8AB3D1201FDB525200540BE2 /* clear_skies.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8AB3D11F1FDB525200540BE2 /* clear_skies.mp3 */; };
 		8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AF8565B1FB2327D002BA0EB /* fire.sks */; };
-		A22954EB1FDDFB6500713AB2 /* bgParallax.sks in Resources */ = {isa = PBXBuildFile; fileRef = A22954EA1FDDFB6500713AB2 /* bgParallax.sks */; };
 		A26445721FE44A3A0033FBBE /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26445711FE44A3A0033FBBE /* Buttons.swift */; };
 		A26445741FE465760033FBBE /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26445731FE465760033FBBE /* Button.swift */; };
 		D8014BFC1FC386AB00E6510F /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8014BFB1FC386AB00E6510F /* MenuScene.swift */; };
@@ -67,7 +66,6 @@
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		8AB3D11F1FDB525200540BE2 /* clear_skies.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clear_skies.mp3; sourceTree = "<group>"; };
 		8AF8565B1FB2327D002BA0EB /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
-		A22954EA1FDDFB6500713AB2 /* bgParallax.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = bgParallax.sks; sourceTree = "<group>"; };
 		A26445711FE44A3A0033FBBE /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		A26445731FE465760033FBBE /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D8014BFB1FC386AB00E6510F /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 		8ACC10AC1FD9B3520054F63C /* Emitters */ = {
 			isa = PBXGroup;
 			children = (
-				A22954EA1FDDFB6500713AB2 /* bgParallax.sks */,
 				8AF8565B1FB2327D002BA0EB /* fire.sks */,
 				8AAE84E01FA8DFE2003E0738 /* spark.sks */,
 				D84D4DF51FD4E3180060D050 /* smoke1.sks */,
@@ -334,7 +331,6 @@
 				8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */,
 				D8ADE5E41FD0FBF00082570B /* slide_whistle_up.mp3 in Resources */,
 				D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */,
-				A22954EB1FDDFB6500713AB2 /* bgParallax.sks in Resources */,
 				D8ADE5E21FD0FA290082570B /* slide_whistle_down.mp3 in Resources */,
 				D8DD14A71FCF35D4003D4BAD /* Assets.xcassets in Resources */,
 				8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */,
@@ -540,11 +536,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GU44U5NASD;
+				DEVELOPMENT_TEAM = Y4M5563D49;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0121;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -557,11 +553,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GU44U5NASD;
+				DEVELOPMENT_TEAM = Y4M5563D49;
 				INFOPLIST_FILE = Karojiha/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0;
+				PRODUCT_BUNDLE_IDENTIFIER = Karojiha0121;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

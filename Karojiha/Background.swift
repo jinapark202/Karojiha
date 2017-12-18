@@ -123,7 +123,9 @@ class Background {
         
     }
     
-    /*Code altered from https://www.hackingwithswift.com/read/36/3/sky-background-and-ground-parallax-scrolling-with-spritekit. Implements the parallax background.
+    /*
+        Implements the parallax background.
+        Code altered from https://www.hackingwithswift.com/read/36/3/sky-background-and-ground-parallax-scrolling-with-spritekit.
     */
     func createParallax() {
         let backgroundTexture = SKTexture(imageNamed: "parallax_white")

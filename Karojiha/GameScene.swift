@@ -10,7 +10,7 @@
 import SpriteKit
 import CoreMotion
 
-//creates a random function for us to use
+//Creates a random function for us to use. Source: Paul Cantrell
 func random() -> CGFloat {
     return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
 }
@@ -26,6 +26,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var flappingAction = SKAction()
     var flapVelocity = CGFloat(600.0)
 
+    let instructions = SKSpriteNode(imageNamed: "instructions")
+    var instructionsAdded = true
+    
+    let encouragingLabel = SKLabelNode()
+    
+    
     var fliesEaten = 0
     var beeEaten = 0
     var fliesFrequency = CGFloat(6.0)
@@ -48,7 +54,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let pauseBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "pauseButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
 
     var gameStarted = false
-    var soundOn: Bool = true
     var powerUpActive: Bool = false
     
     let cameraNode: SKCameraNode
@@ -56,7 +61,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let music = Sound()
     let motionManager = CMMotionManager()
 
-    //For proper collision detection
+    /*
+     For proper collision detection.
+     Code altered from: https://www.raywenderlich.com/145318/spritekit-swift-3-tutorial-beginners
+    */
     struct PhysicsCategory {
         static let Player: UInt32 = 1
         static let Fly: UInt32 = 3
@@ -67,6 +75,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cameraNode = SKCameraNode()
         super.init(size: size)
         background.scene = self
+        music.scene = self
+
     }
     
     //TODO: WHAT IS THIS?
@@ -74,15 +84,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cameraNode = SKCameraNode()
         super.init(coder: aDecoder)
         background.scene = self
+        music.scene = self
     }
     
     
-    //Called as soon as the user presses "START", sets up the game environment
+    /*
+       Called as soon as the user presses "START", sets up the game environment.
+       Code altered from:https://www.raywenderlich.com/145318/spritekit-swift-3-tutorial-beginners
+    */
     override func didMove(to view: SKView) {
         createScene()
 
-        addChild(music.backgroundSound)
-        music.backgroundSound.autoplayLooped = true
+        music.beginBGMusic(file: music.backgroundSound)
+
         physicsWorld.contactDelegate = self
         physicsWorld.gravity.dy = CGFloat(-10.0)
         addChild(cameraNode)
@@ -109,20 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
         pauseBtn.addToCamera()
         
-        
-        
-        
-//        buttons.addHomeButton(position: CGPoint(x: -size.width/2.5 , y: size.height/2.25))
-//        buttons.homeBtn.removeFromParent()
-//        cameraNode.addChild(buttons.homeBtn)
-//
-//        buttons.addSoundButton(position: CGPoint(x: -size.width/2.5, y: size.height/3.85))
-//        buttons.soundBtn.removeFromParent()
-//        cameraNode.addChild(buttons.soundBtn)
-//
-//        buttons.createPauseButton()
-//        cameraNode.addChild(buttons.pauseBtn)
-        
+        createEncouragingLabel()
 
         background.initBackgroundArray(names: background.backgroundNames)
         bird = createBird()
@@ -133,9 +134,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
     }
     
-    
-    
-    //Responsible for the setting up and maintaing correct viewing frame as the bird moves up the screen.
+    /*
+       Responsible for the setting up and maintaing correct viewing frame as the bird moves up the screen.
+       Code altered from: https://www.raywenderlich.com/145318/spritekit-swift-3-tutorial-beginners
+    */
     func setupCameraNode() {
         let playerPositionInCamera = cameraNode.convert(bird.position, from: self)
         
@@ -146,13 +148,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Restarts the game when the bird hits the bottom of the screen
         if playerPositionInCamera.y < -size.height / 2.0 {
-            run(music.dyingSound)
+            music.playSoundEffect(file: music.dyingSound)
             let reveal = SKTransition.fade(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, score: Int(score), fliesCount: fliesEaten)
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }
-    
     
     
     // Responds to the user's touches. Checks for contact with all buttons and animates bird.
@@ -163,7 +164,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gameStarted = true
             background.createParallax()
         }
-        
+        if encouragingLabel.inParentHierarchy(self) == true {
+            encouragingLabel.removeFromParent()
+        }
         
         for touch in touches{
             var location = touch.location(in: self)
@@ -172,40 +175,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
             
+
             if homeBtn.contains(location){
-                if soundOn == true {
-                    run(music.buttonPressSound)
-                }
+                music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
             } else if soundBtn.contains(location) {
-                if soundOn {
-                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
-                    soundOn = false
-                    music.backgroundSound.run(SKAction.stop())
+                music.switchSound()
+                music.playSoundEffect(file: music.buttonPressSound)
+                music.switchBGMusic(file: music.backgroundSound)
+                if music.checkForSound() == true {
+                     soundBtn.texture =  SKTexture(imageNamed: "soundButtonSmallSquare")
                 } else {
-                    run(music.buttonPressSound)
-                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
-                    soundOn = true
-                    music.backgroundSound.run(SKAction.play())
+                     soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                 }
             } else if pauseBtn.contains(location){
+                music.playSoundEffect(file: music.buttonPressSound)
                 if self.isPaused == false {
-                    if soundOn == true {
-                        run(music.buttonPressSound)
-                    }
                     self.isPaused = true
                     pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
-                    if soundOn == true {
-                        run(music.buttonPressSound)
-                    }
                     self.isPaused = false
                     pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                 }
             }
-            else{
+            else {
                 self.bird.run(flappingAction)
 
                 if (bird.physicsBody?.velocity.dy)! < flapVelocity {
@@ -216,16 +211,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //checks whether bird is high enough for space helmet; applies it if so
+    //Checks whether bird is high enough for space helmet; applies it if so
     func applyFlapAnimation(){
-        if altitude < 1000{
+        if altitude < 18000{
             animateBird(fileName: "bird" )
         }else{
             animateBird(fileName: "birdHelmet")
         }
     }
    
-    //Makes bird flap its wings when tap occurrs
+    /*
+        Makes bird flap its wings when tap occurrs.
+        Code altered from: http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
+    */
     func animateBird(fileName: String){
         let birdSprites = (1...4).map { n in birdAtlas.textureNamed(fileName+"_\(n)") }
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
@@ -245,7 +243,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    //Checks for collision between bird and other objects, calls necessary collision functions
+    /*
+        Checks for collision between bird and other objects, calls necessary collision functions.
+        Code altered from: https://www.raywenderlich.com/123393/how-to-create-a-breakout-game-with-sprite-kit-and-swift
+    */
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
@@ -281,15 +282,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 startPowerUp()
             }
             if remainder == 1{
-                if soundOn == true {
-                    run(music.fly1Sound)
-                }
+                music.playSoundEffect(file: music.fly1Sound)
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 75, height: 75))
             }
             if remainder == 2{
-                if soundOn == true {
-                    run(music.fly2Sound)
-                }
+                music.playSoundEffect(file: music.fly2Sound)
                 addSparkNode(scene: self, Object: object, file: "spark", size: CGSize(width: 200, height: 200))
             }
         }
@@ -298,9 +295,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Called when the bird eats its third fly... see collisionWithFlies() above
     func startPowerUp() {
-        if soundOn == true {
-            run(music.powerUpSound)
-        }
+        music.playSoundEffect(file: music.powerUpSound)
         powerUpEndTime = latestTime + 2
     }
     
@@ -315,29 +310,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    
-    
     //Removes bee, adds sound and sparks, and starts a 5 second penalty.
     func collisionWithBee(object: SKNode, bird: SKNode) {
         object.removeFromParent()
-        
         if powerUpActive == false {
-            if soundOn == true {
-                run(music.beeHitSound)
-            }
+            music.playSoundEffect(file: music.beeHitSound)
             addSparkNode(scene: self, Object: object, file: "smoke1", size: CGSize(width: 50, height: 50))
             beeEaten += 1
             startPenalty()
         }
     }
     
-    //Called when user collides with a bee... 5 seconds of impaired movement
-    //Collision with a bee within the 5 second window restarts the penalty timer
+    /*
+        Called when user collides with a bee and leads to 5 seconds of impaired movement
+        Collision with a bee within the 5 second window restarts the penalty timer
+    */
     func startPenalty() {
         penaltyEndTime = latestTime + 5
     }
-    
     
     //Further slows the bird as it collides with more bees within 5 seconds
     func applyPenalty(){
@@ -353,8 +343,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    
-    
     //Called in update(), this function increases the probability of bees spawning as altitiude increases
     func updateBeeFrequency() {
         let exponent = Double(-0.12 * (bird.position.y / 1000))
