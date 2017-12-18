@@ -33,11 +33,14 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         soundBtn = Button(position: CGPoint(x: size.width/3.8, y: size.height/1.05), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50))
 
         super.init(size: size)
-    
+        
         homeBtn.addToScene(parentScene: self)
         soundBtn.addToScene(parentScene: self)
         
         music.scene = self
+        if music.checkForSound() == false {
+            soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+        }
         
         //Changed background to be black
         backgroundColor = SKColor.black

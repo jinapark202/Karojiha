@@ -30,6 +30,10 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         music.beginBGMusic(file: music.backgroundSound1)
         
+        if music.checkForSound() == false {
+            soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+        }
+
         restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
         homeBtn.position =  CGPoint(x: size.width/10, y: size.height/1.05)
         soundBtn.position = CGPoint(x: size.width/10, y: size.height/1.17)
