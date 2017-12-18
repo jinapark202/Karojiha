@@ -11,33 +11,30 @@ import SpriteKit
 
 class Button: SKSpriteNode{
     
-    let position: CGPoint
-    let imageName: String
-    let size: CGSize
-    let parentScene: SKScene
-    let camera: SKCameraNode
+//    let parentScene: SKScene
+    var camera: SKCameraNode?
     
     
-    init(position: CGPoint, imageName: String, size: CGSize, parentScene: SKScene, camera: SKCameraNode? = nil) {
-        self.position = position
-        self.imageName = imageName
-        self.size = size
-        self.parentScene = parentScene
-        self.camera = camera
+    init(position: CGPoint, imageName: String, size: CGSize, cameraNode: SKCameraNode) {
+        //Initialize a SKSpriteNode
+//        self.parentScene = parentScene
+//        self.camera = camera!
+        let texture = SKTexture(imageNamed: imageName)
+        self.camera = cameraNode
+        super.init(texture: texture, color: UIColor.black, size: texture.size())
+        super.position = position
+        super.size = size
+        
     }
     
-    //TODO: Getters and setters
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     
-    
-    
-    
-    func add(){
-        if camera != nil{
-            camera.addChild(self)
-        }
-        else{
-            parentScene.addChild(self)
-        }
+    func addToCamera(){
+        camera?.addChild(self)
+//        self.parentScene.addChild(self)
     }
     
     

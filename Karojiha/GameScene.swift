@@ -41,13 +41,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var powerUpEndTime = 0.0
     var penaltyEndTime = 0.0
     
-    let buttons = Buttons()
-    
+
+    //Super Frustrating why we cannot initialize correct values anywhere - what is going on
+    let homeBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
+    let soundBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
+    let pauseBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "pauseButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
+
     var gameStarted = false
     var soundOn: Bool = true
     var powerUpActive: Bool = false
     
-    let cameraNode = SKCameraNode()
+    let cameraNode: SKCameraNode
     let background = Background()
     let music = Sound()
     let motionManager = CMMotionManager()
@@ -60,16 +64,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override init(size: CGSize) {
+        cameraNode = SKCameraNode()
         super.init(size: size)
         background.scene = self
-        buttons.scene = self
     }
     
     //TODO: WHAT IS THIS?
     required init?(coder aDecoder: NSCoder) {
+        cameraNode = SKCameraNode()
         super.init(coder: aDecoder)
         background.scene = self
-        buttons.scene = self
     }
     
     
@@ -93,17 +97,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Adds all neccessary physical components to the screen
     func createScene(){
         createElevationLabel()
+        homeBtn.camera = cameraNode
+        homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
+        homeBtn.addToCamera()
         
-        buttons.addHomeButton(position: CGPoint(x: -size.width/2.5 , y: size.height/2.25))
-        buttons.homeBtn.removeFromParent()
-        cameraNode.addChild(buttons.homeBtn)
+        soundBtn.camera = cameraNode
+        soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
+        soundBtn.addToCamera()
         
-        buttons.addSoundButton(position: CGPoint(x: -size.width/2.5, y: size.height/3.85))
-        buttons.soundBtn.removeFromParent()
-        cameraNode.addChild(buttons.soundBtn)
+        pauseBtn.camera = cameraNode
+        pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
+        pauseBtn.addToCamera()
         
-        buttons.createPauseButton()
-        cameraNode.addChild(buttons.pauseBtn)
+        
+        
+        
+//        buttons.addHomeButton(position: CGPoint(x: -size.width/2.5 , y: size.height/2.25))
+//        buttons.homeBtn.removeFromParent()
+//        cameraNode.addChild(buttons.homeBtn)
+//
+//        buttons.addSoundButton(position: CGPoint(x: -size.width/2.5, y: size.height/3.85))
+//        buttons.soundBtn.removeFromParent()
+//        cameraNode.addChild(buttons.soundBtn)
+//
+//        buttons.createPauseButton()
+//        cameraNode.addChild(buttons.pauseBtn)
         
 
         background.initBackgroundArray(names: background.backgroundNames)
@@ -154,37 +172,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             location.x -= cameraNode.position.x
             location.y -= cameraNode.position.y
             
-            if buttons.homeBtn.contains(location){
+            if homeBtn.contains(location){
                 if soundOn == true {
                     run(music.buttonPressSound)
                 }
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let menuScene = MenuScene(size: size)
                 self.view?.presentScene(menuScene, transition: reveal)
-            } else if buttons.soundBtn.contains(location) {
+            } else if soundBtn.contains(location) {
                 if soundOn {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                     soundOn = false
                     music.backgroundSound.run(SKAction.stop())
                 } else {
                     run(music.buttonPressSound)
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                     soundOn = true
                     music.backgroundSound.run(SKAction.play())
                 }
-            } else if buttons.pauseBtn.contains(location){
+            } else if pauseBtn.contains(location){
                 if self.isPaused == false {
                     if soundOn == true {
                         run(music.buttonPressSound)
                     }
                     self.isPaused = true
-                    buttons.pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
+                    pauseBtn.texture = SKTexture(imageNamed: "playButtonSmallSquare")
                 } else {
                     if soundOn == true {
                         run(music.buttonPressSound)
                     }
                     self.isPaused = false
-                    buttons.pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
+                    pauseBtn.texture = SKTexture(imageNamed: "pauseButtonSmallSquare")
                 }
             }
             else{
