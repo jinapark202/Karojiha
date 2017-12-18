@@ -28,7 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let encouragingLabel = SKLabelNode()
     
-    
     var fliesEaten = 0
     var beeEaten = 0
     var fliesFrequency = CGFloat(6.0)
@@ -75,7 +74,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
-    //TODO: WHAT IS THIS?
     required init?(coder aDecoder: NSCoder) {
         cameraNode = SKCameraNode()
         super.init(coder: aDecoder)
@@ -119,7 +117,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         createEncouragingLabel()
 
-        
         background.initBackgroundArray(names: background.backgroundNames)
         bird = createBird()
         addChild(bird)
@@ -128,6 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let edgeFrame = CGRect(origin: CGPoint(x: ((self.view?.frame.minX)!) ,y: (self.view?.frame.minY)!), size: CGSize(width: (self.view?.frame.width)!, height: (self.view?.frame.height)! + 200000000))
         physicsBody = SKPhysicsBody(edgeLoopFrom: edgeFrame)
     }
+    
     
     /*
        Responsible for the setting up and maintaing correct viewing frame as the bird moves up the screen.
@@ -151,7 +149,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    // Responds to the user's touches. Checks for contact with all buttons and animates bird.
+    // Responds to the user's touches. Checks for contact with all buttons, provides subsequent action, and animates bird.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         //Sets the parallax background in motion on the first touch of the game
@@ -206,15 +204,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    //Checks whether bird is high enough for space helmet; applies it if so
+    //Checks whether bird is high enough for space helmet and if so, applies helmet.
     func applyFlapAnimation(){
         if altitude < 18000{
             animateBird(fileName: "bird" )
-        }else{
+        } else {
             animateBird(fileName: "birdHelmet")
         }
     }
    
+    
     /*
         Makes bird flap its wings when tap occurrs.
         Code altered from: http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
@@ -224,6 +223,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animatebird = SKAction.animate(with: birdSprites, timePerFrame: 0.1)
         flappingAction = SKAction.repeat(animatebird, count: 2)
     }
+    
     
     //Allows the bird to move left and right when phone tilts
     func processUserMotion(forUpdate currentTime: CFTimeInterval) {
@@ -237,6 +237,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
     
     /*
         Checks for collision between bird and other objects, calls necessary collision functions.
@@ -305,6 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     //Removes bee, adds sound and sparks, and starts a 5 second penalty.
     func collisionWithBee(object: SKNode, bird: SKNode) {
         object.removeFromParent()
@@ -338,7 +340,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    //Called in update(), this function increases the probability of bees spawning as altitiude increases
+    //Increases the probability of bees spawning as altitiude increases
     func updateBeeFrequency() {
         let exponent = Double(-0.12 * (bird.position.y / 1000))
         beeFrequency =  CGFloat(20 / (1 + (5.9 * (pow(M_E, exponent)))))
@@ -354,7 +356,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupCameraNode()
     }
     
-    //Called continuously, this runs the game
+    
+    //Called continuously and runs the game
     override func update(_ currentTime: TimeInterval) {
         latestTime = currentTime
         processUserMotion(forUpdate: currentTime)

@@ -26,15 +26,17 @@ class Background {
     let flavorFrequency = CGFloat(500.0)
     
     let backgroundNames = ["background1","background2","background3","background4","blackBackground"]
+    
+    //For example, images of comets and planets are added to the 5th background --> "blackBackground"
     var bgFlavorImages  = [
-        1: ["background1Cloud"],   //First background (light blue)
+        1: ["background1Cloud"],
         2: ["lightning"],
         3: ["blueClouds"],
         4: ["purplePlanet"],
-        5: ["comet", "planet"]    //Last background (Space)
+        5: ["comet", "planet"]
     ]
 
-    //This function creates SKSpriteNode Objects for all background images, and adds them to an array (backgroundImages)
+    //This function creates SKSpriteNode Objects for all background images, and adds them to backgroundImages
     func initBackgroundArray(names: [String]){
         var x: CGFloat = 0.0
         for bgName in names {
@@ -88,6 +90,7 @@ class Background {
         }
     }
     
+    
     //Adds images to the background, choosing randomly from the correct array in bgFlavorImages
     func addBackgroundFlavor(forBirdPosition position: CGPoint){
         if position.y > flavorFrequency + bgFlavorCheckpoint {
@@ -107,7 +110,8 @@ class Background {
         }
     }
     
-    //Called in addBackgroundFlavor()
+    
+    //Helper function called in addBackgroundFlavor()
     func createFlavorSprite(imageName: String, forBirdPosition position: CGPoint){
         let flavorSprite = SKSpriteNode(imageNamed: imageName)
         scene?.addChild(flavorSprite)
@@ -120,8 +124,8 @@ class Background {
         let deleteAction = SKAction.removeFromParent()
         let flavorAction = SKAction.sequence([moveAction, deleteAction])
         flavorSprite.run(flavorAction)
-        
     }
+    
     
     /*
         Implements the parallax background.

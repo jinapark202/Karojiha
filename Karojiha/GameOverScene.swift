@@ -41,12 +41,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         restartBtn.addToScene(parentScene: self)
         homeBtn.addToScene(parentScene: self)
         soundBtn.addToScene(parentScene: self)
-
-        
         
         let highScoreDefault = UserDefaults.standard
         var highScore = highScoreDefault.integer(forKey: "highScore")
-        
         
         //Label for new high score
         let newHighScoreLabel = SKLabelNode(fontNamed: "Avenir-Light")
@@ -63,7 +60,6 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
             highScoreDefault.synchronize()
             addChild(newHighScoreLabel)
         }
-
 
         //Creates game over label
         let message = "Game Over"
@@ -92,10 +88,10 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         highScoreLabel.position = CGPoint(x: size.width/2, y: size.height/9)
         highScoreLabel.zPosition = 10
         addChild(highScoreLabel)
-
     }
     
     //Takes you back to the GameScene when you touch the restart button.
+    //Responds to the user's touches. Checks for contact with all buttons and provides subsequent action.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)

@@ -28,15 +28,15 @@ class Sound {
     static var sound = true
     var scene: SKScene?
     
+    //If sound is muted, stop playing sound. If not, play sound.
     func switchSound() {
-        if Sound.sound == true{
+        if Sound.sound == true {
             Sound.sound = false
         } else {
             Sound.sound = true
         }
     }
     
-    //Returns true if the sound is on and returns false if the sound is off
     func checkForSound() -> Bool {
         if Sound.sound == true{
             return true
@@ -50,6 +50,7 @@ class Sound {
         }
     }
     
+    //When sound is muted, stop playing any sound/music. Switch music files depending on scene.
     func switchBGMusic(file: SKAudioNode) {
         if Sound.sound == false {
             file.run(SKAction.stop())
@@ -60,6 +61,7 @@ class Sound {
         }
     }
     
+    //Start and loop the background music when sound is not muted
     func beginBGMusic(file: SKAudioNode) {
         file.autoplayLooped = true
         if Sound.sound == true {

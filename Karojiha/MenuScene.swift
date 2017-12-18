@@ -30,7 +30,6 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         soundBtn.position = CGPoint(x: size.width/2, y: size.height/4)
         
-
         instructionBtn.addToScene(parentScene: self)
         startBtn.addToScene(parentScene: self)
         soundBtn.addToScene(parentScene: self)
@@ -51,6 +50,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Responds to the user's touches. Checks for contact with all buttons and provides subsequent action.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: scene!)
