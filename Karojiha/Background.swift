@@ -27,7 +27,7 @@ class Background {
     
     let backgroundNames = ["background1","background2","background3","background4","blackBackground"]
     
-    //1: First background (light blue), 2: last background (Black space)
+    //For example, images of comets and planets are added to the 5th background --> "blackBackground"
     var bgFlavorImages  = [
         1: ["background1Cloud"],
         2: ["lightning"],
@@ -111,7 +111,7 @@ class Background {
     }
     
     
-    //Adds bgFlavorImages in the background
+    //Helper function called in addBackgroundFlavor()
     func createFlavorSprite(imageName: String, forBirdPosition position: CGPoint){
         let flavorSprite = SKSpriteNode(imageNamed: imageName)
         scene?.addChild(flavorSprite)

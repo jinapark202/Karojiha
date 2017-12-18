@@ -27,10 +27,10 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         
         super.init(size: size)
         instructionBtn.position = CGPoint(x: size.width/2, y: size.height/2.2)
-        instructionBtn.addToScene(parentScene: self)
-
         startBtn.position = CGPoint(x: size.width/2, y: size.height/1.5)
         soundBtn.position = CGPoint(x: size.width/2, y: size.height/4)
+        
+        instructionBtn.addToScene(parentScene: self)
         startBtn.addToScene(parentScene: self)
         soundBtn.addToScene(parentScene: self)
 

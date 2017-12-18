@@ -9,7 +9,6 @@
 import SpriteKit
 
 
-//Extension of Game Scene
 extension GameScene{
     
     //Source:http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
@@ -68,7 +67,7 @@ extension GameScene{
         let sequence = SKAction.sequence([wait, remove])
         fly.run(sequence)
     }
-
+ 
     
     func createBee() {
         
@@ -120,7 +119,7 @@ extension GameScene{
     }
     
     
-    //Updates the size of the elevation label depending on the altitude
+    //Updates the size and text of the elevation label depending on the altitude
     func adjustLabels(){
         
         if (altitude >= score) {
@@ -139,6 +138,7 @@ extension GameScene{
             elevationLabel.run(scaleActionSequence)
         }
     }
+    
     
     //Adds spark particles
     func addSparkNode(scene: SKScene, Object: SKNode, file: String, size: CGSize) {

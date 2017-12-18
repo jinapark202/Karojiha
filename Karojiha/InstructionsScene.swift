@@ -77,7 +77,6 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         bird.run(repeatActionbird)
     }
     
-    //Takes you back to the Home screen when you touch the home button.
     //Responds to the user's touches. Checks for contact with all buttons and provides subsequent action.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{

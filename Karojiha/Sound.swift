@@ -37,7 +37,6 @@ class Sound {
         }
     }
     
-    //Returns true if the sound is on and returns false if the sound is off
     func checkForSound() -> Bool {
         if Sound.sound == true{
             return true
@@ -45,7 +44,6 @@ class Sound {
         return false
     }
     
-    //Plays the sound effect when sound is not muted
     func playSoundEffect(file: SKAction){
         if Sound.sound == true {
            scene?.run(file)
