@@ -3,7 +3,7 @@ Space Bird is an iOS game written in Swift and is intended for iOS versions 9.0 
 
 ## Getting Started
 
-These instrutions will help you get the game running on your local machine.
+These instrutions will help you get Space Bird running on your local machine.
 
 #### Prerequisites
 Xcode 9 is free to install from the App Store. You will need a Mac running macOS Sierra 10.12.4 or above.
