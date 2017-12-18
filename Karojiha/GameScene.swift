@@ -48,10 +48,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var penaltyEndTime = 0.0
     
 
-    //Super Frustrating why we cannot initialize correct values anywhere - what is going on
-    let homeBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
-    let soundBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
-    let pauseBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "pauseButtonSmallSquare", size: CGSize(width: 50, height: 50), cameraNode: SKCameraNode())
+    let homeBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50))
+    let soundBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50))
+    let pauseBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "pauseButtonSmallSquare", size: CGSize(width: 50, height: 50))
 
     var gameStarted = false
     var powerUpActive: Bool = false
@@ -111,20 +110,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //Adds all neccessary physical components to the screen
     func createScene(){
         createElevationLabel()
-        homeBtn.camera = cameraNode
+        
         homeBtn.position = CGPoint(x: -size.width/2.5 , y: size.height/2.25)
-        homeBtn.addToCamera()
+        homeBtn.addToCamera(parentCamera: cameraNode)
         
-        soundBtn.camera = cameraNode
         soundBtn.position = CGPoint(x: -size.width/2.5, y: size.height/3.85)
-        soundBtn.addToCamera()
+        soundBtn.addToCamera(parentCamera: cameraNode)
         
-        pauseBtn.camera = cameraNode
         pauseBtn.position = CGPoint(x: -size.width/2.5, y: size.height/2.85)
-        pauseBtn.addToCamera()
+        pauseBtn.addToCamera(parentCamera: cameraNode)
         
         createEncouragingLabel()
 
+        
         background.initBackgroundArray(names: background.backgroundNames)
         bird = createBird()
         addChild(bird)

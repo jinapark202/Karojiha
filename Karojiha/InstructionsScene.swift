@@ -16,26 +16,33 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
     let instructions = SKSpriteNode(imageNamed: "instructions")
     
     let music = Sound()
+    let homeBtn: Button
+    let soundBtn: Button
+    
     
     let birdAtlas = SKTextureAtlas(named:"player")
     var birdSprites = Array<SKTexture>()
     var bird = SKSpriteNode()
     var repeatActionbird = SKAction()
-    let buttons = Buttons()
 
 
     override init(size: CGSize){
+        
+        //TODO: Ask paul why we can call size here before super.init()
+        homeBtn = Button(position: CGPoint(x: size.width/10, y: size.height/1.05), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50))
+        soundBtn = Button(position: CGPoint(x: size.width/3.8, y: size.height/1.05), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50))
+
         super.init(size: size)
-        buttons.scene = self
+    
+        homeBtn.addToScene(parentScene: self)
+        soundBtn.addToScene(parentScene: self)
+        
         music.scene = self
         
         //Changed background to be black
         backgroundColor = SKColor.black
 
         music.beginBGMusic(file: music.backgroundSound1)
-
-        buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
-        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.20))
 
         
         //Sets up 'How to Play' Label
@@ -75,19 +82,19 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         
         for touch in touches{
             let location = touch.location(in: self)
-            if buttons.homeBtn.contains(location) {
+            if homeBtn.contains(location) {
                 music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            } else if buttons.soundBtn.contains(location) {
+            } else if soundBtn.contains(location) {
                 music.switchSound()
                 music.playSoundEffect(file: music.buttonPressSound)
                 music.switchBGMusic(file: music.backgroundSound1)
                 if music.checkForSound() == true {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                 } else {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                 }
             }
         }

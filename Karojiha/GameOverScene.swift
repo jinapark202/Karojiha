@@ -14,7 +14,9 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     let background = Background()
     let music = Sound()
     
-    let buttons = Buttons()
+    let homeBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50))
+    let soundBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50))
+    let restartBtn = Button(position: CGPoint(x: 5, y: 5), imageName: "restartButton_400", size: CGSize(width: 225, height: 225))
     
     init(size: CGSize, score: Int, fliesCount: Int) {
         
@@ -28,10 +30,14 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         
         music.beginBGMusic(file: music.backgroundSound1)
         
-        buttons.scene = self
-        buttons.addRestartButton()
-        buttons.addHomeButton(position: CGPoint(x: size.width/10, y: size.height/1.05))
-        buttons.addSoundButton(position: CGPoint(x: size.width/10, y: size.height/1.17))
+        restartBtn.position = CGPoint(x: size.width/2, y: size.height/2.6)
+        homeBtn.position =  CGPoint(x: size.width/10, y: size.height/1.05)
+        soundBtn.position = CGPoint(x: size.width/10, y: size.height/1.17)
+        
+        restartBtn.addToScene(parentScene: self)
+        homeBtn.addToScene(parentScene: self)
+        soundBtn.addToScene(parentScene: self)
+
         
         
         let highScoreDefault = UserDefaults.standard
@@ -89,24 +95,24 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
             let location = touch.location(in: self)
-            if buttons.restartBtn.contains(location) {
+            if restartBtn.contains(location) {
                 music.playSoundEffect(file: music.restartButtonSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let gameScene = GameScene(size: size)
                 self.view?.presentScene(gameScene, transition: reveal)
-            } else if buttons.homeBtn.contains(location) {
+            } else if homeBtn.contains(location) {
                 music.playSoundEffect(file: music.buttonPressSound)
                 let reveal = SKTransition.fade(withDuration: 0.5)
                 let scene = MenuScene(size: size)
                 self.view?.presentScene(scene, transition: reveal)
-            } else if buttons.soundBtn.contains(location) {
+            } else if soundBtn.contains(location) {
                 music.switchSound()
                 music.playSoundEffect(file: music.buttonPressSound)
                 music.switchBGMusic(file: music.backgroundSound1)
                 if music.checkForSound() == true {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundButtonSmallSquare")
                 } else {
-                    buttons.soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+                    soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
                 }
             }
         }
