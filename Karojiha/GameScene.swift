@@ -75,6 +75,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         super.init(size: size)
         background.scene = self
         music.scene = self
+        if music.checkForSound() == false {
+            soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+        }
 
     }
     
@@ -84,6 +87,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         super.init(coder: aDecoder)
         background.scene = self
         music.scene = self
+        if music.checkForSound() == false {
+            soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+        }
     }
     
     

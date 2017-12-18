@@ -23,6 +23,10 @@ class GameOverScene: SKScene, SKPhysicsContactDelegate {
         super.init(size: size)
         music.scene = self
         
+        if music.checkForSound() == false {
+            soundBtn.texture = SKTexture(imageNamed: "soundOffButtonSmallSquare")
+        }
+        
         //Set up background
         background.scene = self
         backgroundColor = SKColor.black
