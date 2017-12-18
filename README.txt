@@ -1,31 +1,27 @@
-"Space Bird" is a simple game that was designed and developed during Paul Cantrell's
-Software Development course at Macalester College in Fall of 2017.
+# Space Bird
+Space Bird is an iOS game written in Swift and is intended for iOS versions 9.0 or above. The objective of the game is to help the bird fly as high as possible without falling off the bottom by tapping the screen. The user collects dragonflies to earn speed boosts, while attempting to avoiding bees. Collisions with bees slow the bird down, particularly when multiple bees are hit within a short time frame.
 
-The game is written in Swift (using SpriteKit) and intended for use on iOS devices 
-running iOS 9.0 or later.
+## Getting Started
 
-The object of the game is to move a bird (by tapping) as high as possible without falling 
-off the bottom of the screen. The user should collect dragonflies to earn speed boosts, and 
-avoid colliding with bees - which will slow the user significantly if multiple are hit 
-within a short time frame.
+These instrutions will help you get the game running on your local machine.
 
-=====================================================================================
+#### Prerequisites
+Xcode 9 is free to install from the App Store. You will need a Mac running macOS Sierra 10.12.4 or above.
 
-TO RUN THIS GAME ON YOUR DEVICES:
-1: You are going to need a Mac running macOS Sierra 10.12.4 or later
-2: Make sure you have XCode 9.0 (or newer versions) installed from the App Store
-3: Navigate your target location in your terminal and run 
-	git clone https://github.com/jinapark22/Karojiha
-4: Open the project in XCode - you can play the game in one of the built in simulators.
-      
-If you want to run the app on a mobile device, plug an iPhone into your
-computer with a USB cable and select your phone as the desired output target
-from the dropdown menu located to the right of the "Stop" button
-on the top left-hand corner of the screen.
+#### Installation
+Clone the following repository
+```
+git clone https://github.com/jinapark22/Karojiha
+```
 
-=====================================================================================
+#### To run the game on a simulator
+In the top bar of the Xcode editor next to the pause button and the Space Bird icon, select the desired device. Press the play button to run the game in the simulator.
 
+#### To run the game on an iPhone
+Attach a USB port to your computer. In the dropdown menu for devices, select your device. Press the play button to run Space Bird on your phone.
 
-Enjoy!
+## Authors
+Hannah Gray, Rose Havener, Kai Heen, Jina Park
 
-- Hannah Gray, Rose Havener, Kai Heen, Jina Park
+## Acknowledgements
+Our professor, Paul Cantrell, for all of his help.
