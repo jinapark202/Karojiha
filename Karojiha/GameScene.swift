@@ -25,9 +25,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let birdAtlas = SKTextureAtlas(named:"player")
     var flappingAction = SKAction()
     var flapVelocity = CGFloat(600.0)
-
-    let instructions = SKSpriteNode(imageNamed: "instructions")
-    var instructionsAdded = true
     
     let encouragingLabel = SKLabelNode()
     

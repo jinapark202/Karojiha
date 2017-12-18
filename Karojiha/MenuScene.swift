@@ -44,6 +44,7 @@ class MenuScene: SKScene, SKPhysicsContactDelegate {
         
         //Set up background music
         music.beginBGMusic(file: music.menuSceneBackgroundSound)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
