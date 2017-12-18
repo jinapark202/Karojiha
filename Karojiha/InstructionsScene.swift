@@ -28,7 +28,6 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
 
     override init(size: CGSize){
         
-        //TODO: Ask paul why we can call size here before super.init()
         homeBtn = Button(position: CGPoint(x: size.width/10, y: size.height/1.05), imageName: "homeButtonSmallSquare", size: CGSize(width: 50, height: 50))
         soundBtn = Button(position: CGPoint(x: size.width/3.8, y: size.height/1.05), imageName: "soundButtonSmallSquare", size: CGSize(width: 50, height: 50))
 
@@ -47,7 +46,6 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
 
         music.beginBGMusic(file: music.backgroundSound1)
 
-        
         //Sets up 'How to Play' Label
         let titleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-DemiBold")
         titleLabel.text = "How to Play"
@@ -79,10 +77,9 @@ class InstructionsScene: SKScene, SKPhysicsContactDelegate{
         bird.run(repeatActionbird)
     }
     
-    // Return to the home page if the home button is pressed
+    //Takes you back to the Home screen when you touch the home button.
+    //Responds to the user's touches. Checks for contact with all buttons and provides subsequent action.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
         for touch in touches{
             let location = touch.location(in: self)
             if homeBtn.contains(location) {

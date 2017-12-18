@@ -9,8 +9,7 @@
 import SpriteKit
 
 
-//Note that this is technically the same class as GameScene - the two files share the same functions and instance variables
-
+//Extension of Game Scene
 extension GameScene{
     
     //Source:http://sweettutos.com/2017/03/09/build-your-own-flappy-bird-game-with-swift-3-and-spritekit/
@@ -94,8 +93,8 @@ extension GameScene{
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([wait, remove])
         bee.run(sequence)
-
     }
+    
     
     func createElevationLabel(){
         elevationLabel.horizontalAlignmentMode = .right
@@ -109,6 +108,7 @@ extension GameScene{
         cameraNode.addChild(elevationLabel)
     }
     
+    //Instruction label in game scene that disappears once game starts
     func createEncouragingLabel(){
         encouragingLabel.text = "Tap the screen to fly!"
         encouragingLabel.fontName = "AvenirNextCondensed-DemiBold"
@@ -120,7 +120,7 @@ extension GameScene{
     }
     
     
-    //Updates the text of the elevation label on the game screen
+    //Updates the size of the elevation label depending on the altitude
     func adjustLabels(){
         
         if (altitude >= score) {
@@ -151,7 +151,6 @@ extension GameScene{
         emitter.particleLifetime = 0.2
         emitter.particleSize = size
         
-        // Place the emitter at object postition.
         emitter.position = Object.position
         emitter.name = "exhaust"
         
@@ -183,7 +182,6 @@ extension GameScene{
             }
         }
     }
-
 }
 
 

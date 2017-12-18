@@ -23,11 +23,12 @@ class Button: SKSpriteNode{
         super.zPosition = 10
     }
     
-    
+    //Adds button to camera node
     func addToCamera(parentCamera: SKCameraNode){
         parentCamera.addChild(self)
     }
     
+    //Adds button to game scene
     func addToScene(parentScene: SKScene){
         parentScene.addChild(self)
     }
