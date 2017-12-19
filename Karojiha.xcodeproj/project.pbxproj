@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		02154DEF1FE09C9F00CB11CA /* powerUpNoise.wav in Resources */ = {isa = PBXBuildFile; fileRef = 02154DEC1FE09C9E00CB11CA /* powerUpNoise.wav */; };
-		021DBE2B1FE8B59200AEDD0F /* fly1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 021DBE2A1FE8B59200AEDD0F /* fly1.wav */; };
-		021DBE2F1FE8BDC700AEDD0F /* fly2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 021DBE2E1FE8BDC700AEDD0F /* fly2.wav */; };
 		022E34891FCCA23D001AF1D0 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022E34881FCCA23D001AF1D0 /* Background.swift */; };
+		023164F01FE8C48900DA945C /* fly1a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 023164EE1FE8C48900DA945C /* fly1a.wav */; };
+		023164F11FE8C48900DA945C /* fly2a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 023164EF1FE8C48900DA945C /* fly2a.wav */; };
 		0239C34E1FCC7C9B004C44E8 /* InstructionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */; };
 		8A8EBD7D1FE37968004FC896 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8EBD7C1FE37968004FC896 /* Sound.swift */; };
 		8AAE84E11FA8DFE2003E0738 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8AAE84E01FA8DFE2003E0738 /* spark.sks */; };
@@ -57,9 +57,9 @@
 
 /* Begin PBXFileReference section */
 		02154DEC1FE09C9E00CB11CA /* powerUpNoise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = powerUpNoise.wav; sourceTree = "<group>"; };
-		021DBE2A1FE8B59200AEDD0F /* fly1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fly1.wav; path = "../../../../Downloads/Karojiha Sounds/fly1.wav"; sourceTree = "<group>"; };
-		021DBE2E1FE8BDC700AEDD0F /* fly2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fly2.wav; path = "../../../../Downloads/Karojiha Sounds/fly2.wav"; sourceTree = "<group>"; };
 		022E34881FCCA23D001AF1D0 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		023164EE1FE8C48900DA945C /* fly1a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fly1a.wav; sourceTree = "<group>"; };
+		023164EF1FE8C48900DA945C /* fly2a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fly2a.wav; sourceTree = "<group>"; };
 		0239C34D1FCC7C9B004C44E8 /* InstructionsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsScene.swift; sourceTree = "<group>"; };
 		8A8EBD7C1FE37968004FC896 /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		8AAE84E01FA8DFE2003E0738 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
@@ -121,8 +121,8 @@
 		8ACC10AB1FD9B2D20054F63C /* SoundEffects */ = {
 			isa = PBXGroup;
 			children = (
-				021DBE2E1FE8BDC700AEDD0F /* fly2.wav */,
-				021DBE2A1FE8B59200AEDD0F /* fly1.wav */,
+				023164EE1FE8C48900DA945C /* fly1a.wav */,
+				023164EF1FE8C48900DA945C /* fly2a.wav */,
 				02154DEC1FE09C9E00CB11CA /* powerUpNoise.wav */,
 				D8ADE5D71FD0EA220082570B /* city_pulse.mp3 */,
 				D84D4DF71FD4E7FF0060D050 /* wet_gooey_liquid_splat.mp3 */,
@@ -314,17 +314,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				023164F11FE8C48900DA945C /* fly2a.wav in Resources */,
 				D84D4DF61FD4E3180060D050 /* smoke1.sks in Resources */,
 				D8ADE5D81FD0EA220082570B /* city_pulse.mp3 in Resources */,
+				023164F01FE8C48900DA945C /* fly1a.wav in Resources */,
 				8AB3D1201FDB525200540BE2 /* clear_skies.mp3 in Resources */,
 				D8984B221F8EC20D00B6D113 /* player.atlas in Resources */,
 				D84D4DF81FD4E7FF0060D050 /* wet_gooey_liquid_splat.mp3 in Resources */,
-				021DBE2F1FE8BDC700AEDD0F /* fly2.wav in Resources */,
 				D8ADE5DE1FD0F5020082570B /* single_bubbleEDIT.wav in Resources */,
 				02154DEF1FE09C9F00CB11CA /* powerUpNoise.wav in Resources */,
 				D8984AF71F8EBF5300B6D113 /* Main.storyboard in Resources */,
 				D8ADE5E01FD0F55B0082570B /* opening_day.mp3 in Resources */,
-				021DBE2B1FE8B59200AEDD0F /* fly1.wav in Resources */,
 				8AF8565C1FB2327D002BA0EB /* fire.sks in Resources */,
 				D8ADE5E41FD0FBF00082570B /* slide_whistle_up.mp3 in Resources */,
 				D8984AFC1F8EBF5300B6D113 /* LaunchScreen.storyboard in Resources */,
